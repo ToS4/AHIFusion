@@ -1,0 +1,10 @@
+{
+	"profiles": {
+		"AHIFusion.Windows (Unpackaged)": {
+			"commandName": "Project"
+		},
+		"AHIFusion.Windows (Package)": {
+			"commandName": "MsixPackage"
+		}
+	}
+}

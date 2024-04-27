@@ -1,0 +1,10 @@
+{
+  "background_color": "#ffffff",
+  "description": "AHIFusion",
+  "display": "standalone",
+  "name": "AHIFusion",
+  "short_name": "AHIFusion",
+  "start_url": "/index.html",
+  "theme_color": "#ffffff",
+  "scope": "/"
+}

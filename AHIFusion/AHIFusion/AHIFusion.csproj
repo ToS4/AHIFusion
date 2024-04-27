@@ -46,7 +46,6 @@
 
   <ItemGroup>
     <None Remove="HomePage.xaml" />
-    <None Remove="NotesPage.xaml" />
   </ItemGroup>
 
 

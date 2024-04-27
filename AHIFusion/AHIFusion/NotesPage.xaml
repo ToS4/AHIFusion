@@ -8,7 +8,58 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
 
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="2*"/>
+      <ColumnDefinition Width="8*"/>
+    </Grid.ColumnDefinitions>
+
+    
+    <Grid Grid.Column="0" Grid.Row="0">
+
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="90*"/>
+        <RowDefinition Height="5*"/>
+      </Grid.RowDefinitions>
+
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <Grid Margin="15">
+          <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+
+        <TextBox x:Name="SearchTextBox" Grid.Column="0" Margin="0,0,20,0" Padding="5" VerticalAlignment="Center" TextChanged="SearchTextBox_TextChanged" />
+          <SymbolIcon Symbol="Find" HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" />
+      </Grid>
+
+      <ListView x:Name="notesListView" Grid.Row="1" SelectionChanged="notesListView_SelectionChanged">
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <Grid Margin="15" Visibility="{Binding Visibility}">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+              </Grid.ColumnDefinitions>
+
+              <TextBox Grid.Column="0" Text="{Binding Title, Mode=TwoWay}" VerticalAlignment="Center" Padding="5" Margin="0,0,15,0" />
+              <Button Click="DeleteButton_Click" x:Name="DeleteButton" Grid.Column="1" IsEnabled="{Binding IsSelected}" VerticalAlignment="Center" Padding="0">
+                <SymbolIcon Symbol="Delete" />
+              </Button>
+            </Grid>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+
+      <Button x:Name="AddButton" Grid.Row="2" HorizontalAlignment="Stretch" Content="Add Note" Click="AddButton_Click"/>
     </Grid>
+  </Grid>
 </Page>

@@ -13,6 +13,10 @@ public sealed partial class MainPage : Page
         Tabs.CollectionChanged += Tabs_CollectionChanged;
         AddHomeTab();
 
+        var tab = AddTab(new NotesPage());
+        tab.Header = "Notes";
+        tab.IconSource = new SymbolIconSource { Symbol = Symbol.Edit };
+
         DataContext = this;
     }
 
@@ -23,6 +27,7 @@ public sealed partial class MainPage : Page
             IsClosable = false,
             Content = page,
         };
+        Tabs.Add(tabViewItem);
 
         return tabViewItem;
     }
@@ -32,7 +37,6 @@ public sealed partial class MainPage : Page
         TabViewItem tab = AddTab(new HomePage());
         tab.Header = "Home";
         tab.IconSource = new SymbolIconSource { Symbol = Symbol.Home };
-        Tabs.Add(tab);
     }
 
     private void TabView_AddTabButtonClick(TabView sender, object args)

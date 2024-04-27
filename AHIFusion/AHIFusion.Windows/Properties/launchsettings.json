@@ -1,10 +1,14 @@
 {
-	"profiles": {
-		"AHIFusion.Windows (Unpackaged)": {
-			"commandName": "Project"
-		},
-		"AHIFusion.Windows (Package)": {
-			"commandName": "MsixPackage"
-		}
-	}
+  "profiles": {
+    "AHIFusion.Windows (Unpackaged)": {
+      "commandName": "Project"
+    },
+    "AHIFusion.Windows (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    }
+  }
 }

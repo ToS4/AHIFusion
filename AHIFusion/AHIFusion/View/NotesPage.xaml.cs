@@ -1,10 +1,10 @@
-using AHIFusion.Notes;
+using AHIFusion.Model;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Data;
 
 namespace AHIFusion
 {
-	public sealed partial class NotesPage : Page
+    public sealed partial class NotesPage : Page
 	{
         public NotesPage()
         {

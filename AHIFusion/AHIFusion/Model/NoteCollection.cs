@@ -1,7 +1,7 @@
 using System.Collections.ObjectModel;
 using Windows.ApplicationModel.VoiceCommands;
 
-namespace AHIFusion.Notes;
+namespace AHIFusion.Model;
 public static class NoteCollection
 {
     public static ObservableCollection<Note> Notes { get; set; } = new ObservableCollection<Note>();

@@ -57,4 +57,9 @@
   <ItemGroup>
     <UpToDateCheckInput Remove="HomePage.xaml" />
   </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="View\" />
+  </ItemGroup>
 </Project>

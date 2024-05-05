@@ -18,9 +18,7 @@
       <ColumnDefinition Width="8*"/>
     </Grid.ColumnDefinitions>
 
-    
     <Grid Grid.Column="0" Grid.Row="0">
-
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="90*"/>
@@ -58,7 +56,6 @@
           </DataTemplate>
         </ListView.ItemTemplate>
       </ListView>
-
       <Button x:Name="AddButton" Grid.Row="2" HorizontalAlignment="Stretch" Content="Add Note" Click="AddButton_Click"/>
     </Grid>
   </Grid>

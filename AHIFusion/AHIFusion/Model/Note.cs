@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace AHIFusion.Notes;
+namespace AHIFusion.Model;
 public class Note : INotifyPropertyChanged
 {
     private string title;

@@ -48,7 +48,7 @@
                 <ColumnDefinition Width="Auto" />
               </Grid.ColumnDefinitions>
 
-              <TextBox Grid.Column="0" Text="{Binding Title, Mode=TwoWay}" VerticalAlignment="Center" Padding="5" Margin="0,0,15,0" />
+              <TextBox Grid.Column="0" Text="{Binding Note.Title, Mode=TwoWay}" VerticalAlignment="Center" Padding="5" Margin="0,0,15,0" />
               <Button Click="DeleteButton_Click" x:Name="DeleteButton" Grid.Column="1" IsEnabled="{Binding IsSelected}" VerticalAlignment="Center" Padding="0">
                 <SymbolIcon Symbol="Delete" />
               </Button>

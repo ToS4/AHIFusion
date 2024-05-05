@@ -32,23 +32,6 @@ public class Note : INotifyPropertyChanged
         }
     }
 
-    [JsonIgnore]
-    private bool isSelected;
-
-    [JsonIgnore]
-    public bool IsSelected
-    {
-        get { return isSelected; }
-        set
-        {
-            if (isSelected != value)
-            {
-                isSelected = value;
-                OnPropertyChanged(nameof(IsSelected));
-            }
-        }
-    }
-
     public Note(string title, string text)
     {
         Title = title;

@@ -2,21 +2,29 @@ using System.Collections.ObjectModel;
 using AHIFusion.Model;
 using System.Linq;
 using Windows.ApplicationModel.VoiceCommands;
+using Uno.Extensions.Specialized;
+using System.ComponentModel;
 
 namespace AHIFusion
 {
     public sealed partial class NotesPage : Page
 	{
-        private ObservableCollection<Note> notesFiltered = new ObservableCollection<Note>();
+        private ObservableCollection<SelectableNote> notesFiltered = new ObservableCollection<SelectableNote>();
 
         public NotesPage()
         {
             this.InitializeComponent();
 
-            notesFiltered = new ObservableCollection<Note>(NoteCollection.Notes);
+            foreach (Note note in NoteCollection.Notes)
+            {
+                notesFiltered.Add(new SelectableNote { Note = note, IsSelected = false});
+            }
+
             NotesListView.ItemsSource = notesFiltered;
+
             Update();
         }
+        
         private void Update()
         {
             var filtered = NoteCollection.Notes.Where(note => Filter(note));
@@ -34,38 +42,70 @@ namespace AHIFusion
             for (int i = notesFiltered.Count - 1; i >= 0; i--)
             {
                 var item = notesFiltered[i];
-                if (!filteredData.Contains(item))
+                if (!filteredData.Contains(item.Note))
                 {
                     notesFiltered.Remove(item);
                 }
             }
         }
         
+        private SelectableNote GetSelectableNote(Note note)
+        {
+            foreach (var item in notesFiltered)
+            {
+                if (item.Note == note)
+                {
+                    return item;
+                }
+            }
+
+            SelectableNote newItem = new SelectableNote()
+            {
+                Note = note,
+                IsSelected = false
+            };
+
+            return newItem;
+        }
+
         private void AddMatching(IEnumerable<Note> filteredData)
         {
             foreach (var item in filteredData)
             {
-                if (!notesFiltered.Contains(item))
+                SelectableNote note = GetSelectableNote(item);
+
+                if (note != null)
                 {
-                    notesFiltered.Add(item);
+                    if (!notesFiltered.Contains(note))
+                    {
+                        notesFiltered.Add(note);
+                    }
                 }
             }
         }
-       
+
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            Note note = new Note("Untitled", "");
-            NoteCollection.Add(note);
+
+            SelectableNote selectableNote = new SelectableNote()
+            {
+                Note = new Note("Untitled", ""),
+                IsSelected = false
+            };
+
+            NoteCollection.Add(selectableNote.Note);
+            notesFiltered.Add(selectableNote);
             Update();
         }
         
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            var selectedItem = NotesListView.SelectedItem as Note;
+            var selectedItem = NotesListView.SelectedItem as SelectableNote;
 
             if (selectedItem != null)
             {
-                NoteCollection.Remove(selectedItem);
+                NoteCollection.Remove(selectedItem.Note);
+                notesFiltered.Remove(selectedItem);
                 Update();
             }
         }
@@ -74,17 +114,17 @@ namespace AHIFusion
         {
             Update();
         }
-        
+
         private void NotesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0)
             {
-                var selectedItem = e.AddedItems[0] as Note;
+                var selectedItem = e.AddedItems[0] as SelectableNote;
                 selectedItem.IsSelected = true;
 
                 if (e.RemovedItems.Count > 0)
                 {
-                    var oldSelectedItem = e.RemovedItems[0] as Note;
+                    var oldSelectedItem = e.RemovedItems[0] as SelectableNote;
                     oldSelectedItem.IsSelected = false;
                 }
             }

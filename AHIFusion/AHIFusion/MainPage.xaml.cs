@@ -17,6 +17,10 @@ public sealed partial class MainPage : Page
         noteTab.Header = "Notes";
         noteTab.IconSource = new SymbolIconSource { Symbol = Symbol.Edit };
 
+        var noteTab1 = AddTab(new NotesPage());
+        noteTab1.Header = "Notes";
+        noteTab1.IconSource = new SymbolIconSource { Symbol = Symbol.Edit };
+
         var clockTabe = AddTab(new ClockPage());
         clockTabe.Header = "Clock";
         clockTabe.IconSource = new SymbolIconSource { Symbol = Symbol.Clock };

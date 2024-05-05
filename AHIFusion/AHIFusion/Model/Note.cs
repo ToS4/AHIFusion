@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace AHIFusion.Model;
 public class Note : INotifyPropertyChanged
@@ -31,7 +32,10 @@ public class Note : INotifyPropertyChanged
         }
     }
 
+    [JsonIgnore]
     private bool isSelected;
+
+    [JsonIgnore]
     public bool IsSelected
     {
         get { return isSelected; }
@@ -41,20 +45,6 @@ public class Note : INotifyPropertyChanged
             {
                 isSelected = value;
                 OnPropertyChanged(nameof(IsSelected));
-            }
-        }
-    }
-
-    private Visibility visibility;
-    public Visibility Visibility
-    {
-        get { return visibility; }
-        set
-        {
-            if (visibility != value)
-            {
-                visibility = value;
-                OnPropertyChanged(nameof(Visibility));
             }
         }
     }

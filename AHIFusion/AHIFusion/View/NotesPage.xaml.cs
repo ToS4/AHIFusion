@@ -1,37 +1,81 @@
 using System.Collections.ObjectModel;
 using AHIFusion.Model;
 using System.Linq;
+using Windows.ApplicationModel.VoiceCommands;
 
 namespace AHIFusion
 {
     public sealed partial class NotesPage : Page
 	{
-        ObservableCollection<Note> notesFiltered = new ObservableCollection<Note>();
+        private ObservableCollection<Note> notesFiltered = new ObservableCollection<Note>();
 
         public NotesPage()
         {
             this.InitializeComponent();
 
             notesFiltered = new ObservableCollection<Note>(NoteCollection.Notes);
-            notesListView.ItemsSource = notesFiltered;
+            NotesListView.ItemsSource = notesFiltered;
+            Update();
+        }
+        private void Update()
+        {
+            var filtered = NoteCollection.Notes.Where(note => Filter(note));
+            RemoveNonMatching(filtered);
+            AddMatching(filtered);
         }
 
+        private bool Filter(Note note)
+        {
+            return note.Title.Contains(SearchTextBox.Text, StringComparison.InvariantCultureIgnoreCase);
+        }
+        
+        private void RemoveNonMatching(IEnumerable<Note> filteredData)
+        {
+            for (int i = notesFiltered.Count - 1; i >= 0; i--)
+            {
+                var item = notesFiltered[i];
+                if (!filteredData.Contains(item))
+                {
+                    notesFiltered.Remove(item);
+                }
+            }
+        }
+        
+        private void AddMatching(IEnumerable<Note> filteredData)
+        {
+            foreach (var item in filteredData)
+            {
+                if (!notesFiltered.Contains(item))
+                {
+                    notesFiltered.Add(item);
+                }
+            }
+        }
+       
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             Note note = new Note("Untitled", "");
             NoteCollection.Add(note);
+            Update();
         }
+        
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            var selectedItem = notesListView.SelectedItem as Note;
+            var selectedItem = NotesListView.SelectedItem as Note;
 
             if (selectedItem != null)
             {
                 NoteCollection.Remove(selectedItem);
+                Update();
             }
         }
-
-        private void notesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Update();
+        }
+        
+        private void NotesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0)
             {
@@ -44,43 +88,6 @@ namespace AHIFusion
                     oldSelectedItem.IsSelected = false;
                 }
             }
-        }
-
-        private bool Filter(Note note)
-        {
-            return note.Title.Contains(SearchTextBox.Text, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private void Remove_NonMatching(IEnumerable<Note> filteredData)
-        {
-            for (int i = notesFiltered.Count - 1; i >= 0; i--)
-            {
-                var item = notesFiltered[i];
-                // If contact is not in the filtered argument list, remove it from the ListView's source.
-                if (!filteredData.Contains(item))
-                {
-                    notesFiltered.Remove(item);
-                }
-            }
-        }
-
-        private void AddBack_Notes(IEnumerable<Note> filteredData)
-        {
-            foreach (var item in filteredData)
-            {
-                // If item in filtered list is not currently in ListView's source collection, add it back in
-                if (!notesFiltered.Contains(item))
-                {
-                    notesFiltered.Add(item);
-                }
-            }
-        }
-
-        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            var filtered = NoteCollection.Notes.Where(note => Filter(note));
-            Remove_NonMatching(filtered);
-            AddBack_Notes(filtered);
         }
     }
 }

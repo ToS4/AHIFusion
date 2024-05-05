@@ -39,7 +39,7 @@
           <SymbolIcon Symbol="Find" HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" />
       </Grid>
 
-      <ListView x:Name="notesListView" Grid.Row="1" SelectionChanged="notesListView_SelectionChanged">
+      <ListView x:Name="notesListView" Grid.Row="1" SelectionChanged="notesListView_SelectionChanged" SelectionMode="Single">
         <ListView.ItemTemplate>
           <DataTemplate>
             <Grid Margin="15" Visibility="{Binding Visibility}">

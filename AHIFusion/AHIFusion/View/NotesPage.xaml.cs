@@ -1,21 +1,19 @@
+using System.Collections.ObjectModel;
 using AHIFusion.Model;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Data;
+using System.Linq;
 
 namespace AHIFusion
 {
     public sealed partial class NotesPage : Page
 	{
+        ObservableCollection<Note> notesFiltered = new ObservableCollection<Note>();
+
         public NotesPage()
         {
             this.InitializeComponent();
 
-            Binding notesItemsSourceBinding = new Binding()
-            {
-                Source = NoteCollection.Notes,
-                Mode = BindingMode.OneWay
-            };
-            notesListView.SetBinding(ListView.ItemsSourceProperty, notesItemsSourceBinding);
+            notesFiltered = new ObservableCollection<Note>(NoteCollection.Notes);
+            notesListView.ItemsSource = notesFiltered;
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -48,21 +46,41 @@ namespace AHIFusion
             }
         }
 
-        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private bool Filter(Note note)
         {
-            string searchText = SearchTextBox.Text.ToLower();
+            return note.Title.Contains(SearchTextBox.Text, StringComparison.InvariantCultureIgnoreCase);
+        }
 
-            foreach (Note note in notesListView.Items)
+        private void Remove_NonMatching(IEnumerable<Note> filteredData)
+        {
+            for (int i = notesFiltered.Count - 1; i >= 0; i--)
             {
-                if (note.Title.ToLower().Contains(searchText))
+                var item = notesFiltered[i];
+                // If contact is not in the filtered argument list, remove it from the ListView's source.
+                if (!filteredData.Contains(item))
                 {
-                    note.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    note.Visibility = Visibility.Collapsed;
+                    notesFiltered.Remove(item);
                 }
             }
+        }
+
+        private void AddBack_Notes(IEnumerable<Note> filteredData)
+        {
+            foreach (var item in filteredData)
+            {
+                // If item in filtered list is not currently in ListView's source collection, add it back in
+                if (!notesFiltered.Contains(item))
+                {
+                    notesFiltered.Add(item);
+                }
+            }
+        }
+
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var filtered = NoteCollection.Notes.Where(note => Filter(note));
+            Remove_NonMatching(filtered);
+            AddBack_Notes(filtered);
         }
     }
 }

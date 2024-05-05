@@ -22,9 +22,16 @@ namespace AHIFusion
 
             NotesListView.ItemsSource = notesFiltered;
 
+            NoteCollection.Notes.CollectionChanged += Notes_CollectionChanged;
+
             Update();
         }
-        
+
+        private void Notes_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            Update();
+        }
+
         private void Update()
         {
             var filtered = NoteCollection.Notes.Where(note => Filter(note));
@@ -93,9 +100,7 @@ namespace AHIFusion
                 IsSelected = false
             };
 
-            NoteCollection.Add(selectableNote.Note);
-            notesFiltered.Add(selectableNote);
-            Update();
+            NoteCollection.Add(selectableNote.Note);;
         }
         
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -105,8 +110,6 @@ namespace AHIFusion
             if (selectedItem != null)
             {
                 NoteCollection.Remove(selectedItem.Note);
-                notesFiltered.Remove(selectedItem);
-                Update();
             }
         }
         

@@ -13,9 +13,14 @@ public sealed partial class MainPage : Page
         Tabs.CollectionChanged += Tabs_CollectionChanged;
         AddHomeTab();
 
-        var tab = AddTab(new NotesPage());
-        tab.Header = "Notes";
-        tab.IconSource = new SymbolIconSource { Symbol = Symbol.Edit };
+        var noteTab = AddTab(new NotesPage());
+        noteTab.Header = "Notes";
+        noteTab.IconSource = new SymbolIconSource { Symbol = Symbol.Edit };
+
+        var clockTabe = AddTab(new ClockPage());
+        clockTabe.Header = "Clock";
+        clockTabe.IconSource = new SymbolIconSource { Symbol = Symbol.Clock };
+
 
         DataContext = this;
     }

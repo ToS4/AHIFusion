@@ -46,6 +46,7 @@
 
   <ItemGroup>
     <None Remove="HomePage.xaml" />
+    <None Remove="View\ClockPage.xaml" />
   </ItemGroup>
 
 
@@ -60,6 +61,6 @@
 
 
   <ItemGroup>
-    <Folder Include="View\" />
+    <UpToDateCheckInput Remove="View\ClockPage.xaml" />
   </ItemGroup>
 </Project>

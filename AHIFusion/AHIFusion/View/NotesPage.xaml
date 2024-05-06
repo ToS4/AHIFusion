@@ -30,13 +30,13 @@
       </Grid.ColumnDefinitions>
 
       <Grid Margin="15">
-          <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="*" />
-              <ColumnDefinition Width="Auto" />
-          </Grid.ColumnDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
 
         <TextBox x:Name="SearchTextBox" Grid.Column="0" Margin="0,0,20,0" Padding="5" VerticalAlignment="Center" TextChanged="SearchTextBox_TextChanged" />
-          <SymbolIcon Symbol="Find" HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" />
+        <SymbolIcon Symbol="Find" HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" />
       </Grid>
 
       <ListView x:Name="NotesListView" Grid.Row="1" SelectionChanged="NotesListView_SelectionChanged" SelectionMode="Single">
@@ -58,5 +58,59 @@
       </ListView>
       <Button x:Name="AddButton" Grid.Row="2" HorizontalAlignment="Stretch" Content="Add Note" Click="AddButton_Click"/>
     </Grid>
+
+    <Grid Grid.Column="1" Grid.Row="0" Background="Red">
+
+      <Grid.RowDefinitions>
+        <RowDefinition Height="95"/>
+        <RowDefinition Height="5*"/>
+      </Grid.RowDefinitions>
+
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+
+
+      <RichEditBox Grid.Row="0" VerticalAlignment="Stretch">
+
+      </RichEditBox>
+
+      <RelativePanel Grid.Row="1" Margin="0,0,0,20" HorizontalAlignment="Stretch">
+        <RelativePanel.Resources>
+          <Style TargetType="Button">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Margin" Value="0,0,8,0" />
+          </Style>
+        </RelativePanel.Resources>
+
+        <Button x:Name="OpenFileButton" AutomationProperties.Name="Open file" ToolTipService.ToolTip="Open file">
+          <Button.Content>
+            <FontIcon Glyph="&#xE8E5;"/>
+          </Button.Content>
+        </Button>
+        <Button x:Name="SaveFileButton" AutomationProperties.Name="Save file" ToolTipService.ToolTip="Save file"
+            RelativePanel.RightOf="OpenFileButton">
+          <Button.Content>
+            <FontIcon Glyph="&#xE74E;"/>
+          </Button.Content>
+        </Button>
+        <Button x:Name="BoldButton" AutomationProperties.Name="Bold" ToolTipService.ToolTip="Bold"
+            RelativePanel.RightOf="SaveFileButton">
+          <Button.Content>
+            <FontIcon Glyph="&#xE8DD;"/>
+          </Button.Content>
+        </Button>
+        <Button x:Name="ItalicButton" AutomationProperties.Name="Italic" ToolTipService.ToolTip="Italic"
+                RelativePanel.RightOf="BoldButton">
+          <Button.Content>
+            <FontIcon Glyph="&#xE8DB;"/>
+          </Button.Content>
+        </Button>
+      </RelativePanel>
+
+    </Grid>
+    
   </Grid>
 </Page>

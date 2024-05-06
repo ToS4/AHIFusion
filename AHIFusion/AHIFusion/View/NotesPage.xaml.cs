@@ -4,6 +4,10 @@ using System.Linq;
 using Windows.ApplicationModel.VoiceCommands;
 using Uno.Extensions.Specialized;
 using System.ComponentModel;
+using Windows.Storage.Pickers;
+using Windows.Storage.Provider;
+using Microsoft.UI.Text;
+using Windows.UI;
 
 namespace AHIFusion
 {

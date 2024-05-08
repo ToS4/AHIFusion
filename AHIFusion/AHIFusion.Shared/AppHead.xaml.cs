@@ -22,6 +22,6 @@ public sealed partial class AppHead : App
     {
         base.OnLaunched(args);
 
-        MainWindow.SetWindowIcon();
+        // MainWindow.SetWindowIcon();
     }
 }

@@ -8,6 +8,12 @@ using Windows.Storage.Pickers;
 using Windows.Storage.Provider;
 using Microsoft.UI.Text;
 using Windows.UI;
+using Windows.Storage.Streams;
+using Windows.UI.Core;
+using Microsoft.UI.Xaml;
+using Windows.Storage.Pickers.Provider;
+using Windows.UI.Popups;
+using Microsoft.UI.Xaml.Controls;
 
 namespace AHIFusion
 {
@@ -136,5 +142,44 @@ namespace AHIFusion
                 }
             }
         }
+
+        private async void OpenFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            FileOpenPicker open = new FileOpenPicker();
+            open.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            open.FileTypeFilter.Add(".rtf");
+
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
+            WinRT.Interop.InitializeWithWindow.Initialize(open, hwnd);
+
+            StorageFile file = await open.PickSingleFileAsync();
+
+            if (file != null)
+            {
+                using (Windows.Storage.Streams.IRandomAccessStream randAccStream =
+                    await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
+                {
+                    EditorRichEditBox.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
+                }
+            }
+        }
+
+        private async void SaveFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+
+        private void BoldButton_Click(object sender, RoutedEventArgs e)
+        {
+            EditorRichEditBox.Document.Selection.CharacterFormat.Bold = FormatEffect.Toggle;
+        }
+
+        private void ItalicButton_Click(object sender, RoutedEventArgs e)
+        {
+            EditorRichEditBox.Document.Selection.CharacterFormat.Italic = FormatEffect.Toggle;
+        }
+
+
     }
 }

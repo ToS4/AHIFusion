@@ -70,43 +70,38 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-      <RichEditBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0">
-
+      <RichEditBox x:Name="EditorRichEditBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Margin="10" Padding="10">
+        <RichEditBox.Header>
+          <TextBlock Padding="5" Text="Note file name, last modified, etc."/>
+        </RichEditBox.Header>
       </RichEditBox>
 
-      <RelativePanel Grid.Row="1" Margin="0,0,0,20" HorizontalAlignment="Stretch">
-        <RelativePanel.Resources>
-          <Style TargetType="Button">
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Margin" Value="0,0,8,0" />
-          </Style>
-        </RelativePanel.Resources>
-
-        <Button x:Name="OpenFileButton" AutomationProperties.Name="Open file" ToolTipService.ToolTip="Open file">
+      <StackPanel Height="Auto" VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left">
+        <Button x:Name="OpenFileButton" AutomationProperties.Name="Open file" ToolTipService.ToolTip="Open file"
+                Margin="5,0,5,0" Click="OpenFileButton_Click">
           <Button.Content>
             <FontIcon Glyph="&#xE8E5;"/>
           </Button.Content>
         </Button>
         <Button x:Name="SaveFileButton" AutomationProperties.Name="Save file" ToolTipService.ToolTip="Save file"
-            RelativePanel.RightOf="OpenFileButton">
+                RelativePanel.RightOf="OpenFileButton" Margin="5,0,5,0" Click="SaveFileButton_Click">
           <Button.Content>
             <FontIcon Glyph="&#xE74E;"/>
           </Button.Content>
         </Button>
         <Button x:Name="BoldButton" AutomationProperties.Name="Bold" ToolTipService.ToolTip="Bold"
-            RelativePanel.RightOf="SaveFileButton">
+            RelativePanel.RightOf="SaveFileButton" Margin="5,0,5,0" Click="BoldButton_Click">
           <Button.Content>
             <FontIcon Glyph="&#xE8DD;"/>
           </Button.Content>
         </Button>
         <Button x:Name="ItalicButton" AutomationProperties.Name="Italic" ToolTipService.ToolTip="Italic"
-                RelativePanel.RightOf="BoldButton">
+                RelativePanel.RightOf="BoldButton" Margin="5,0,5,0" Click="ItalicButton_Click">
           <Button.Content>
             <FontIcon Glyph="&#xE8DB;"/>
           </Button.Content>
         </Button>
-      </RelativePanel>
+      </StackPanel>
 
     </Grid>
     

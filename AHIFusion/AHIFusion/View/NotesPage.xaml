@@ -59,10 +59,10 @@
       <Button x:Name="AddButton" Grid.Row="2" HorizontalAlignment="Stretch" Content="Add Note" Click="AddButton_Click"/>
     </Grid>
 
-    <Grid Grid.Column="1" Grid.Row="0" Background="Red">
+    <Grid Grid.Column="1" Grid.Row="0">
 
       <Grid.RowDefinitions>
-        <RowDefinition Height="95"/>
+        <RowDefinition Height="95*"/>
         <RowDefinition Height="5*"/>
       </Grid.RowDefinitions>
 
@@ -70,9 +70,7 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-
-
-      <RichEditBox Grid.Row="0" VerticalAlignment="Stretch">
+      <RichEditBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0">
 
       </RichEditBox>
 

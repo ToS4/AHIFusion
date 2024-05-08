@@ -45,8 +45,20 @@
 
 
   <ItemGroup>
+    <Content Remove="Assets\Fonts\aptos-light.ttf" />
+    <Content Remove="Assets\Fonts\aptos-semibold.ttf" />
+    <Content Remove="Assets\Fonts\aptos.ttf" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Remove="CustomStyles.xaml" />
     <None Remove="HomePage.xaml" />
+    <None Remove="View\AlarmContent.xaml" />
     <None Remove="View\ClockPage.xaml" />
+    <None Remove="View\StopwatchContent.xaml" />
+    <None Remove="View\TimerContent.xaml" />
+    <None Remove="View\WorldClockContent.xaml" />
   </ItemGroup>
 
 
@@ -62,5 +74,35 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="View\ClockPage.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="CustomStyles.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\AlarmContent.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\StopwatchContent.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\TimerContent.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\WorldClockContent.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="View\Clock\" />
   </ItemGroup>
 </Project>

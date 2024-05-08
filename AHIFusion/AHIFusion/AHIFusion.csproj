@@ -63,4 +63,9 @@
   <ItemGroup>
     <UpToDateCheckInput Remove="View\ClockPage.xaml" />
   </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="View\Notes\" />
+  </ItemGroup>
 </Project>

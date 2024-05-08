@@ -17,7 +17,7 @@ using Microsoft.UI.Xaml.Controls;
 
 namespace AHIFusion
 {
-    public sealed partial class NotesPage : Page
+    public partial class NotesPage : Page
 	{
         private ObservableCollection<SelectableNote> notesFiltered = new ObservableCollection<SelectableNote>();
 
@@ -35,6 +35,8 @@ namespace AHIFusion
             NoteCollection.Notes.CollectionChanged += Notes_CollectionChanged;
 
             Update();
+
+            this.DataContext = this;
         }
 
         private void Notes_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -156,8 +158,8 @@ namespace AHIFusion
 
             if (file != null)
             {
-                using (Windows.Storage.Streams.IRandomAccessStream randAccStream =
-                    await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
+                using (IRandomAccessStream randAccStream =
+                    await file.OpenAsync(FileAccessMode.Read))
                 {
                     EditorRichEditBox.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
                 }
@@ -166,9 +168,28 @@ namespace AHIFusion
 
         private async void SaveFileButton_Click(object sender, RoutedEventArgs e)
         {
-            
-        }
+            var fileSavePicker = new FileSavePicker();
+            fileSavePicker.SuggestedStartLocation = PickerLocationId.ComputerFolder;
+            fileSavePicker.SuggestedFileName = "New Document";
+            fileSavePicker.FileTypeChoices.Add("Rich Text", new List<string>() { ".rtf" });
 
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
+            WinRT.Interop.InitializeWithWindow.Initialize(fileSavePicker, hwnd);
+
+            StorageFile saveFile = await fileSavePicker.PickSaveFileAsync();
+            if (saveFile != null)
+            {
+                CachedFileManager.DeferUpdates(saveFile);
+
+                using (IRandomAccessStream randAccStream =
+                    await saveFile.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    EditorRichEditBox.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
+                }
+
+                //await CachedFileManager.CompleteUpdatesAsync(saveFile);
+            }
+        }
 
         private void BoldButton_Click(object sender, RoutedEventArgs e)
         {
@@ -180,6 +201,9 @@ namespace AHIFusion
             EditorRichEditBox.Document.Selection.CharacterFormat.Italic = FormatEffect.Toggle;
         }
 
-
+        private void UnderlineButton_Click(object sender, RoutedEventArgs e)
+        {
+            EditorRichEditBox.Document.Selection.CharacterFormat.Underline = UnderlineType.Single;
+        }
     }
 }

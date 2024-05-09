@@ -28,6 +28,12 @@
       <NavigationViewItem Icon="ReportHacked" Content="World Clock" Tag="AHIFusion.WorldClockContent" />
     </NavigationView.MenuItems>
     
-    <Frame x:Name="ContentFrame"/>
+    <Frame x:Name="ContentFrame">
+      <Frame.ContentTransitions>
+        <TransitionCollection>
+          <NavigationThemeTransition  />
+        </TransitionCollection>
+      </Frame.ContentTransitions>
+    </Frame>
   </NavigationView>
 </Page>

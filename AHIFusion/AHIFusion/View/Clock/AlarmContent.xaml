@@ -18,9 +18,8 @@
       <ColumnDefinition Width="*"></ColumnDefinition>
     </Grid.ColumnDefinitions>
 
-    <local:AlarmControl Grid.Row="0" Grid.Column="0" Margin="10" Title="Alarm 1"></local:AlarmControl>
-    <local:AlarmControl Grid.Row="0" Grid.Column="1" Margin="10" Title="Fick dich Marlon"></local:AlarmControl>
-    <local:AlarmControl Grid.Row="1" Grid.Column="0" Margin="10"></local:AlarmControl>
-    <local:AlarmControl Grid.Row="1" Grid.Column="1" Margin="10"></local:AlarmControl>
+    <local:AlarmControl Grid.Row="0" Grid.Column="0" Margin="10" Title="Alarm 1" IsOn="False"></local:AlarmControl>
+    <local:AlarmControl Grid.Row="0" Grid.Column="1" Margin="10" Title="Langer Text Beispiel 59, das ist ein Textbeispiel,ABCDEFGHIJKOLODINFADFJADLFKJ"></local:AlarmControl>
+    <local:AlarmControl Grid.Row="1" Grid.Column="0" Margin="10" Title="Alarm 2" IsOn="True"></local:AlarmControl>
     </Grid>
 </Page>

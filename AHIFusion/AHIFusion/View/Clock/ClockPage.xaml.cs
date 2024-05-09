@@ -23,15 +23,29 @@ namespace AHIFusion;
 /// </summary>
 public sealed partial class ClockPage : Page
 {
+    public static object? SelectedItem { get; set; }
+
     public ClockPage()
     {
         this.InitializeComponent();
+
+        SelectedItem = ClockNavigation.MenuItems[1];
+    }
+
+    protected override void OnNavigatedTo(NavigationEventArgs e)
+    {
+        base.OnNavigatedTo(e);
+
+        if (SelectedItem != null)
+        {
+            ClockNavigation.SelectedItem = SelectedItem;
+        }
     }
 
     private void ClockNavigation_Loaded(object sender, RoutedEventArgs e)
     {
 
-        ClockNavigation.SelectedItem = ClockNavigation.MenuItems[1];
+        ClockNavigation.SelectedItem = SelectedItem;
 
         ContentFrame.Navigated += On_Navigated;
 
@@ -59,6 +73,8 @@ public sealed partial class ClockPage : Page
 
     private void ClockNavigation_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
+        SelectedItem = args.SelectedItem;
+
         if (args.IsSettingsSelected)
         {
             return;
@@ -76,7 +92,7 @@ public sealed partial class ClockPage : Page
 
         if (pageType is not null && pageType != preNavigationPageType)
         {
-            ContentFrame.Navigate(pageType, null, transitionInfo);
+            ContentFrame.Navigate(pageType, null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft});
         }
     }
 }

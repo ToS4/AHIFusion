@@ -106,4 +106,9 @@
   <ItemGroup>
     <UpToDateCheckInput Remove="View\Clock\Custom Controls\AlarmControl.xaml" />
   </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="View\Notes\" />
+  </ItemGroup>
 </Project>

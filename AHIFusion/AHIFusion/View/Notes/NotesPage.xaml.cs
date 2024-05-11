@@ -14,6 +14,8 @@ using Microsoft.UI.Xaml;
 using Windows.Storage.Pickers.Provider;
 using Windows.UI.Popups;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Data;
 
 namespace AHIFusion
 {
@@ -134,14 +136,25 @@ namespace AHIFusion
         {
             if (e.AddedItems.Count > 0)
             {
+                RightViewGrid.Visibility = Visibility.Visible;
+                
                 var selectedItem = e.AddedItems[0] as SelectableNote;
                 selectedItem.IsSelected = true;
+
+                Binding binding = new Binding();
+                binding.Source = selectedItem.Note;
+                binding.Path = new PropertyPath("Title");
+                RightViewNoteTitleTextBlock.SetBinding(TextBlock.TextProperty, binding);
 
                 if (e.RemovedItems.Count > 0)
                 {
                     var oldSelectedItem = e.RemovedItems[0] as SelectableNote;
                     oldSelectedItem.IsSelected = false;
                 }
+            } else
+            {
+                RightViewGrid.Visibility = Visibility.Collapsed;
+                RightViewNoteTitleTextBlock.Text = "";
             }
         }
 
@@ -204,6 +217,14 @@ namespace AHIFusion
         private void UnderlineButton_Click(object sender, RoutedEventArgs e)
         {
             EditorRichEditBox.Document.Selection.CharacterFormat.Underline = UnderlineType.Single;
+        }
+
+        private void FontSizeNumberBox_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
+        {
+            if (double.IsNaN(FontSizeNumberBox.Value))
+            {
+                EditorRichEditBox.Document.Selection.CharacterFormat.Size = Convert.ToInt32(FontSizeNumberBox.Value);
+            }
         }
     }
 }

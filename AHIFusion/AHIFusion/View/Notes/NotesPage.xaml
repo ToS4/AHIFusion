@@ -59,8 +59,7 @@
       <Button x:Name="AddButton" Grid.Row="2" HorizontalAlignment="Stretch" Content="Add Note" Click="AddButton_Click"/>
     </Grid>
 
-    <Grid Grid.Column="1" Grid.Row="0">
-
+    <Grid x:Name="RightViewGrid" Grid.Column="1" Grid.Row="0" Visibility="Collapsed">
       <Grid.RowDefinitions>
         <RowDefinition Height="95*"/>
         <RowDefinition Height="5*"/>
@@ -72,7 +71,7 @@
 
       <RichEditBox x:Name="EditorRichEditBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Margin="10" Padding="10">
         <RichEditBox.Header>
-          <TextBlock Padding="5" Text="Note file name, last modified, etc."/>
+          <TextBlock x:Name="RightViewNoteTitleTextBlock" Padding="5"/>
         </RichEditBox.Header>
       </RichEditBox>
 
@@ -107,7 +106,7 @@
             <FontIcon Glyph="&#xe8dc;"/>
           </Button.Content>
         </Button>
-        <NumberBox x:Name="FontSizeNumberBox" Value="{Binding FontSize, Mode=TwoWay}" PlaceholderText="12" AcceptsExpression="True" />
+        <NumberBox x:Name="FontSizeNumberBox" PlaceholderText="12" AcceptsExpression="True" ValueChanged="FontSizeNumberBox_ValueChanged"/>
       </StackPanel>
 
     </Grid>

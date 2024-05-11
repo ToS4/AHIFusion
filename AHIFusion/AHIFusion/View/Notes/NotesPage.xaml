@@ -69,7 +69,7 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-      <RichEditBox x:Name="EditorRichEditBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Margin="10" Padding="10">
+      <RichEditBox SelectionChanged="EditorRichEditBox_SelectionChanged" TextChanged="EditorRichEditBox_TextChanged" LostFocus="EditorRichEditBox_LostFocus"   x:Name="EditorRichEditBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Margin="10" Padding="10">
         <RichEditBox.Header>
           <TextBlock x:Name="RightViewNoteTitleTextBlock" Padding="5"/>
         </RichEditBox.Header>
@@ -106,7 +106,7 @@
             <FontIcon Glyph="&#xe8dc;"/>
           </Button.Content>
         </Button>
-        <NumberBox x:Name="FontSizeNumberBox" PlaceholderText="12" AcceptsExpression="True" ValueChanged="FontSizeNumberBox_ValueChanged"/>
+        <NumberBox x:Name="FontSizeNumberBox" Value="14" AcceptsExpression="True" ValueChanged="FontSizeNumberBox_ValueChanged"/>
       </StackPanel>
 
     </Grid>

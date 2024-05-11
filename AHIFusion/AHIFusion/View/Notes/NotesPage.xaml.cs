@@ -22,6 +22,7 @@ namespace AHIFusion
     public partial class NotesPage : Page
 	{
         private ObservableCollection<SelectableNote> notesFiltered = new ObservableCollection<SelectableNote>();
+        public ITextSelection? textSelection;
 
         public NotesPage()
         {
@@ -136,15 +137,19 @@ namespace AHIFusion
         {
             if (e.AddedItems.Count > 0)
             {
+                textSelection = null;
                 RightViewGrid.Visibility = Visibility.Visible;
-                
+
+                   
                 var selectedItem = e.AddedItems[0] as SelectableNote;
                 selectedItem.IsSelected = true;
 
-                Binding binding = new Binding();
-                binding.Source = selectedItem.Note;
-                binding.Path = new PropertyPath("Title");
-                RightViewNoteTitleTextBlock.SetBinding(TextBlock.TextProperty, binding);
+                Binding Titlebinding = new Binding();
+                Titlebinding.Source = selectedItem.Note;
+                Titlebinding.Path = new PropertyPath("Title");
+                RightViewNoteTitleTextBlock.SetBinding(TextBlock.TextProperty, Titlebinding);
+
+                EditorRichEditBox.Document.SetText(TextSetOptions.None, selectedItem.Note.Text);
 
                 if (e.RemovedItems.Count > 0)
                 {
@@ -155,6 +160,7 @@ namespace AHIFusion
             {
                 RightViewGrid.Visibility = Visibility.Collapsed;
                 RightViewNoteTitleTextBlock.Text = "";
+                textSelection = null;
             }
         }
 
@@ -219,12 +225,36 @@ namespace AHIFusion
             EditorRichEditBox.Document.Selection.CharacterFormat.Underline = UnderlineType.Single;
         }
 
+        private void EditorRichEditBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            textSelection = EditorRichEditBox.Document.Selection;
+            EditorRichEditBox.Document.Selection.SetRange(textSelection.StartPosition, textSelection.EndPosition);
+            //MyRichEditBox.Document.Selection.SetRange(MyRichEditBox.Document.Selection.EndPosition, MyRichEditBox.Document.Selection.EndPosition);
+        }
+
         private void FontSizeNumberBox_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
         {
-            if (double.IsNaN(FontSizeNumberBox.Value))
+            if (FontSizeNumberBox.Value > 0)
             {
-                EditorRichEditBox.Document.Selection.CharacterFormat.Size = Convert.ToInt32(FontSizeNumberBox.Value);
+                EditorRichEditBox.Document.Selection.CharacterFormat.Size = (float)FontSizeNumberBox.Value;
+            }      
+        }
+
+        private void EditorRichEditBox_TextChanged(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = NotesListView.SelectedItem as SelectableNote;
+
+            if (selectedItem != null)
+            {
+                EditorRichEditBox.Document.GetText(TextGetOptions.None, out string text);
+                selectedItem.Note.Text = text;
             }
+        }
+
+        private void EditorRichEditBox_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            ITextCharacterFormat format = EditorRichEditBox.Document.Selection.CharacterFormat;
+            FontSizeNumberBox.Value = format.Size;
         }
     }
 }

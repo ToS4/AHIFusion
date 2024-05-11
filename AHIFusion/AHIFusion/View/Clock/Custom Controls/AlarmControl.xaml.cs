@@ -11,6 +11,8 @@ public sealed partial class AlarmControl : UserControl
     {
         this.InitializeComponent();
 
+        DataContext = this;
+
         _timer = new DispatcherTimer
         {
             Interval = TimeSpan.FromMinutes(1)
@@ -28,7 +30,7 @@ public sealed partial class AlarmControl : UserControl
 
     private void UpdateClockHands()
     {
-        DateTime now = DateTime.Now;
+        TimeOnly now = Time;
         double minuteAngle = now.Minute * 6; // 360 degrees / 60 minutes = 6 degrees per minute
         double hourAngle = (now.Hour % 12 + now.Minute / 60.0) * 30; // 360 degrees / 12 hours = 30 degrees per hour
 

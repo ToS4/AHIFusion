@@ -1,29 +1,42 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.UI.Xaml.Shapes;
 namespace AHIFusion;
 public sealed partial class AlarmControl : UserControl
 {
-    private double hourAngle = 0;
-    private double minuteAngle = 0;
-    private const double HourSpeed = 0.05; // Adjust this value to change hour hand speed
-    private const double MinuteSpeed = 0.5;
+
+    private DispatcherTimer _timer;
 
     public AlarmControl()
     {
         this.InitializeComponent();
-        CompositionTarget.Rendering += CompositionTarget_Rendering;
+
+        _timer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromMinutes(1)
+        };
+        _timer.Tick += Timer_Tick;
+        _timer.Start();
+
+        UpdateClockHands();
     }
 
-    private void CompositionTarget_Rendering(object? sender, object e)
+    private void Timer_Tick(object sender, object e)
     {
-        DateTime currentTime = DateTime.Now;
+        UpdateClockHands();
+    }
 
-        hourAngle += HourSpeed;
-        minuteAngle += MinuteSpeed;
+    private void UpdateClockHands()
+    {
+        DateTime now = DateTime.Now;
+        double minuteAngle = now.Minute * 6; // 360 degrees / 60 minutes = 6 degrees per minute
+        double hourAngle = (now.Hour % 12 + now.Minute / 60.0) * 30; // 360 degrees / 12 hours = 30 degrees per hour
 
-        // Apply rotation to hands
-        hourHand.RenderTransform = new RotateTransform { Angle = hourAngle, CenterX = 0, CenterY = 115 };
-        minuteHand.RenderTransform = new RotateTransform { Angle = minuteAngle, CenterX = 0, CenterY = 115 };
+        MinuteHand.X2 = 150 + 90 * Math.Sin(minuteAngle * Math.PI / 180);
+        MinuteHand.Y2 = 150 - 90 * Math.Cos(minuteAngle * Math.PI / 180);
+
+        HourHand.X2 = 150 + 50 * Math.Sin(hourAngle * Math.PI / 180);
+        HourHand.Y2 = 150 - 50 * Math.Cos(hourAngle * Math.PI / 180);
     }
 
     public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(AlarmControl), new PropertyMetadata(""));

@@ -17,50 +17,40 @@
     </Border>
     <Grid Margin="30">
       <Grid.RowDefinitions>
-        <RowDefinition Height="1.5*"/>
+        <RowDefinition Height="0.8*"/>
         <RowDefinition Height="4*"/>
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 
-      <TextBlock Foreground="Black" Text="{Binding Title}"
-           HorizontalAlignment="Center"
-           FontSize="25"
-           TextAlignment="Center"
-                 Grid.Row="0"/>
-      <Grid Grid.Row="1">
-        <Ellipse Width="220" Height="220" Fill="#F7FAFF" Stroke="Black" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Ellipse Width="170" Height="170" Fill="#F2F7FF" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Ellipse Width="120" Height="120" Fill="#EBF4FF" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Ellipse Width="70" Height="70" Fill="#E3EFFE" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-          <Grid>
-          <Line x:Name="hourHand" Stroke="Black" StrokeThickness="2.5" X1="0" Y1="75" X2="0" Y2="60" HorizontalAlignment="Center"/>
-          <Line x:Name="minuteHand" Stroke="DarkGray" StrokeThickness="2.5" X1="0" Y1="60" X2="0" Y2="30" HorizontalAlignment="Center" />
-              <Ellipse Width="15" Height="15" Stroke="Black" StrokeThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-              <Line Stroke="Black" StrokeThickness="3" X1="0" Y1="10" X2="0" Y2="20" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5">
-                  <Line.RenderTransform>
-                      <RotateTransform Angle="0"/>
-                  </Line.RenderTransform>
-              </Line>
-              <Line Stroke="Black" StrokeThickness="3" X1="0" Y1="10" X2="0" Y2="20" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5">
-                  <Line.RenderTransform>
-                      <RotateTransform Angle="90"/>
-                  </Line.RenderTransform>
-              </Line>
-              <Line Stroke="Black" StrokeThickness="3" X1="0" Y1="10" X2="0" Y2="20" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5">
-                  <Line.RenderTransform>
-                      <RotateTransform Angle="180"/>
-                  </Line.RenderTransform>
-              </Line>
-              <Line Stroke="Black" StrokeThickness="3" X1="0" Y1="10" X2="0" Y2="20" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5">
-                  <Line.RenderTransform>
-                      <RotateTransform Angle="270"/>
-                  </Line.RenderTransform>
-              </Line>
-          </Grid>
-      </Grid>
-      
 
-      <ToggleSwitch AutomationProperties.Name="ToggleSwitch" HorizontalAlignment="Center" Grid.Row="2" IsOn="{Binding IsOn, Mode=TwoWay}"/>
+      <Viewbox Grid.Row="0">
+        <TextBlock Foreground="Black" Text="{Binding Title}"
+            HorizontalAlignment="Center"
+            FontSize="25"
+            TextAlignment="Center"
+            Grid.Row="0"
+                   TextWrapping="Wrap"
+                   MaxWidth="600"/>
+      </Viewbox>
+
+
+      <Viewbox Grid.Row="1">
+        <Grid>
+          <Ellipse x:Name="ClockFace" Width="300" Height="300" Stroke="Black" StrokeThickness="2" Fill="White"/>
+          <Line x:Name="HourHand" X1="150" Y1="150" Stroke="Black" StrokeThickness="4"/>
+          <Line x:Name="MinuteHand" X1="150" Y1="150" Stroke="Black" StrokeThickness="2"/>
+          <Ellipse Width="15" Height="15" Stroke="Black" StrokeThickness="2" Fill="White"/>
+
+          <Line X1="150" Y1="20" X2="150" Y2="0" Stroke="Black" StrokeThickness="4"/>
+          <Line X1="278" Y1="150" X2="298.3" Y2="150" Stroke="Black" StrokeThickness="4"/>
+          <Line X1="150" Y1="278.3" X2="150" Y2="298.3" Stroke="Black" StrokeThickness="4"/>
+          <Line X1="20" Y1="150" X2="0" Y2="150" Stroke="Black" StrokeThickness="4"/>
+        </Grid>
+      </Viewbox>
+
+      <Viewbox Grid.Row="2">
+        <ToggleSwitch AutomationProperties.Name="ToggleSwitch" HorizontalAlignment="Center" Grid.Row="2" IsOn="{Binding IsOn, Mode=TwoWay}"/>
+      </Viewbox>
     </Grid>
 
   </Grid>

@@ -6,26 +6,14 @@ namespace AHIFusion;
 /// </summary>
 public partial class AlarmContent : Page
 {
-    public Alarm alarm1 = new Alarm("TestAlarm", new TimeOnly(7, 0));
+    public Alarm alarm1 { get; set; }
 
     public AlarmContent()
     {
         this.InitializeComponent();
 
-        DataContext = this;
-
-        AlarmControl alarmControl = new AlarmControl()
-        {
-            Title = alarm1.Title,
-            Time = new TimeOnly(3,0),
-            IsOn = true
-        };
-
+        alarm1 = new Alarm("Test Alarm", new TimeOnly(15, 0), false);
         
-
-        MainGrid.Children.Add(alarmControl);
-
-        Grid.SetRow(alarmControl, 1);
-        Grid.SetColumn(alarmControl, 1);
+        DataContext = this;
     }
 }

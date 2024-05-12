@@ -15,7 +15,7 @@ public class Alarm : INotifyPropertyChanged
             if (title != value)
             {
                 title = value;
-                onPropertyChanged("Title");
+                onPropertyChanged(nameof(Title));
             }
         }
     }
@@ -32,13 +32,13 @@ public class Alarm : INotifyPropertyChanged
             if (time != value)
             {
                 time = value;
-                onPropertyChanged("Time");
+                onPropertyChanged(nameof(Time));
             }
         }
     }
 
     private bool isOn;
-    private bool IsOn
+    public bool IsOn
     {
         get
         {
@@ -49,15 +49,16 @@ public class Alarm : INotifyPropertyChanged
             if (isOn != value)
             {
                 isOn = value;
-                onPropertyChanged("IsOn");
+                onPropertyChanged(nameof(IsOn));
             }
         }
     }
 
-    public Alarm(string title, TimeOnly time)
+    public Alarm(string title, TimeOnly time, bool isOn)
     {
         Title = title;
         Time = time;
+        IsOn = isOn;
     }
 
     public Alarm() { }

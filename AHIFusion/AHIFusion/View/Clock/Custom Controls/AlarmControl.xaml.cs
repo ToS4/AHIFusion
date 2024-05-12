@@ -4,28 +4,14 @@ using Microsoft.UI.Xaml.Shapes;
 namespace AHIFusion;
 public sealed partial class AlarmControl : UserControl
 {
-
-    private DispatcherTimer _timer;
-
     public AlarmControl()
     {
         this.InitializeComponent();
 
         DataContext = this;
 
-        _timer = new DispatcherTimer
-        {
-            Interval = TimeSpan.FromMinutes(1)
-        };
-        _timer.Tick += Timer_Tick;
-        _timer.Start();
-
         UpdateClockHands();
-    }
 
-    private void Timer_Tick(object sender, object e)
-    {
-        UpdateClockHands();
     }
 
     private void UpdateClockHands()
@@ -57,11 +43,14 @@ public sealed partial class AlarmControl : UserControl
         set { SetValue(IsOnProperty, value); }
     }
 
-    public static readonly DependencyProperty TimeProperty = DependencyProperty.Register("Time", typeof(TimeOnly), typeof(AlarmControl), new PropertyMetadata(new TimeOnly(0,0,0)));
+    public static readonly DependencyProperty TimeProperty = DependencyProperty.Register("Time", typeof(TimeOnly), typeof(AlarmControl), new PropertyMetadata(new TimeOnly(0,15)));
 
     public TimeOnly Time
     {
         get { return (TimeOnly)GetValue(TimeProperty); }
-        set { SetValue(TimeProperty, value); }
+        set
+        {
+            SetValue(TimeProperty, value);
+        }
     }
 }

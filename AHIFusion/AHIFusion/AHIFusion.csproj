@@ -56,6 +56,7 @@
     <None Remove="HomePage.xaml" />
     <None Remove="View\AlarmContent.xaml" />
     <None Remove="View\ClockPage.xaml" />
+    <None Remove="View\Clock\Custom Controls\AddAlarm.xaml" />
     <None Remove="View\Clock\Custom Controls\AddRectControl.xaml" />
     <None Remove="View\Clock\Custom Controls\AlarmControl.xaml" />
     <None Remove="View\StopwatchContent.xaml" />
@@ -116,5 +117,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="View\Clock\Custom Controls\AddRectControl.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Clock\Custom Controls\AddAlarm.xaml" />
   </ItemGroup>
 </Project>

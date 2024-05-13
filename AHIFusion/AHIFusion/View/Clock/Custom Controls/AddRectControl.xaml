@@ -9,7 +9,7 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-  <Grid>
+  <Grid PointerPressed="Grid_PointerPressed">
     <Border BorderThickness="4" BorderBrush="Black" CornerRadius="20">
       <Rectangle x:Name="rect" Fill="DarkGray" PointerEntered="Rect_PointerEntered" PointerExited="Rect_PointerExited"/>
     </Border>

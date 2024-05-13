@@ -14,10 +14,6 @@ public partial class AlarmContent : Page
         this.InitializeComponent();
 
         alarm1 = new Alarm("Joudi", new TimeOnly(8, 0), false);
-        alarm1.Time = new TimeOnly(8, 0);
-
-        alarm1.Title = "Fick dich";
-        
         DataContext = this;
     }
 }

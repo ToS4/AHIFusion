@@ -13,7 +13,7 @@
 
   <Grid>
     <Border BorderThickness="4" BorderBrush="Black" CornerRadius="20">
-      <Rectangle Fill="DarkGray"/>
+      <Rectangle x:Name="rect" Fill="DarkGray" PointerEntered="Rect_PointerEntered" PointerExited="Rect_PointerExited"/>
     </Border>
     <Grid Margin="30">
       <Grid.RowDefinitions>

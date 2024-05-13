@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Shapes;
 using Windows.UI.Popups;
 namespace AHIFusion;
@@ -43,7 +44,7 @@ public sealed partial class AlarmControl : UserControl
         set { SetValue(IsOnProperty, value); }
     }
 
-    public static DependencyProperty TimeProperty = DependencyProperty.Register("Time", typeof(TimeOnly), typeof(AlarmControl), new PropertyMetadata(new TimeOnly(0,15), OnTimeChanged));
+    public static readonly DependencyProperty TimeProperty = DependencyProperty.Register("Time", typeof(TimeOnly), typeof(AlarmControl), new PropertyMetadata(new TimeOnly(0,15), OnTimeChanged));
 
     public TimeOnly Time
     {
@@ -58,5 +59,15 @@ public sealed partial class AlarmControl : UserControl
     {
         AlarmControl control = d as AlarmControl;
         control?.UpdateClockHands();
+    }
+
+    private void Rect_PointerEntered(object sender, PointerRoutedEventArgs e)
+    {
+        rect.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 149, 149, 149)); // Change to a darker color when the pointer enters
+    }
+
+    private void Rect_PointerExited(object sender, PointerRoutedEventArgs e)
+    {
+        rect.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 169, 169, 169)); // Change back to the original color when the pointer exits
     }
 }

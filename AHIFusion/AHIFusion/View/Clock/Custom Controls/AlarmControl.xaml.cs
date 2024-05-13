@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Microsoft.UI.Xaml.Shapes;
+using Windows.UI.Popups;
 namespace AHIFusion;
 public sealed partial class AlarmControl : UserControl
 {
+
     public AlarmControl()
     {
         this.InitializeComponent();
 
-        DataContext = this;
-
         UpdateClockHands();
-
     }
 
     private void UpdateClockHands()
@@ -43,7 +43,7 @@ public sealed partial class AlarmControl : UserControl
         set { SetValue(IsOnProperty, value); }
     }
 
-    public static readonly DependencyProperty TimeProperty = DependencyProperty.Register("Time", typeof(TimeOnly), typeof(AlarmControl), new PropertyMetadata(new TimeOnly(0,15)));
+    public static DependencyProperty TimeProperty = DependencyProperty.Register("Time", typeof(TimeOnly), typeof(AlarmControl), new PropertyMetadata(new TimeOnly(0,15), OnTimeChanged));
 
     public TimeOnly Time
     {
@@ -52,5 +52,11 @@ public sealed partial class AlarmControl : UserControl
         {
             SetValue(TimeProperty, value);
         }
+    }
+
+    private static void OnTimeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        AlarmControl control = d as AlarmControl;
+        control?.UpdateClockHands();
     }
 }

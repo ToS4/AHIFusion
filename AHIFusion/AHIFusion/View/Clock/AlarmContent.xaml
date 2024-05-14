@@ -13,18 +13,16 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <local:AlarmControl MaxHeight="320" DataContext="{Binding alarm1}" Grid.Row="0" Grid.Column="0" Margin="10" Time="{Binding Time, Mode=TwoWay}" Title="{Binding Title, Mode=TwoWay}" IsOn="{Binding IsOn, Mode=TwoWay}"></local:AlarmControl>
+            <!--<local:AlarmControl MaxHeight="320" DataContext="{Binding alarm1}" Grid.Row="0" Grid.Column="0" Margin="10" Time="{Binding Time, Mode=TwoWay}" Title="{Binding Title, Mode=TwoWay}" IsOn="{Binding IsOn, Mode=TwoWay}"></local:AlarmControl>
             <local:AlarmControl MaxHeight="320" Grid.Row="0" Grid.Column="1" Margin="10" Title="Langer Text Beispiel 59, das ist ein Tsextbeispiel,ABCDEFGHIJKOLODINFADFJADLFKJ"></local:AlarmControl>
             <local:AlarmControl MaxHeight="320" Grid.Row="1" Grid.Column="0" Margin="10" Title="Alarm 2" IsOn="True"></local:AlarmControl>
-            <local:AddRectControl Grid.Row="1" Grid.Column="1" Margin="10"></local:AddRectControl>
+            <local:AddRectControl Grid.Row="1" Grid.Column="1" Margin="10"></local:AddRectControl>-->
         </Grid>
     </ScrollViewer>
 </Page>

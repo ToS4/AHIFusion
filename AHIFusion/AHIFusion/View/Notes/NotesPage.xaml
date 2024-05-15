@@ -69,7 +69,7 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-      <RichEditBox SelectionChanged="EditorRichEditBox_SelectionChanged" TextChanged="EditorRichEditBox_TextChanged" LostFocus="EditorRichEditBox_LostFocus"   x:Name="EditorRichEditBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Margin="10" Padding="10">
+      <RichEditBox Loaded="EditorRichEditBox_Loaded" Unloaded="EditorRichEditBox_Unloaded" TextChanged="EditorRichEditBox_TextChanged" x:Name="EditorRichEditBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Margin="10" Padding="10">
         <RichEditBox.Header>
           <TextBlock x:Name="RightViewNoteTitleTextBlock" Padding="5"/>
         </RichEditBox.Header>
@@ -88,25 +88,6 @@
             <FontIcon Glyph="&#xe74e;"/>
           </Button.Content>
         </Button>
-        <Button x:Name="BoldButton" AutomationProperties.Name="Bold" ToolTipService.ToolTip="Bold"
-                Margin="5,0,5,0" Click="BoldButton_Click">
-          <Button.Content>
-            <FontIcon Glyph="&#xe8dd;"/>
-          </Button.Content>
-        </Button>
-        <Button x:Name="ItalicButton" AutomationProperties.Name="Italic" ToolTipService.ToolTip="Italic"
-                Margin="5,0,5,0" Click="ItalicButton_Click">
-          <Button.Content>
-            <FontIcon Glyph="&#xe8db;"/>
-          </Button.Content>
-        </Button>
-        <Button x:Name="UnderlineButton" AutomationProperties.Name="Underline" ToolTipService.ToolTip="Underline"
-                Margin="5,0,5,0" Click="UnderlineButton_Click">
-          <Button.Content>
-            <FontIcon Glyph="&#xe8dc;"/>
-          </Button.Content>
-        </Button>
-        <NumberBox x:Name="FontSizeNumberBox" Value="14" AcceptsExpression="True" ValueChanged="FontSizeNumberBox_ValueChanged"/>
       </StackPanel>
 
     </Grid>

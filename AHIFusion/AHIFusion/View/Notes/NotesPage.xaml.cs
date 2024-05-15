@@ -16,14 +16,16 @@ using Windows.UI.Popups;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Input;
+using Windows.System;
+using Microsoft.UI.Xaml.Documents;
+using System;
 
 namespace AHIFusion
 {
     public partial class NotesPage : Page
 	{
         private ObservableCollection<SelectableNote> notesFiltered = new ObservableCollection<SelectableNote>();
-        public ITextSelection? textSelection;
-
         public NotesPage()
         {
             this.InitializeComponent();
@@ -37,9 +39,79 @@ namespace AHIFusion
 
             NoteCollection.Notes.CollectionChanged += Notes_CollectionChanged;
 
+            EditorRichEditBox.IsTabStop = true;
+            EditorRichEditBox.TabNavigation = KeyboardNavigationMode.Local;
+
+            EditorRichEditBox.KeyUp += EditorRichEditBox_KeyUp;
+            EditorRichEditBox.Paste += EditorRichEditBox_Paste;
+
             Update();
 
             this.DataContext = this;
+        }
+
+        private void EditorRichEditBox_Paste(object sender, TextControlPasteEventArgs e)
+        {
+            //var range = EditorRichEditBox.Document.GetRange(EditorRichEditBox.Document.Selection.StartPosition, EditorRichEditBox.Document.Selection.EndPosition);
+
+            ApplyParagraphStyle(11, FormatEffect.Off);
+        }
+
+        private void EditorRichEditBox_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == VirtualKey.Enter)
+            {
+                ApplyParagraphStyle(11, FormatEffect.Off);
+            }
+        }
+
+        private void Menu_Opening(object sender, object e)
+        {
+            CommandBarFlyout myFlyout = sender as CommandBarFlyout;
+            if (myFlyout.Target == EditorRichEditBox)
+            {
+
+                AppBarButton standardButton = new AppBarButton();
+                FontIcon fontIcon1 = new FontIcon
+                {
+                    FontFamily = new FontFamily("Segoe UI"),
+                    Glyph = "S"
+                };
+                standardButton.Icon = fontIcon1;
+                standardButton.Click += (s, e) => ApplyParagraphStyle(11, FormatEffect.Off); // Normal font size, not bold
+                myFlyout.PrimaryCommands.Add(standardButton);
+
+                AppBarButton heading1Button = new AppBarButton();
+                FontIcon fontIcon2 = new FontIcon
+                {
+                    FontFamily = new FontFamily("Segoe UI"),
+                    Glyph = "H1"
+                };
+                heading1Button.Icon = fontIcon2;
+                heading1Button.Click += (s, e) => ApplyParagraphStyle(24, FormatEffect.On); // Large font size, bold
+                myFlyout.PrimaryCommands.Add(heading1Button);
+            }
+        }
+
+        private void ApplyParagraphStyle(float size, FormatEffect bold)
+        {
+            var range = EditorRichEditBox.Document.GetRange(EditorRichEditBox.Document.Selection.StartPosition, EditorRichEditBox.Document.Selection.EndPosition);
+            range.Expand(TextRangeUnit.Paragraph);
+
+            range.CharacterFormat.Size = size;
+            range.CharacterFormat.Bold = bold;
+        }
+
+        private void EditorRichEditBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            EditorRichEditBox.SelectionFlyout.Opening += Menu_Opening;
+            EditorRichEditBox.ContextFlyout.Opening += Menu_Opening;
+        }
+
+        private void EditorRichEditBox_Unloaded(object sender, RoutedEventArgs e)
+        {
+            EditorRichEditBox.SelectionFlyout.Opening -= Menu_Opening;
+            EditorRichEditBox.ContextFlyout.Opening -= Menu_Opening;
         }
 
         private void Notes_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -137,7 +209,6 @@ namespace AHIFusion
         {
             if (e.AddedItems.Count > 0)
             {
-                textSelection = null;
                 RightViewGrid.Visibility = Visibility.Visible;
 
                    
@@ -149,7 +220,7 @@ namespace AHIFusion
                 Titlebinding.Path = new PropertyPath("Title");
                 RightViewNoteTitleTextBlock.SetBinding(TextBlock.TextProperty, Titlebinding);
 
-                EditorRichEditBox.Document.SetText(TextSetOptions.None, selectedItem.Note.Text);
+                EditorRichEditBox.Document.SetText(TextSetOptions.FormatRtf, selectedItem.Note.Text);
 
                 if (e.RemovedItems.Count > 0)
                 {
@@ -160,7 +231,6 @@ namespace AHIFusion
             {
                 RightViewGrid.Visibility = Visibility.Collapsed;
                 RightViewNoteTitleTextBlock.Text = "";
-                textSelection = null;
             }
         }
 
@@ -210,51 +280,15 @@ namespace AHIFusion
             }
         }
 
-        private void BoldButton_Click(object sender, RoutedEventArgs e)
-        {
-            EditorRichEditBox.Document.Selection.CharacterFormat.Bold = FormatEffect.Toggle;
-        }
-
-        private void ItalicButton_Click(object sender, RoutedEventArgs e)
-        {
-            EditorRichEditBox.Document.Selection.CharacterFormat.Italic = FormatEffect.Toggle;
-        }
-
-        private void UnderlineButton_Click(object sender, RoutedEventArgs e)
-        {
-            EditorRichEditBox.Document.Selection.CharacterFormat.Underline = UnderlineType.Single;
-        }
-
-        private void EditorRichEditBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            textSelection = EditorRichEditBox.Document.Selection;
-            EditorRichEditBox.Document.Selection.SetRange(textSelection.StartPosition, textSelection.EndPosition);
-            //MyRichEditBox.Document.Selection.SetRange(MyRichEditBox.Document.Selection.EndPosition, MyRichEditBox.Document.Selection.EndPosition);
-        }
-
-        private void FontSizeNumberBox_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
-        {
-            if (FontSizeNumberBox.Value > 0)
-            {
-                EditorRichEditBox.Document.Selection.CharacterFormat.Size = (float)FontSizeNumberBox.Value;
-            }      
-        }
-
         private void EditorRichEditBox_TextChanged(object sender, RoutedEventArgs e)
         {
             var selectedItem = NotesListView.SelectedItem as SelectableNote;
 
             if (selectedItem != null)
             {
-                EditorRichEditBox.Document.GetText(TextGetOptions.None, out string text);
-                selectedItem.Note.Text = text;
+                EditorRichEditBox.Document.GetText(TextGetOptions.FormatRtf, out string formatedText);
+                selectedItem.Note.Text = formatedText;
             }
-        }
-
-        private void EditorRichEditBox_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-            ITextCharacterFormat format = EditorRichEditBox.Document.Selection.CharacterFormat;
-            FontSizeNumberBox.Value = format.Size;
         }
     }
 }

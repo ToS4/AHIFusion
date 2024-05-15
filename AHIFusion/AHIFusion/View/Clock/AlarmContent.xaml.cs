@@ -16,19 +16,27 @@ public partial class AlarmContent : Page
 {
     public Alarm alarm1 { get; set; } = new Alarm("Joudi", new TimeOnly(8, 10), true);
     public Alarm alarm2 { get; set; } = new Alarm("Alarm 2", new TimeOnly(5, 45), false);
-    public Alarm alarm3 { get; set; } = new Alarm("Test", new TimeOnly(12, 30), true);
-    public Alarm alarm4 { get; set; } = new Alarm("Langer Text für Hausaufgaben", new TimeOnly(22, 53), false);
-    public Alarm alarm5 { get; set; } = new Alarm("Langer Text für Hausaufgaben", new TimeOnly(22, 53), false);
 
     public AlarmContent()
     {
         this.InitializeComponent();
 
+         Dictionary<string, bool> defaultDays = new Dictionary<string, bool>
+        {
+            { "Mo", false },
+            { "Tu", false },
+            { "We", true },
+            { "Th", false },
+            { "Fr", false },
+            { "Sa", true },
+            { "Su", false }
+        };
+
+        alarm1.Days = defaultDays;
+        alarm2.Days = defaultDays;
+
         AlarmCollection.Alarms.Add(alarm1);
         AlarmCollection.Alarms.Add(alarm2);
-        AlarmCollection.Alarms.Add(alarm3);
-        AlarmCollection.Alarms.Add(alarm4);
-        AlarmCollection.Alarms.Add(alarm5);
 
         DataContext = this;
 
@@ -41,8 +49,6 @@ public partial class AlarmContent : Page
 
     private void InitializeControls()
     {
-        MainGrid.Children.Clear();
-        MainGrid.RowDefinitions.Clear();
 
         for (int i = 0; i < AlarmCollection.Alarms.Count; i++)
         {
@@ -50,7 +56,8 @@ public partial class AlarmContent : Page
             {
                 DataContext = AlarmCollection.Alarms[i],
                 Margin = new Thickness(10),
-                MaxHeight = 320
+                MaxHeight = 320,
+                MinHeight = 320
             };
 
             Binding timeBinding = new Binding
@@ -71,9 +78,16 @@ public partial class AlarmContent : Page
                 Mode = BindingMode.TwoWay
             };
 
+            Binding daysBinding = new Binding
+            {
+                Path = new PropertyPath("Days"),
+                Mode = BindingMode.TwoWay
+            };
+
             alarmControl.SetBinding(AlarmControl.TimeProperty, timeBinding);
             alarmControl.SetBinding(AlarmControl.TitleProperty, titleBinding);
             alarmControl.SetBinding(AlarmControl.IsOnProperty, isOnBinding);
+            alarmControl.SetBinding(AlarmControl.DaysProperty, daysBinding);
 
             int row = i / 2;
             int column = i % 2;
@@ -102,7 +116,8 @@ public partial class AlarmContent : Page
         AddRectControl addRectControl = new AddRectControl
         {
             Margin = new Thickness(10),
-            MaxHeight = 320
+            MaxHeight = 320,
+            MinHeight = 320
         };
 
         int addRectRow = AlarmCollection.Alarms.Count / 2;
@@ -147,7 +162,8 @@ public partial class AlarmContent : Page
         {
             DataContext = alarm,
             Margin = new Thickness(10),
-            MaxHeight = 320
+            MaxHeight = 320,
+            MinHeight = 320
         };
 
         Binding timeBinding = new Binding

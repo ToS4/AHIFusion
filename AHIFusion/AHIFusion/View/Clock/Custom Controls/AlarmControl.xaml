@@ -10,10 +10,13 @@
     d:DesignWidth="400"
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
+  <UserControl.Resources>
+    <local:DayToColorConverter x:Key="DayToColorConverter"/>
+  </UserControl.Resources>
 
-  <Grid>
+  <Grid PointerEntered="Grid_PointerEntered" PointerExited="Grid_PointerExited">
     <Border BorderThickness="4" BorderBrush="Black" CornerRadius="20">
-      <Rectangle x:Name="rect" Fill="DarkGray" PointerEntered="Rect_PointerEntered" PointerExited="Rect_PointerExited"/>
+      <Rectangle x:Name="rect" Fill="DarkGray"/>
     </Border>
     <Grid Margin="30">
       <Grid.RowDefinitions>
@@ -22,8 +25,13 @@
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="0.8*"></ColumnDefinition>
+        <ColumnDefinition Width="*"></ColumnDefinition>
+      </Grid.ColumnDefinitions>
 
-      <Viewbox Grid.Row="0">
+
+      <Viewbox Grid.Row="0" Grid.Column="2">
         <TextBlock Foreground="Black" Text="{Binding Title}"
             HorizontalAlignment="Center"
             FontSize="25"
@@ -34,7 +42,7 @@
       </Viewbox>
 
 
-      <Viewbox Grid.Row="1">
+      <Viewbox x:Name="ClockViewbox" Visibility="Collapsed" Grid.RowSpan="3">
         <Grid>
           <Ellipse x:Name="ClockFace" Width="300" Height="300" Stroke="Black" StrokeThickness="2" Fill="White"/>
           <Line x:Name="HourHand" X1="150" Y1="150" Stroke="Black" StrokeThickness="4"/>
@@ -48,7 +56,25 @@
         </Grid>
       </Viewbox>
 
-      <Viewbox Grid.Row="2">
+      <Viewbox x:Name="TextViewbox" Grid.RowSpan="3">
+        <TextBlock Text="{Binding Time}" Foreground="Black"></TextBlock>
+      </Viewbox>
+
+      <Viewbox Grid.Row="1" Grid.Column="1">
+        <Border BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="20">
+          <StackPanel Orientation="Horizontal" Margin="5,8,5,2" >
+            <TextBlock Text="Mo" Margin="3" FontSize="16" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Mo'}" />
+            <TextBlock Text="Tu" Margin="3" FontSize="16" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Tu'}" />
+            <TextBlock Text="We" Margin="3" FontSize="16" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='We'}" />
+            <TextBlock Text="Th" Margin="3" FontSize="16" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Th'}" />
+            <TextBlock Text="Fr" Margin="3" FontSize="16" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Fr'}" />
+            <TextBlock Text="Sa" Margin="3" FontSize="16" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Sa'}" />
+            <TextBlock Text="Su" Margin="3" FontSize="16" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Su'}" />
+          </StackPanel>
+        </Border>
+      </Viewbox>
+
+      <Viewbox Grid.Row="2" Grid.Column="1">
         <ToggleSwitch AutomationProperties.Name="ToggleSwitch" HorizontalAlignment="Center" Grid.Row="2" IsOn="{Binding IsOn, Mode=TwoWay}"/>
       </Viewbox>
     </Grid>

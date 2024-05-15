@@ -55,19 +55,40 @@ public sealed partial class AlarmControl : UserControl
         }
     }
 
+    public static Dictionary<string, bool> defaultDays = new Dictionary<string, bool>
+    {
+        { "Mo", false },
+        { "Tu", false },
+        { "We", true },
+        { "Th", false },
+        { "Fr", false },
+        { "Sa", false },
+        { "Su", false }
+    };
+    public static readonly DependencyProperty DaysProperty = DependencyProperty.Register("Days", typeof(Dictionary<string, bool>), typeof(AlarmControl), new PropertyMetadata(defaultDays));
+    public Dictionary<string, bool> Days
+    {
+        get { return (Dictionary<string, bool>)GetValue(DaysProperty); }
+        set { SetValue(DaysProperty, value); }
+    }
+
     private static void OnTimeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         AlarmControl control = d as AlarmControl;
         control?.UpdateClockHands();
     }
 
-    private void Rect_PointerEntered(object sender, PointerRoutedEventArgs e)
+    private void Grid_PointerEntered(object sender, PointerRoutedEventArgs e)
     {
-        rect.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 149, 149, 149)); // Change to a darker color when the pointer enters
+        ClockViewbox.Visibility = Visibility.Visible;
+        TextViewbox.Visibility = Visibility.Collapsed;
+        rect.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 149, 149, 149));
     }
 
-    private void Rect_PointerExited(object sender, PointerRoutedEventArgs e)
+    private void Grid_PointerExited(object sender, PointerRoutedEventArgs e)
     {
-        rect.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 169, 169, 169)); // Change back to the original color when the pointer exits
+        ClockViewbox.Visibility = Visibility.Collapsed;
+        TextViewbox.Visibility = Visibility.Visible;
+        rect.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 169, 169, 169));
     }
 }

@@ -37,6 +37,23 @@ public class Alarm : INotifyPropertyChanged
         }
     }
 
+    private Dictionary<string, bool> days = new Dictionary<string, bool>();
+    public Dictionary<string, bool> Days
+    {
+        get
+        {
+            return days;
+        }
+        set
+        {
+            if (days != value)
+            {
+                days = value;
+                onPropertyChanged(nameof(Days));
+            }
+        }
+    }
+
     private bool isOn;
     public bool IsOn
     {

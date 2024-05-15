@@ -9,11 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AHIFusion", "AHIFusion\AHIFusion.csproj", "{2D3679AD-27F8-4BB1-B85D-BA4290C967BB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AHIFusion.Wasm", "AHIFusion.Wasm\AHIFusion.Wasm.csproj", "{0AD3E45E-D000-4BFC-9B28-A6F2A29DA281}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AHIFusion.Windows", "AHIFusion.Windows\AHIFusion.Windows.csproj", "{43F6A85E-EED8-4F3C-B580-48D3F16BB741}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AHIFusion.Mobile", "AHIFusion.Mobile\AHIFusion.Mobile.csproj", "{A6449846-C159-4DB0-9432-381190FD8F97}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AHIFusion.Shared", "AHIFusion.Shared\AHIFusion.Shared.csproj", "{8230D328-FB88-424C-B919-854A73E22F17}"
 EndProject

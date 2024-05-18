@@ -8,7 +8,6 @@ namespace AHIFusion;
 public sealed partial class AlarmControl : UserControl
 {
     public TimeSpan TimeLeft { get; set; }
-    public string TimeLeftText { get; set; }
     public DispatcherTimer timer = new DispatcherTimer();
 
     public AlarmControl()
@@ -47,6 +46,14 @@ public sealed partial class AlarmControl : UserControl
     {
         get { return (string)GetValue(TitleProperty); }
         set { SetValue(TitleProperty, value); }
+    }
+
+    public static readonly DependencyProperty TimeLeftTextProperty = DependencyProperty.Register("TimeLeftText", typeof(string), typeof(AlarmControl), new PropertyMetadata(""));
+
+    public string TimeLeftText
+    {
+        get { return (string)GetValue(TimeLeftTextProperty); }
+        set { SetValue(TimeLeftTextProperty, value); }
     }
 
     public static readonly DependencyProperty IsOnProperty = DependencyProperty.Register("IsOn", typeof(bool), typeof(AlarmControl), new PropertyMetadata(true));
@@ -112,21 +119,25 @@ public sealed partial class AlarmControl : UserControl
 
         if (now > alarmTimeToday)
         {
-            now = now.AddDays(1);
+            alarmTimeToday = alarmTimeToday.AddDays(1);
         }
 
         for (int i = 0; i < 7; i++)
         {
-            string dayOfWeek = now.DayOfWeek.ToString().Substring(0, 2);
+            string dayOfWeek = alarmTimeToday.DayOfWeek.ToString().Substring(0, 2);
             if (Days.ContainsKey(dayOfWeek) && Days[dayOfWeek])
             {
-                DateTime alarmTime = new DateTime(now.Year, now.Month, now.Day, Time.Hour, Time.Minute, 0);
-                TimeLeft = alarmTime - DateTime.Now;
+                TimeLeft = alarmTimeToday - DateTime.Now;
+                if (TimeLeft.Days != 0)
+                {
+                    TimeLeftText = $"Your Alarm will ring in {TimeLeft.Days}d {TimeLeft.Hours}h {TimeLeft.Minutes}min";
+                    return;
+                }
                 TimeLeftText = $"Your Alarm will ring in {TimeLeft.Hours}h {TimeLeft.Minutes}min";
                 return;
             }
 
-            now = now.AddDays(1);
+            alarmTimeToday = alarmTimeToday.AddDays(1);
         }
 
         TimeLeft = TimeSpan.FromDays(7);

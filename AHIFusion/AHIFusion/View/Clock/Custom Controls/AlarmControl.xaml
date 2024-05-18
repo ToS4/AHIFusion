@@ -74,7 +74,7 @@
               <TextBlock Text="Su" Margin="3" FontSize="16" TextDecorations="{Binding Days, Converter={StaticResource DayToTextDecorationsConverter}, ConverterParameter='Su'}" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Su'}" />
             </StackPanel>
           </Border>
-          <TextBlock Text="{x:Bind TimeLeftText, Mode=OneWay}" Foreground="Black" ></TextBlock>
+          <TextBlock Text="{x:Bind TimeLeftText, Mode=OneWay}" Foreground="Black" HorizontalAlignment="Center"></TextBlock>
         </StackPanel>
       </Viewbox>
 

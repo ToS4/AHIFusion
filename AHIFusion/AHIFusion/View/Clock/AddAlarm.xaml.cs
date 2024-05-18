@@ -4,9 +4,9 @@ using AHIFusion.Model;
 namespace AHIFusion;
 public sealed partial class AddAlarm : ContentDialog
 {
-    public string Name { get; set; } = $"Alarm {AlarmCollection.Alarms.Count + 1}";
-    public TimeSpan Time { get; set; } = new TimeSpan(10, 0, 0);
-    public Dictionary<string, bool> days = new Dictionary<string, bool>
+    public string NameAdd { get; set; } = $"Alarm {AlarmCollection.Alarms.Count + 1}";
+    public TimeSpan TimeAdd { get; set; } = new TimeSpan(10, 0, 0);
+    public Dictionary<string, bool> DaysAdd { get; set; } = new Dictionary<string, bool>
         {
             { "Mo", true },
             { "Tu", true },
@@ -24,6 +24,13 @@ public sealed partial class AddAlarm : ContentDialog
 
     private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
-        AlarmCollection.Alarms.Add(new Alarm(Name, TimeOnly.FromTimeSpan(Time), true));
+        Alarm alarmToAdd = new Alarm()
+        {
+            Title = NameAdd,
+            Time = TimeOnly.FromTimeSpan(TimeAdd),
+            IsOn = true,
+            Days = DaysAdd
+        };
+        AlarmCollection.Alarms.Add(alarmToAdd);
     }
 }

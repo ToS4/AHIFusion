@@ -14,9 +14,9 @@
 
   <StackPanel Margin="5">
     <TextBlock Text="Alarm Name:" Margin="0,10,0,15"/>
-    <TextBox Text="{Binding Name, Mode=TwoWay}"/>
+    <TextBox Text="{Binding NameAdd, Mode=TwoWay}"/>
     <TextBlock Text="Alarm Time:" Margin="0,25,0,15"/>
-    <TimePicker Time="{Binding Time, Mode=TwoWay}"/>
+    <TimePicker Time="{Binding TimeAdd, Mode=TwoWay}"/>
     <TextBlock Text="Alarm Days:" Margin="0,25,0,15"/>
     <Grid>
       <Grid.ColumnDefinitions>
@@ -33,13 +33,13 @@
         <RowDefinition Height="*"></RowDefinition>
       </Grid.RowDefinitions>
 
-      <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding Days[Mo], Mode=TwoWay}"/>
-      <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Days[Tu], Mode=TwoWay}"/>
-      <CheckBox Grid.Row="0" Grid.Column="2" IsChecked="{Binding Days[We], Mode=TwoWay}"/>
-      <CheckBox Grid.Row="0" Grid.Column="3" IsChecked="{Binding Days[Th], Mode=TwoWay}"/>
-      <CheckBox Grid.Row="0" Grid.Column="4" IsChecked="{Binding Days[Fr], Mode=TwoWay}"/>
-      <CheckBox Grid.Row="0" Grid.Column="5" IsChecked="{Binding Days[Sa], Mode=TwoWay}"/>
-      <CheckBox Grid.Row="0" Grid.Column="6" IsChecked="{Binding Days[Su], Mode=TwoWay}"/>
+      <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding DaysAdd[Mo], Mode=TwoWay}"/>
+      <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding DaysAdd[Tu], Mode=TwoWay}"/>
+      <CheckBox Grid.Row="0" Grid.Column="2" IsChecked="{Binding DaysAdd[We], Mode=TwoWay}"/>
+      <CheckBox Grid.Row="0" Grid.Column="3" IsChecked="{Binding DaysAdd[Th], Mode=TwoWay}"/>
+      <CheckBox Grid.Row="0" Grid.Column="4" IsChecked="{Binding DaysAdd[Fr], Mode=TwoWay}"/>
+      <CheckBox Grid.Row="0" Grid.Column="5" IsChecked="{Binding DaysAdd[Sa], Mode=TwoWay}"/>
+      <CheckBox Grid.Row="0" Grid.Column="6" IsChecked="{Binding DaysAdd[Su], Mode=TwoWay}"/>
 
       <TextBlock Grid.Row="1" Grid.Column="0" Text="Mo" HorizontalAlignment="Center" Margin="0,0,6,0"/>
       <TextBlock Grid.Row="1" Grid.Column="1" Text="Tu" HorizontalAlignment="Center" Margin="0,0,6,0"/>

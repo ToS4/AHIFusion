@@ -16,7 +16,7 @@ public class DayToColorConverter : IValueConverter
             return new SolidColorBrush(Colors.Gray);
         }
 
-        return days[day] ? new SolidColorBrush(Colors.LightGray) : new SolidColorBrush(Colors.Black);
+        return days[day] ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.LightGray);
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)

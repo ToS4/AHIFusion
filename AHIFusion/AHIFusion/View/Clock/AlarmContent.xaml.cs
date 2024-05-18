@@ -14,26 +14,9 @@ using Uno;
 /// </summary>
 public partial class AlarmContent : Page
 {
-    public Alarm alarm1 { get; set; } = new Alarm("Joudi", new TimeOnly(8, 10), true);
-    public Alarm alarm2 { get; set; } = new Alarm("Alarm 2", new TimeOnly(5, 45), false);
-
     public AlarmContent()
     {
         this.InitializeComponent();
-
-         Dictionary<string, bool> defaultDays = new Dictionary<string, bool>
-        {
-            { "Mo", false },
-            { "Tu", false },
-            { "We", true },
-            { "Th", false },
-            { "Fr", false },
-            { "Sa", true },
-            { "Su", false }
-        };
-
-        alarm1.Days = defaultDays;
-        alarm2.Days = defaultDays;
 
         DataContext = this;
 
@@ -180,9 +163,16 @@ public partial class AlarmContent : Page
             Mode = BindingMode.TwoWay
         };
 
+        Binding daysBinding = new Binding
+        {
+            Path = new PropertyPath("Days"),
+            Mode = BindingMode.TwoWay
+        };
+
         alarmControl.SetBinding(AlarmControl.TimeProperty, timeBinding);
         alarmControl.SetBinding(AlarmControl.TitleProperty, titleBinding);
         alarmControl.SetBinding(AlarmControl.IsOnProperty, isOnBinding);
+        alarmControl.SetBinding(AlarmControl.DaysProperty, daysBinding);
 
         int i = MainGrid.Children.OfType<AlarmControl>().Count();
 

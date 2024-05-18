@@ -12,12 +12,11 @@ public class DayToColorConverter : IValueConverter
 
         if (!days.ContainsKey(day))
         {
-            // Handle the case when the key is not present in the dictionary
-            // For example, you can return a default color
+            //debug handling
             return new SolidColorBrush(Colors.Gray);
         }
 
-        return days[day] ? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Red);
+        return days[day] ? new SolidColorBrush(Colors.LightGray) : new SolidColorBrush(Colors.Black);
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)

@@ -7,19 +7,32 @@ using Windows.UI.Popups;
 namespace AHIFusion;
 public sealed partial class AlarmControl : UserControl
 {
+    public TimeSpan TimeLeft { get; set; }
+    public string TimeLeftText { get; set; }
+    public DispatcherTimer timer = new DispatcherTimer();
 
     public AlarmControl()
     {
         this.InitializeComponent();
 
+        timer.Interval = TimeSpan.FromSeconds(1);
+        timer.Tick += Timer_Tick;
+        timer.Start();
+
         UpdateClockHands();
+    }
+
+    private void Timer_Tick(object? sender, object e)
+    {
+        CalculateTimeLeft();
     }
 
     private void UpdateClockHands()
     {
         TimeOnly now = Time;
-        double minuteAngle = now.Minute * 6; // 360 degrees / 60 minutes = 6 degrees per minute
-        double hourAngle = (now.Hour % 12 + now.Minute / 60.0) * 30; // 360 degrees / 12 hours = 30 degrees per hour
+
+        double minuteAngle = now.Minute * 6; 
+        double hourAngle = (now.Hour % 12 + now.Minute / 60.0) * 30;
 
         MinuteHand.X2 = 150 + 90 * Math.Sin(minuteAngle * Math.PI / 180);
         MinuteHand.Y2 = 150 - 90 * Math.Cos(minuteAngle * Math.PI / 180);
@@ -90,5 +103,34 @@ public sealed partial class AlarmControl : UserControl
         ClockViewbox.Visibility = Visibility.Collapsed;
         TextViewbox.Visibility = Visibility.Visible;
         rect.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 169, 169, 169));
+    }
+
+    private void CalculateTimeLeft()
+    {
+        DateTime now = DateTime.Now;
+        DateTime alarmTimeToday = new DateTime(now.Year, now.Month, now.Day, Time.Hour, Time.Minute, 0);
+
+        if (now > alarmTimeToday)
+        {
+            now = now.AddDays(1);
+        }
+
+        for (int i = 0; i < 7; i++)
+        {
+            string dayOfWeek = now.DayOfWeek.ToString().Substring(0, 2);
+            if (Days.ContainsKey(dayOfWeek) && Days[dayOfWeek])
+            {
+                DateTime alarmTime = new DateTime(now.Year, now.Month, now.Day, Time.Hour, Time.Minute, 0);
+                TimeLeft = alarmTime - DateTime.Now;
+                TimeLeftText = $"Your Alarm will ring in {TimeLeft.Hours}h {TimeLeft.Minutes}min";
+                return;
+            }
+
+            now = now.AddDays(1);
+        }
+
+        TimeLeft = TimeSpan.FromDays(7);
+
+        TimeLeftText = "No day selected";
     }
 }

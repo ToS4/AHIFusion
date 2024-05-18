@@ -35,15 +35,11 @@ public partial class AlarmContent : Page
         alarm1.Days = defaultDays;
         alarm2.Days = defaultDays;
 
-        AlarmCollection.Alarms.Add(alarm1);
-        AlarmCollection.Alarms.Add(alarm2);
-
         DataContext = this;
 
         InitializeControls();
 
         AlarmCollection.Alarms.CollectionChanged += Alarms_CollectionChanged;
-
         
     }
 

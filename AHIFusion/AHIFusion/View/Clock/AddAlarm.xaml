@@ -11,11 +11,45 @@
     CloseButtonText="Cancel"
     DefaultButton="Primary"
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
-  
-    <StackPanel Margin="5">
-      <TextBlock Text="Alarm Name:" Margin="0,10,0,15"/>
-      <TextBox Text="{Binding Name, Mode=TwoWay}"/>
-      <TextBlock Text="Alarm Time:" Margin="0,25,0,15"/>
-      <TimePicker Time="{Binding Time, Mode=TwoWay}"/>
-    </StackPanel>
+
+  <StackPanel Margin="5">
+    <TextBlock Text="Alarm Name:" Margin="0,10,0,15"/>
+    <TextBox Text="{Binding Name, Mode=TwoWay}"/>
+    <TextBlock Text="Alarm Time:" Margin="0,25,0,15"/>
+    <TimePicker Time="{Binding Time, Mode=TwoWay}"/>
+    <TextBlock Text="Alarm Days:" Margin="0,25,0,15"/>
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"></ColumnDefinition>
+        <ColumnDefinition Width="*"></ColumnDefinition>
+        <ColumnDefinition Width="*"></ColumnDefinition>
+        <ColumnDefinition Width="*"></ColumnDefinition>
+        <ColumnDefinition Width="*"></ColumnDefinition>
+        <ColumnDefinition Width="*"></ColumnDefinition>
+        <ColumnDefinition Width="*"></ColumnDefinition>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"></RowDefinition>
+        <RowDefinition Height="*"></RowDefinition>
+      </Grid.RowDefinitions>
+
+      <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding Days[Mo], Mode=TwoWay}"/>
+      <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Days[Tu], Mode=TwoWay}"/>
+      <CheckBox Grid.Row="0" Grid.Column="2" IsChecked="{Binding Days[We], Mode=TwoWay}"/>
+      <CheckBox Grid.Row="0" Grid.Column="3" IsChecked="{Binding Days[Th], Mode=TwoWay}"/>
+      <CheckBox Grid.Row="0" Grid.Column="4" IsChecked="{Binding Days[Fr], Mode=TwoWay}"/>
+      <CheckBox Grid.Row="0" Grid.Column="5" IsChecked="{Binding Days[Sa], Mode=TwoWay}"/>
+      <CheckBox Grid.Row="0" Grid.Column="6" IsChecked="{Binding Days[Su], Mode=TwoWay}"/>
+
+      <TextBlock Grid.Row="1" Grid.Column="0" Text="Mo" HorizontalAlignment="Center" Margin="0,0,6,0"/>
+      <TextBlock Grid.Row="1" Grid.Column="1" Text="Tu" HorizontalAlignment="Center" Margin="0,0,6,0"/>
+      <TextBlock Grid.Row="1" Grid.Column="2" Text="We" HorizontalAlignment="Center" Margin="0,0,6,0"/>
+      <TextBlock Grid.Row="1" Grid.Column="3" Text="Th" HorizontalAlignment="Center" Margin="0,0,6,0"/>
+      <TextBlock Grid.Row="1" Grid.Column="4" Text="Fr" HorizontalAlignment="Center" Margin="0,0,6,0"/>
+      <TextBlock Grid.Row="1" Grid.Column="5" Text="Sa" HorizontalAlignment="Center" Margin="0,0,6,0"/>
+      <TextBlock Grid.Row="1" Grid.Column="6" Text="Su" HorizontalAlignment="Center" Margin="0,0,6,0"/>
+
+    </Grid>
+    
+  </StackPanel>
 </ContentDialog>

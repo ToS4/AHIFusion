@@ -12,6 +12,7 @@
 
   <UserControl.Resources>
     <local:DayToColorConverter x:Key="DayToColorConverter"/>
+    <local:DayToTextDecorationsConverter x:Key="DayToTextDecorationsConverter"/>
   </UserControl.Resources>
 
   <Grid PointerEntered="Grid_PointerEntered" PointerExited="Grid_PointerExited">
@@ -61,17 +62,20 @@
       </Viewbox>
 
       <Viewbox Grid.Row="1" Grid.Column="1">
-        <Border BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="20">
-          <StackPanel Orientation="Horizontal" Margin="5,8,5,2" >
-            <TextBlock Text="Mo" Margin="3" FontSize="16" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Mo'}" />
-            <TextBlock Text="Tu" Margin="3" FontSize="16" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Tu'}" />
-            <TextBlock Text="We" Margin="3" FontSize="16" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='We'}" />
-            <TextBlock Text="Th" Margin="3" FontSize="16" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Th'}" />
-            <TextBlock Text="Fr" Margin="3" FontSize="16" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Fr'}" />
-            <TextBlock Text="Sa" Margin="3" FontSize="16" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Sa'}" />
-            <TextBlock Text="Su" Margin="3" FontSize="16" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Su'}" />
-          </StackPanel>
-        </Border>
+        <StackPanel>
+          <Border BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="20">
+            <StackPanel x:Name="DaysStackPanel" Orientation="Horizontal" Margin="5,8,5,2">
+              <TextBlock Text="Mo" Margin="3" FontSize="16" TextDecorations="{Binding Days, Converter={StaticResource DayToTextDecorationsConverter}, ConverterParameter='Mo'}" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Mo'}" />
+              <TextBlock Text="Tu" Margin="3" FontSize="16" TextDecorations="{Binding Days, Converter={StaticResource DayToTextDecorationsConverter}, ConverterParameter='Tu'}" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Tu'}" />
+              <TextBlock Text="We" Margin="3" FontSize="16" TextDecorations="{Binding Days, Converter={StaticResource DayToTextDecorationsConverter}, ConverterParameter='We'}" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='We'}" />
+              <TextBlock Text="Th" Margin="3" FontSize="16" TextDecorations="{Binding Days, Converter={StaticResource DayToTextDecorationsConverter}, ConverterParameter='Th'}" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Th'}" />
+              <TextBlock Text="Fr" Margin="3" FontSize="16" TextDecorations="{Binding Days, Converter={StaticResource DayToTextDecorationsConverter}, ConverterParameter='Fr'}" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Fr'}" />
+              <TextBlock Text="Sa" Margin="3" FontSize="16" TextDecorations="{Binding Days, Converter={StaticResource DayToTextDecorationsConverter}, ConverterParameter='Sa'}" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Sa'}" />
+              <TextBlock Text="Su" Margin="3" FontSize="16" TextDecorations="{Binding Days, Converter={StaticResource DayToTextDecorationsConverter}, ConverterParameter='Su'}" Foreground="{Binding Days, Converter={StaticResource DayToColorConverter}, ConverterParameter='Su'}" />
+            </StackPanel>
+          </Border>
+          <TextBlock Text="{x:Bind TimeLeftText, Mode=OneWay}" Foreground="Black" ></TextBlock>
+        </StackPanel>
       </Viewbox>
 
       <Viewbox Grid.Row="2" Grid.Column="1">

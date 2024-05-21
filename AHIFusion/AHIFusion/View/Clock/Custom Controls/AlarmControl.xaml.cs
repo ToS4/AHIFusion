@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using AHIFusion.Model;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Shapes;
 using Windows.UI.Popups;
@@ -92,6 +93,7 @@ public sealed partial class AlarmControl : UserControl
         set { SetValue(DaysProperty, value); }
     }
 
+
     private static void OnTimeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         AlarmControl control = d as AlarmControl;
@@ -141,7 +143,22 @@ public sealed partial class AlarmControl : UserControl
         }
 
         TimeLeft = TimeSpan.FromDays(7);
-
         TimeLeftText = "No day selected";
+    }
+
+    private async void Grid_PointerPressed(object sender, PointerRoutedEventArgs e)
+    {
+        // Get the Alarm associated with this AlarmControl
+        Alarm alarm = this.DataContext as Alarm;
+
+        if (alarm != null)
+        {
+            // Create a new EditAlarm dialog
+            EditAlarm editAlarmDialog = new EditAlarm(alarm);
+
+            // Show the EditAlarm dialog
+            editAlarmDialog.XamlRoot = this.XamlRoot;
+            await editAlarmDialog.ShowAsync();
+        }
     }
 }

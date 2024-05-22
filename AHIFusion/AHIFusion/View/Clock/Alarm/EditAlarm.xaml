@@ -11,8 +11,31 @@
     CloseButtonText="Cancel"
     DefaultButton="Primary"
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
-  
+
   <StackPanel Margin="5">
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <TextBlock Grid.Column="0" Text="Edit Alarm" FontSize="20" Style="{ThemeResource TitleTextBlockStyle}"/>
+      <Button Grid.Column="1" Background="Transparent">
+        <Button.Content>
+          <SymbolIcon Symbol="Delete" Foreground="Red"/>
+        </Button.Content>
+        <Button.Flyout>
+          <Flyout>
+            <StackPanel>
+              <TextBlock Text="Are you sure you want to delete the alarm?" Margin="0,0,0,12" />
+              <Button Click="DeleteButton_Click" Content="Yes" />
+            </StackPanel>
+          </Flyout>
+        </Button.Flyout>
+      </Button>
+    </Grid>
+
+    <TextBlock Text="Name:" Margin="0,10,0,15"/>
+
     <TextBlock Text="Alarm Name:" Margin="0,10,0,15"/>
     <TextBox Text="{Binding NameEdit, Mode=TwoWay}"/>
     <TextBlock Text="Alarm Time:" Margin="0,25,0,15"/>

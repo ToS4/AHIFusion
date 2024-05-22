@@ -112,11 +112,6 @@
 
 
   <ItemGroup>
-    <Folder Include="View\Notes\" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <UpToDateCheckInput Remove="View\Clock\Custom Controls\AddRectControl.xaml" />
   </ItemGroup>
 
@@ -128,5 +123,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="View\Clock\Alarm\EditAlarm.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Notes\NotesPage.xaml" />
   </ItemGroup>
 </Project>

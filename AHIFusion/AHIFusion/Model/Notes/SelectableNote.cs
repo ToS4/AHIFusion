@@ -20,6 +20,34 @@ public class SelectableNote : INotifyPropertyChanged
         }
     }
 
+    private string fontName;
+    public string FontName
+    {
+        get { return fontName; }
+        set
+        {
+            if (fontName != value)
+            {
+                fontName = value;
+                OnPropertyChanged(nameof(FontName));
+            }
+        }
+    }
+
+    private int fontSize;
+    public int FontSize
+    {
+        get { return fontSize; }
+        set
+        {
+            if (fontSize != value)
+            {
+                fontSize = value;
+                OnPropertyChanged(nameof(FontSize));
+            }
+        }
+    }
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     protected virtual void OnPropertyChanged(string propertyName)

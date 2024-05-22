@@ -4,7 +4,12 @@ using System.ComponentModel;
 using AHIFusion.Model;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Shapes;
+using Microsoft.UI.Xaml.Controls;
 using Windows.UI.Popups;
+using Windows.Storage;
+using Windows.Media.Core;
+using Windows.Media.Playback;
+
 namespace AHIFusion;
 public sealed partial class AlarmControl : UserControl
 {
@@ -25,6 +30,10 @@ public sealed partial class AlarmControl : UserControl
     private void Timer_Tick(object? sender, object e)
     {
         CalculateTimeLeft();
+        if (TimeLeft <= TimeSpan.FromMinutes(1))
+        {
+            RingAlarm();
+        }
     }
 
     private void UpdateClockHands()
@@ -93,6 +102,12 @@ public sealed partial class AlarmControl : UserControl
         set { SetValue(DaysProperty, value); }
     }
 
+    public async void RingAlarm()
+    {
+        // I gotta find a solution for this BEEP ahh sound man
+        if (IsOn)
+            Console.Beep(442, 300);
+    }
 
     private static void OnTimeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -124,6 +139,13 @@ public sealed partial class AlarmControl : UserControl
             alarmTimeToday = alarmTimeToday.AddDays(1);
         }
 
+        if (IsOn == false)
+        {
+            TimeLeft = TimeSpan.FromDays(7);
+            TimeLeftText = "Alarm is off";
+            return;
+        }
+
         for (int i = 0; i < 7; i++)
         {
             string dayOfWeek = alarmTimeToday.DayOfWeek.ToString().Substring(0, 2);
@@ -148,6 +170,7 @@ public sealed partial class AlarmControl : UserControl
 
     private async void Grid_PointerPressed(object sender, PointerRoutedEventArgs e)
     {
+        RingAlarm();
         // Get the Alarm associated with this AlarmControl
         Alarm alarm = this.DataContext as Alarm;
 

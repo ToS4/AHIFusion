@@ -29,7 +29,6 @@ namespace AHIFusion
     public partial class NotesPage : Page
 	{
         private ObservableCollection<SelectableNote> notesFiltered = new ObservableCollection<SelectableNote>();
-
         public NotesPage()
         {
             this.InitializeComponent();
@@ -65,14 +64,32 @@ namespace AHIFusion
                 textRange.Text = text;
             }
         }
-
         private void Menu_Opening(object sender, object e)
         {
             CommandBarFlyout myFlyout = sender as CommandBarFlyout;
             if (myFlyout.Target == EditorRichEditBox)
             {
+                AppBarButton hyperlinkButton = new AppBarButton();
+                hyperlinkButton.Icon = new SymbolIcon(Symbol.Link);
+                //hyperlinkButton.Label = "Hyperlink";
+                hyperlinkButton.Click += HyperlinkButton_Click;
 
+                myFlyout.PrimaryCommands.Add(hyperlinkButton);
             }
+        }
+        private async void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<SelectableNote> allNotes = new List<SelectableNote>();
+
+            foreach (Note note in NoteCollection.Notes)
+            {
+                allNotes.Add(new SelectableNote { Note = note, IsSelected = false });
+            }
+
+            LinkText linkText = new LinkText(allNotes);
+            linkText.XamlRoot = this.XamlRoot;
+
+            await linkText.ShowAsync();
         }
 
         private void ApplyStyle(int size, string name)
@@ -106,9 +123,7 @@ namespace AHIFusion
             else
             {
                 ApplyStyle(16, "Arial");
-            }
-
-;
+            };
         }
 
         private void EditorRichEditBox_Unloaded(object sender, RoutedEventArgs e)

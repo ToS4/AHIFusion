@@ -29,6 +29,8 @@ public partial class AlarmContent : Page
     private void InitializeControls()
     {
 
+        MainGrid.Children.Clear();
+
         for (int i = 0; i < AlarmCollection.Alarms.Count; i++)
         {
             AlarmControl alarmControl = new AlarmControl
@@ -121,6 +123,10 @@ public partial class AlarmContent : Page
             {
                 AddAlarmControl(newAlarm);
             }
+        }
+        else if (e.Action == NotifyCollectionChangedAction.Remove)
+        {
+            InitializeControls();
         }
     }
 

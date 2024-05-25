@@ -60,6 +60,7 @@
 
 
   <ItemGroup>
+    <None Remove="Assets\Sounds\Alarm-01.wav" />
     <None Remove="CustomStyles.xaml" />
     <None Remove="HomePage.xaml" />
     <None Remove="View\AlarmContent.xaml" />

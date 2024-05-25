@@ -71,11 +71,35 @@ public class Alarm : INotifyPropertyChanged
         }
     }
 
-    public Alarm(string title, TimeOnly time, bool isOn)
+    private static string soundDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Sounds");
+    public static List<string?> SoundPaths { get; private set; } = Directory.EnumerateFiles(soundDirectory, "*.*", SearchOption.AllDirectories)
+    .Where(file => file.EndsWith(".mp3") || file.EndsWith(".wav"))
+    .Select(Path.GetFileName)
+    .ToList();
+
+    private string sound;
+    public string Sound
+    {
+        get
+        {
+            return sound;
+        }
+        set
+        {
+            if (sound != value)
+            {
+                sound = value;
+                onPropertyChanged(nameof(Sound));
+            }
+        }
+    }
+
+    public Alarm(string title, TimeOnly time, bool isOn, string sound)
     {
         Title = title;
         Time = time;
         IsOn = isOn;
+        Sound = sound;
     }
 
     public Alarm() { }

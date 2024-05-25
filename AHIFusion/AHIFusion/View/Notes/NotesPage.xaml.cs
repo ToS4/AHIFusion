@@ -74,7 +74,7 @@ namespace AHIFusion
                 //hyperlinkButton.Label = "Hyperlink";
                 hyperlinkButton.Click += HyperlinkButton_Click;
 
-                myFlyout.PrimaryCommands.Add(hyperlinkButton);
+                //myFlyout.PrimaryCommands.Add(hyperlinkButton);
             }
         }
         private async void HyperlinkButton_Click(object sender, RoutedEventArgs e)

@@ -33,11 +33,15 @@
         DisplayName="AHIFusion"
         Description="AHIFusion">
         <uap:SplashScreen />
+        <uap:DefaultTile/>
       </uap:VisualElements>
     </Application>
   </Applications>
 
   <Capabilities>
     <rescap:Capability Name="runFullTrust" />
+    <Capability Name="internetClientServer"/>
+    <Capability Name="internetClient"/>
+    <Capability Name="privateNetworkClientServer"/>
   </Capabilities>
 </Package>

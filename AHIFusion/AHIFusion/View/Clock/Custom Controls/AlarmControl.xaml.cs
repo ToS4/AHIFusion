@@ -27,6 +27,7 @@ public sealed partial class AlarmControl : UserControl
         timer.Tick += Timer_Tick;
         timer.Start();
 
+
         UpdateClockHands();
     }
 
@@ -112,24 +113,33 @@ public sealed partial class AlarmControl : UserControl
             Console.Beep(442, 300);
     }
 
-    //private void ShowNotification(string title, string content)
-    //{
-    //    var toastContent = new ToastContentBuilder()
-    //        .AddArgument("action", "viewConversation")
-    //        .AddText(title)
-    //        .AddText(content)
-    //        .GetToastContent();
+    private void ShowNotification(string title, string content)
+    {
+        try
+        {
+            // Create the toast notification content
+            // notification must be enabled in windows settings
+            var toastContent = new ToastContentBuilder()
+                .AddArgument("action", "viewConversation")
+                .AddText(title)
+                .AddText(content)
+                .GetToastContent();
 
-    //    var toastNotification = new ToastNotification(toastContent.GetXml());
+            var toastNotification = new ToastNotification(toastContent.GetXml());
 
-    //    ToastNotificationManager.CreateToastNotifier("Alarm").Show(toastNotification);
+            ToastNotificationManager.CreateToastNotifier().Show(toastNotification);
 
-    //    if (IsOn && !hasRung)
-    //    {
-    //        ShowNotification("Alarm", "The alarm is ringing!");
-    //        hasRung = true;
-    //    }
-    //}
+            System.Diagnostics.Debug.WriteLine("Notification should be shown now.");
+        }
+        catch (System.Runtime.InteropServices.COMException comEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"COMException: {comEx.Message} (HRESULT: {comEx.HResult})");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Exception: {ex.Message}");
+        }
+    }
 
     private static void OnTimeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -192,7 +202,7 @@ public sealed partial class AlarmControl : UserControl
 
     private async void Grid_PointerPressed(object sender, PointerRoutedEventArgs e)
     {
-        RingAlarm();
+        ShowNotification("Alarm", "The alarm is ringing!");
         // Get the Alarm associated with this AlarmControl
         Alarm alarm = this.DataContext as Alarm;
 

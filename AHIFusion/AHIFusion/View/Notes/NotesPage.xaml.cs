@@ -23,6 +23,7 @@ using System;
 using Microsoft.UI;
 using Windows.ApplicationModel.DataTransfer;
 using System.Text.RegularExpressions;
+using ABI.System;
 
 namespace AHIFusion
 {
@@ -74,7 +75,7 @@ namespace AHIFusion
                 //hyperlinkButton.Label = "Hyperlink";
                 hyperlinkButton.Click += HyperlinkButton_Click;
 
-                //myFlyout.PrimaryCommands.Add(hyperlinkButton);
+                myFlyout.PrimaryCommands.Add(hyperlinkButton);
             }
         }
         private async void HyperlinkButton_Click(object sender, RoutedEventArgs e)
@@ -90,6 +91,35 @@ namespace AHIFusion
             linkText.XamlRoot = this.XamlRoot;
 
             await linkText.ShowAsync();
+
+            string selectedText;
+            EditorRichEditBox.Document.Selection.GetText(TextGetOptions.None, out selectedText);
+
+            if (!string.IsNullOrEmpty(selectedText))
+            {
+                // Save the RichEditBox document's current content
+                string originalRtf;
+                EditorRichEditBox.Document.GetText(TextGetOptions.FormatRtf, out originalRtf);
+
+                // Format the selected text as a hyperlink
+                var rtfWithLink = InsertHyperlink(originalRtf, selectedText, linkText.selectedLink);
+
+                // Set the RichEditBox content to the updated RTF with the hyperlink
+                EditorRichEditBox.Document.SetText(TextSetOptions.FormatRtf, rtfWithLink);
+            }
+        }
+
+        private string InsertHyperlink(string rtf, string selectedText, string url)
+        {
+            // Find the position of the selected text in the RTF
+            int startIndex = rtf.IndexOf(selectedText);
+            if (startIndex < 0) return rtf; // Selected text not found in RTF
+
+            // Create RTF for the hyperlink
+            string hyperlinkRtf = @"{\field{\*\fldinst HYPERLINK """ + url + @"""}{\fldrslt " + selectedText + @"}}";
+
+            // Insert the hyperlink RTF at the position of the selected text
+            return rtf.Substring(0, startIndex) + hyperlinkRtf + rtf.Substring(startIndex + selectedText.Length);
         }
 
         private void ApplyStyle(int size, string name)

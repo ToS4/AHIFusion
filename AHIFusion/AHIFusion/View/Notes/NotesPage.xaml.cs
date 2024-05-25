@@ -23,6 +23,7 @@ using System;
 using Microsoft.UI;
 using Windows.ApplicationModel.DataTransfer;
 using System.Text.RegularExpressions;
+using ABI.System;
 
 namespace AHIFusion
 {
@@ -90,6 +91,35 @@ namespace AHIFusion
             linkText.XamlRoot = this.XamlRoot;
 
             await linkText.ShowAsync();
+
+            string selectedText;
+            EditorRichEditBox.Document.Selection.GetText(TextGetOptions.None, out selectedText);
+
+            if (!string.IsNullOrEmpty(selectedText) && !string.IsNullOrEmpty(linkText.selectedLink))
+            {
+                // Save the RichEditBox document's current content
+                string originalRtf;
+                EditorRichEditBox.Document.GetText(TextGetOptions.FormatRtf, out originalRtf);
+
+                // Format the selected text as a hyperlink
+                var rtfWithLink = InsertHyperlink(originalRtf, selectedText, linkText.selectedLink);
+
+                // Set the RichEditBox content to the updated RTF with the hyperlink
+                EditorRichEditBox.Document.SetText(TextSetOptions.FormatRtf, rtfWithLink);
+            }
+        }
+
+        private string InsertHyperlink(string rtf, string selectedText, string url)
+        {
+            // Find the position of the selected text in the RTF
+            int startIndex = rtf.IndexOf(selectedText);
+            if (startIndex < 0) return rtf; // Selected text not found in RTF
+
+            // Create RTF for the hyperlink
+            string hyperlinkRtf = @"{\field{\*\fldinst HYPERLINK """ + url + @"""}{\fldrslt " + selectedText + @"}}";
+
+            // Insert the hyperlink RTF at the position of the selected text
+            return rtf.Substring(0, startIndex) + hyperlinkRtf + rtf.Substring(startIndex + selectedText.Length);
         }
 
         private void ApplyStyle(int size, string name)
@@ -107,23 +137,38 @@ namespace AHIFusion
             //EditorRichEditBox.Document.Selection.StartPosition = 0;
         }
 
-        private void EditorRichEditBox_Loaded(object sender, RoutedEventArgs e)
+        private void LoadText()
         {
-            EditorRichEditBox.SelectionFlyout.Opening += Menu_Opening;
-            EditorRichEditBox.ContextFlyout.Opening += Menu_Opening;
-
             var selectedItem = NotesListView.SelectedItem as SelectableNote;
 
             if (selectedItem != null)
             {
+
+                if (selectedItem.FontName == null)
+                {
+                    selectedItem.FontName = "Arial";
+                }
+
+                if (selectedItem.FontSize <= 0)
+                {
+                    selectedItem.FontSize = 16;
+                }
+
                 EditorRichEditBox.Document.SetText(TextSetOptions.FormatRtf, selectedItem.Note.Text);
 
                 ApplyStyle(selectedItem.FontSize, selectedItem.FontName);
-            } 
+            }
             else
             {
                 ApplyStyle(16, "Arial");
             };
+        }
+
+        private void EditorRichEditBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            EditorRichEditBox.SelectionFlyout.Opening += Menu_Opening;
+            EditorRichEditBox.ContextFlyout.Opening += Menu_Opening;
+            LoadText();
         }
 
         private void EditorRichEditBox_Unloaded(object sender, RoutedEventArgs e)
@@ -234,31 +279,19 @@ namespace AHIFusion
                 var selectedItem = e.AddedItems[0] as SelectableNote;
                 selectedItem.IsSelected = true;
 
-                if (selectedItem.FontName == null)
-                {
-                    selectedItem.FontName = "Arial";
-                }
-
-                if (selectedItem.FontSize <= 0)
-                {
-                    selectedItem.FontSize = 16;
-                }
-
                 Binding Titlebinding = new Binding();
                 Titlebinding.Source = selectedItem.Note;
                 Titlebinding.Path = new PropertyPath("Title");
                 RightViewNoteTitleTextBlock.SetBinding(TextBlock.TextProperty, Titlebinding);
-
-                EditorRichEditBox.Document.SetText(TextSetOptions.FormatRtf, selectedItem.Note.Text);
-
-                ApplyStyle(selectedItem.FontSize, selectedItem.FontName);
 
                 if (e.RemovedItems.Count > 0)
                 {
                     var oldSelectedItem = e.RemovedItems[0] as SelectableNote;
                     oldSelectedItem.IsSelected = false;
                 }
-            } 
+
+                LoadText();
+            }
             else
             {
                 RightViewGrid.Visibility = Visibility.Collapsed;
@@ -312,7 +345,7 @@ namespace AHIFusion
             }
         }
 
-        private void EditorRichEditBox_TextChanged(object sender, RoutedEventArgs e)
+        private void SaveText()
         {
             var selectedItem = NotesListView.SelectedItem as SelectableNote;
 
@@ -323,6 +356,11 @@ namespace AHIFusion
             }
         }
 
+        private void EditorRichEditBox_TextChanged(object sender, RoutedEventArgs e)
+        {
+            SaveText();
+        }
+
         private void ColorButton_Click(object sender, RoutedEventArgs e)
         {
             Button clickedColor = (Button)sender;
@@ -330,6 +368,9 @@ namespace AHIFusion
             var color = ((Microsoft.UI.Xaml.Media.SolidColorBrush)rectangle.Fill).Color;
 
             EditorRichEditBox.Document.Selection.CharacterFormat.ForegroundColor = color;
+
+            SaveText();
+            LoadText();
 
             fontColorButton.Flyout.Hide();
             EditorRichEditBox.Focus(Microsoft.UI.Xaml.FocusState.Keyboard);

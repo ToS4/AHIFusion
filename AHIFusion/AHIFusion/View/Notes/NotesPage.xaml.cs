@@ -95,7 +95,7 @@ namespace AHIFusion
             string selectedText;
             EditorRichEditBox.Document.Selection.GetText(TextGetOptions.None, out selectedText);
 
-            if (!string.IsNullOrEmpty(selectedText))
+            if (!string.IsNullOrEmpty(selectedText) && !string.IsNullOrEmpty(linkText.selectedLink))
             {
                 // Save the RichEditBox document's current content
                 string originalRtf;
@@ -137,23 +137,38 @@ namespace AHIFusion
             //EditorRichEditBox.Document.Selection.StartPosition = 0;
         }
 
-        private void EditorRichEditBox_Loaded(object sender, RoutedEventArgs e)
+        private void LoadText()
         {
-            EditorRichEditBox.SelectionFlyout.Opening += Menu_Opening;
-            EditorRichEditBox.ContextFlyout.Opening += Menu_Opening;
-
             var selectedItem = NotesListView.SelectedItem as SelectableNote;
 
             if (selectedItem != null)
             {
+
+                if (selectedItem.FontName == null)
+                {
+                    selectedItem.FontName = "Arial";
+                }
+
+                if (selectedItem.FontSize <= 0)
+                {
+                    selectedItem.FontSize = 16;
+                }
+
                 EditorRichEditBox.Document.SetText(TextSetOptions.FormatRtf, selectedItem.Note.Text);
 
                 ApplyStyle(selectedItem.FontSize, selectedItem.FontName);
-            } 
+            }
             else
             {
                 ApplyStyle(16, "Arial");
             };
+        }
+
+        private void EditorRichEditBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            EditorRichEditBox.SelectionFlyout.Opening += Menu_Opening;
+            EditorRichEditBox.ContextFlyout.Opening += Menu_Opening;
+            LoadText();
         }
 
         private void EditorRichEditBox_Unloaded(object sender, RoutedEventArgs e)
@@ -264,31 +279,19 @@ namespace AHIFusion
                 var selectedItem = e.AddedItems[0] as SelectableNote;
                 selectedItem.IsSelected = true;
 
-                if (selectedItem.FontName == null)
-                {
-                    selectedItem.FontName = "Arial";
-                }
-
-                if (selectedItem.FontSize <= 0)
-                {
-                    selectedItem.FontSize = 16;
-                }
-
                 Binding Titlebinding = new Binding();
                 Titlebinding.Source = selectedItem.Note;
                 Titlebinding.Path = new PropertyPath("Title");
                 RightViewNoteTitleTextBlock.SetBinding(TextBlock.TextProperty, Titlebinding);
-
-                EditorRichEditBox.Document.SetText(TextSetOptions.FormatRtf, selectedItem.Note.Text);
-
-                ApplyStyle(selectedItem.FontSize, selectedItem.FontName);
 
                 if (e.RemovedItems.Count > 0)
                 {
                     var oldSelectedItem = e.RemovedItems[0] as SelectableNote;
                     oldSelectedItem.IsSelected = false;
                 }
-            } 
+
+                LoadText();
+            }
             else
             {
                 RightViewGrid.Visibility = Visibility.Collapsed;
@@ -342,7 +345,7 @@ namespace AHIFusion
             }
         }
 
-        private void EditorRichEditBox_TextChanged(object sender, RoutedEventArgs e)
+        private void SaveText()
         {
             var selectedItem = NotesListView.SelectedItem as SelectableNote;
 
@@ -353,6 +356,11 @@ namespace AHIFusion
             }
         }
 
+        private void EditorRichEditBox_TextChanged(object sender, RoutedEventArgs e)
+        {
+            SaveText();
+        }
+
         private void ColorButton_Click(object sender, RoutedEventArgs e)
         {
             Button clickedColor = (Button)sender;
@@ -360,6 +368,9 @@ namespace AHIFusion
             var color = ((Microsoft.UI.Xaml.Media.SolidColorBrush)rectangle.Fill).Color;
 
             EditorRichEditBox.Document.Selection.CharacterFormat.ForegroundColor = color;
+
+            SaveText();
+            LoadText();
 
             fontColorButton.Flyout.Hide();
             EditorRichEditBox.Focus(Microsoft.UI.Xaml.FocusState.Keyboard);

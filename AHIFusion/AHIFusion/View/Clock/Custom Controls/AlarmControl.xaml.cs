@@ -18,10 +18,14 @@ public sealed partial class AlarmControl : UserControl
     public TimeSpan TimeLeft { get; set; }
     public DispatcherTimer timer = new DispatcherTimer();
     private bool hasRung = false;
+    private MediaPlayer _mediaPlayer;
 
     public AlarmControl()
     {
         this.InitializeComponent();
+
+        _mediaPlayer = new MediaPlayer();
+        AlarmSoundPlayer.SetMediaPlayer(_mediaPlayer);
 
         timer.Interval = TimeSpan.FromSeconds(1);
         timer.Tick += Timer_Tick;
@@ -37,6 +41,11 @@ public sealed partial class AlarmControl : UserControl
         if (TimeLeft <= TimeSpan.FromMinutes(1))
         {
             RingAlarm();
+            if (!hasRung)
+            {
+                ShowNotification(Title, "The alarm is ringing!");
+                hasRung = true;
+            }
         }
     }
 
@@ -108,9 +117,10 @@ public sealed partial class AlarmControl : UserControl
 
     public void RingAlarm()
     {
-        // I gotta find a solution for this BEEP ahh sound man
-        if (IsOn)
-            Console.Beep(442, 300);
+
+        _mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/Sounds/Alarm-01.wav"));
+
+        _mediaPlayer.Play();
     }
 
     private void ShowNotification(string title, string content)
@@ -127,7 +137,10 @@ public sealed partial class AlarmControl : UserControl
 
             var toastNotification = new ToastNotification(toastContent.GetXml());
 
-            ToastNotificationManager.CreateToastNotifier().Show(toastNotification);
+            if (IsOn)
+            {
+                ToastNotificationManager.CreateToastNotifier().Show(toastNotification);
+            }
 
             System.Diagnostics.Debug.WriteLine("Notification should be shown now.");
         }
@@ -175,6 +188,7 @@ public sealed partial class AlarmControl : UserControl
         {
             TimeLeft = TimeSpan.FromDays(7);
             TimeLeftText = "Alarm is off";
+            hasRung = false; 
             return;
         }
 
@@ -187,9 +201,17 @@ public sealed partial class AlarmControl : UserControl
                 if (TimeLeft.Days != 0)
                 {
                     TimeLeftText = $"Your Alarm will ring in {TimeLeft.Days}d {TimeLeft.Hours}h {TimeLeft.Minutes}min";
+                    if (TimeLeft > TimeSpan.FromMinutes(1))
+                    {
+                        hasRung = false; 
+                    }
                     return;
                 }
                 TimeLeftText = $"Your Alarm will ring in {TimeLeft.Hours}h {TimeLeft.Minutes}min";
+                if (TimeLeft > TimeSpan.FromMinutes(1))
+                {
+                    hasRung = false; 
+                }
                 return;
             }
 
@@ -198,11 +220,11 @@ public sealed partial class AlarmControl : UserControl
 
         TimeLeft = TimeSpan.FromDays(7);
         TimeLeftText = "No day selected";
+        hasRung = false;
     }
 
     private async void Grid_PointerPressed(object sender, PointerRoutedEventArgs e)
     {
-        ShowNotification("Alarm", "The alarm is ringing!");
         // Get the Alarm associated with this AlarmControl
         Alarm alarm = this.DataContext as Alarm;
 

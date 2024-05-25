@@ -16,7 +16,7 @@
   </UserControl.Resources>
 
   <Grid PointerEntered="Grid_PointerEntered" PointerExited="Grid_PointerExited" PointerPressed="Grid_PointerPressed">
-    <MediaPlayerPresenter x:Name="test"></MediaPlayerPresenter>
+    <MediaPlayerElement x:Name="AlarmSoundPlayer" AreTransportControlsEnabled="False" Visibility="Collapsed"></MediaPlayerElement>
     <Border BorderThickness="4" BorderBrush="Black" CornerRadius="20">
       <Rectangle x:Name="rect" Fill="DarkGray"/>
     </Border>

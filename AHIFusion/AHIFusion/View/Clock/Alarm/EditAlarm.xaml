@@ -38,7 +38,7 @@
     <TextBlock Text="Alarm Name:" Margin="0,10,0,15"/>
     <TextBox Text="{Binding NameEdit, Mode=TwoWay}"/>
     <TextBlock Text="Alarm Time:" Margin="0,25,0,15"/>
-    <TimePicker Time="{Binding TimeEdit, Mode=TwoWay}"/>
+    <TimePicker Time="{Binding TimeEdit, Mode=TwoWay}" ClockIdentifier="24HourClock"/>
     <TextBlock Text="Alarm Days:" Margin="0,25,0,15"/>
     <Grid>
       <Grid.ColumnDefinitions>

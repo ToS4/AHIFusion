@@ -9,6 +9,9 @@ public sealed partial class EditAlarm : ContentDialog
     public TimeSpan TimeEdit { get; set; } = new TimeSpan();
     public Dictionary<string, bool> DaysEdit { get; set; }
 
+    public List<string?> SoundsEdit { get; set; } = Alarm.SoundPaths;
+    public string? SelectedSound { get; set; }
+
     public Alarm alarmEdit;
 
     public EditAlarm(Alarm alarm)
@@ -18,6 +21,7 @@ public sealed partial class EditAlarm : ContentDialog
         NameEdit = alarm.Title;
         TimeEdit = alarm.Time.ToTimeSpan();
         DaysEdit = new Dictionary<string, bool>(alarm.Days);
+        SelectedSound = alarm.Sound;
 	}
 
 	private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -25,6 +29,7 @@ public sealed partial class EditAlarm : ContentDialog
         alarmEdit.Title = NameEdit;
         alarmEdit.Time = TimeOnly.FromTimeSpan(TimeEdit);
         alarmEdit.Days = DaysEdit;
+        alarmEdit.Sound = SelectedSound;
     }
 
     private void DeleteButton_Click(object sender, RoutedEventArgs e)

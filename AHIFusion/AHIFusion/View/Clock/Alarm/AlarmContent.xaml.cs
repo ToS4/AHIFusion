@@ -65,10 +65,17 @@ public partial class AlarmContent : Page
                 Mode = BindingMode.TwoWay
             };
 
+            Binding soundBinding = new Binding
+            {
+                Path = new PropertyPath("Sound"),
+                Mode = BindingMode.TwoWay
+            };
+
             alarmControl.SetBinding(AlarmControl.TimeProperty, timeBinding);
             alarmControl.SetBinding(AlarmControl.TitleProperty, titleBinding);
             alarmControl.SetBinding(AlarmControl.IsOnProperty, isOnBinding);
             alarmControl.SetBinding(AlarmControl.DaysProperty, daysBinding);
+            alarmControl.SetBinding(AlarmControl.SoundProperty, soundBinding);
 
             int row = i / 2;
             int column = i % 2;
@@ -175,10 +182,17 @@ public partial class AlarmContent : Page
             Mode = BindingMode.TwoWay
         };
 
+        Binding soundBinding = new Binding
+        {
+            Path = new PropertyPath("Sound"),
+            Mode = BindingMode.TwoWay
+        };
+
         alarmControl.SetBinding(AlarmControl.TimeProperty, timeBinding);
         alarmControl.SetBinding(AlarmControl.TitleProperty, titleBinding);
         alarmControl.SetBinding(AlarmControl.IsOnProperty, isOnBinding);
         alarmControl.SetBinding(AlarmControl.DaysProperty, daysBinding);
+        alarmControl.SetBinding(AlarmControl.SoundProperty, soundBinding);
 
         int i = MainGrid.Children.OfType<AlarmControl>().Count();
 

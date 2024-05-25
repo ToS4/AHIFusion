@@ -19,12 +19,13 @@ public sealed partial class AddAlarm : ContentDialog
             { "Sa", true },
             { "Su", true }
         };
-    public List<string> SoundsAdd { get; set; } = Alarm.SoundPaths;
-    public string SelectedSound { get; set; }
+    public List<string?> SoundsAdd { get; set; } = Alarm.SoundPaths;
+    public string? SelectedSound { get; set; }
 
     public AddAlarm()
     {
         this.InitializeComponent();
+        SelectedSound = SoundsAdd[0];
     }
 
     private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)

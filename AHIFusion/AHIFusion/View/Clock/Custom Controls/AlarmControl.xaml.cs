@@ -87,7 +87,7 @@ public sealed partial class AlarmControl : UserControl
         set { SetValue(IsOnProperty, value); }
     }
 
-    public static readonly DependencyProperty TimeProperty = DependencyProperty.Register("Time", typeof(TimeOnly), typeof(AlarmControl), new PropertyMetadata(new TimeOnly(0,15), OnTimeChanged));
+    public static readonly DependencyProperty TimeProperty = DependencyProperty.Register("Time", typeof(TimeOnly), typeof(AlarmControl), new PropertyMetadata(new TimeOnly(0,0), OnTimeChanged));
 
     public TimeOnly Time
     {
@@ -115,10 +115,17 @@ public sealed partial class AlarmControl : UserControl
         set { SetValue(DaysProperty, value); }
     }
 
+    public static readonly DependencyProperty SoundProperty = DependencyProperty.Register("Sound", typeof(string), typeof(AlarmControl), new PropertyMetadata(""));
+    public string Sound
+    {
+        get { return (string)GetValue(SoundProperty); }
+        set { SetValue(SoundProperty, value); }
+    }
+
     public void RingAlarm()
     {
 
-        _mediaPlayer.Source = MediaSource.CreateFromUri(new Uri("ms-appx:///Assets/Sounds/Alarm-01.wav"));
+        _mediaPlayer.Source = MediaSource.CreateFromUri(new Uri($"ms-appx:///Assets/Sounds/{Sound}"));
 
         _mediaPlayer.Play();
     }

@@ -71,7 +71,7 @@ public class Alarm : INotifyPropertyChanged
         }
     }
 
-    private static string soundDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Assets", "Sounds");
+    private static string soundDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Sounds");
     public static List<string?> SoundPaths { get; private set; } = Directory.EnumerateFiles(soundDirectory, "*.*", SearchOption.AllDirectories)
     .Where(file => file.EndsWith(".mp3") || file.EndsWith(".wav"))
     .Select(Path.GetFileName)

@@ -1,7 +1,5 @@
-namespace AHIFusion.View.Calendar;
-/// <summary>
-/// An empty page that can be used on its own or navigated to within a Frame.
-/// </summary>
+namespace AHIFusion;
+
 public sealed partial class CalendarPage : Page
 {
     public CalendarPage()

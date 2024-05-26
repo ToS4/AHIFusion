@@ -105,7 +105,7 @@ public class Alarm : INotifyPropertyChanged
     public Alarm() { }
 
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     private void onPropertyChanged(string propertyName)
     {

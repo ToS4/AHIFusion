@@ -43,7 +43,6 @@
            TextWrapping="Wrap"
            MaxWidth="600"/>
         </Grid>
-        
       </Viewbox>
 
 

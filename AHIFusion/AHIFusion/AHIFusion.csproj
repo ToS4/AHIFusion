@@ -70,6 +70,7 @@
     <None Remove="View\Clock\Custom Controls\AddAlarm.xaml" />
     <None Remove="View\Clock\Custom Controls\AddRectControl.xaml" />
     <None Remove="View\Clock\Custom Controls\AlarmControl.xaml" />
+    <None Remove="View\Clock\Custom Controls\TimerControl.xaml" />
     <None Remove="View\Notes\LinkText.xaml" />
     <None Remove="View\StopwatchContent.xaml" />
     <None Remove="View\TimerContent.xaml" />
@@ -149,5 +150,25 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="View\Calendar\CalendarPage.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="View\Clock\Timer\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <CustomAdditionalCompileInputs Remove="View\Clock\Custom Controls\TimerControl.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Resource Remove="View\Clock\Custom Controls\TimerControl.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Clock\Custom Controls\TimerControl.xaml" />
   </ItemGroup>
 </Project>

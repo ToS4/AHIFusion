@@ -8,7 +8,19 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid Background="LightGreen">
+  <Grid Background="LightGreen">
+    <Grid.RowDefinitions>
+        <RowDefinition/>
+        <RowDefinition/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition/>
+        <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
 
-    </Grid>
+    <local:TimerControl Grid.Row="0" Grid.Column="0"/>
+    <local:TimerControl Grid.Row="0" Grid.Column="1"/>
+    <local:TimerControl Grid.Row="1" Grid.Column="0"/>
+    <local:TimerControl Grid.Row="1" Grid.Column="1"/>
+  </Grid>
 </Page>

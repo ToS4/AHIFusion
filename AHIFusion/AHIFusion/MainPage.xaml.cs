@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using AHIFusion.View.Calendar;
 
 namespace AHIFusion;
 
@@ -20,6 +21,10 @@ public sealed partial class MainPage : Page
         var noteTab1 = AddTab(new NotesPage());
         noteTab1.Header = "Notes";
         noteTab1.IconSource = new SymbolIconSource { Symbol = Symbol.Edit };
+
+        var calendarTab1 = AddTab(new CalendarPage());
+        calendarTab1.Header = "Calendar";
+        calendarTab1.IconSource = new SymbolIconSource { Symbol = Symbol.Calendar };
 
         var clockTabe = AddTab(new ClockPage());
         clockTabe.Header = "Clock";

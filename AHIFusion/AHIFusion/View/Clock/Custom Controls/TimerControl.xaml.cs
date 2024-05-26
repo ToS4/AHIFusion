@@ -13,6 +13,8 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Uno.Extensions.ValueType;
+using Microsoft.UI;
+using Windows.UI;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -21,13 +23,19 @@ namespace AHIFusion
 	public sealed partial class TimerControl : UserControl
 	{
         private DispatcherTimer dispatcherTimer = new DispatcherTimer();
-
+        private double initialTime;
 
         public TimerControl()
         {
             this.InitializeComponent();
+
+            initialTime = Time.TotalSeconds;
+
             dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
             dispatcherTimer.Tick += DispatcherTimer_Tick;
+
+            RingBColor = new SolidColorBrush(Colors.DarkSlateGray);
+            RingFColor = new SolidColorBrush(Colors.DarkSlateGray);
         }
 
         private void DispatcherTimer_Tick(object? sender, object e)
@@ -35,6 +43,7 @@ namespace AHIFusion
             if (Time.TotalSeconds > 0)
             {
                 Time -= TimeSpan.FromSeconds(1);
+                RingValue = (Time.TotalSeconds / initialTime) * 100;
             }
             else
             {
@@ -71,17 +80,49 @@ namespace AHIFusion
             set { SetValue(SoundProperty, value); }
         }
 
+        public static readonly DependencyProperty RingValueProperty = DependencyProperty.Register("RingValue", typeof(double), typeof(TimerControl), new PropertyMetadata(100));
+        public double RingValue
+        {
+            get { return (double)GetValue(RingValueProperty); }
+            set { SetValue(RingValueProperty, value); }
+        }
+
+        public static readonly DependencyProperty RingBColorProperty = DependencyProperty.Register("RingBColor", typeof(SolidColorBrush), typeof(TimerControl), new PropertyMetadata(new SolidColorBrush(Colors.DarkSlateGray)));
+        public SolidColorBrush RingBColor
+        {
+            get { return (SolidColorBrush)GetValue(RingBColorProperty); }
+            set { SetValue(RingBColorProperty, value); }
+        }
+
+        public static readonly DependencyProperty RingFColorProperty = DependencyProperty.Register("RingFColor", typeof(SolidColorBrush), typeof(TimerControl), new PropertyMetadata(new SolidColorBrush(Colors.AliceBlue)));
+        public SolidColorBrush RingFColor
+        {
+            get { return (SolidColorBrush)GetValue(RingFColorProperty); }
+            set { SetValue(RingFColorProperty, value); }
+        }
+
+        public static readonly DependencyProperty TextColorProperty = DependencyProperty.Register("TextColor", typeof(SolidColorBrush), typeof(TimerControl), new PropertyMetadata(new SolidColorBrush(Colors.Black)));
+        public SolidColorBrush TextColor
+        {
+            get { return (SolidColorBrush)GetValue(TextColorProperty); }
+            set { SetValue(TextColorProperty, value); }
+        }
+
         private void StartStopButton_Click(object sender, RoutedEventArgs e)
         {
             if (IsRunning)
             {
                 IsRunning = false;
                 dispatcherTimer.Stop();
+                RingFColor = new SolidColorBrush(Color.FromArgb(255, 220, 228, 235));
+                TextColor = new SolidColorBrush(Color.FromArgb(255, 70, 70, 70));
             }
             else
             {
                 IsRunning = true;
                 dispatcherTimer.Start();
+                RingFColor = new SolidColorBrush(Colors.AliceBlue);
+                TextColor = new SolidColorBrush(Colors.Black);
             }
         }
     }

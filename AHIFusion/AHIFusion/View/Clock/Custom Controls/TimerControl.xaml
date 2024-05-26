@@ -16,8 +16,8 @@
     </Border>
     <Grid Margin="30">
       <Grid.RowDefinitions>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="4*"/>
+        <RowDefinition Height="0.8*"/>
+        <RowDefinition Height="6*"/>
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 
@@ -38,9 +38,10 @@
       </Viewbox>
 
       <Viewbox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-        <TextBlock Foreground="Black" Text="{Binding Time, Mode=TwoWay}">
-
-        </TextBlock>
+        <Grid>
+          <ProgressRing Background="{Binding RingBColor}" Foreground="{Binding RingFColor}" IsIndeterminate="False" Value="{Binding RingValue, Mode=TwoWay}" IsActive="True" Width="120" Height="120" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          <TextBlock Text="{Binding Time, Mode=TwoWay}" Foreground="{Binding TextColor}" Margin="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
       </Viewbox>
 
       <Viewbox Grid.Row="2" Grid.Column="0">

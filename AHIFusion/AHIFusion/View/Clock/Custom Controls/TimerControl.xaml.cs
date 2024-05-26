@@ -12,6 +12,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Uno.Extensions.ValueType;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -19,10 +20,28 @@ namespace AHIFusion
 {
 	public sealed partial class TimerControl : UserControl
 	{
-		public TimerControl()
-		{
-			this.InitializeComponent();
-		}
+        private DispatcherTimer dispatcherTimer = new DispatcherTimer();
+
+
+        public TimerControl()
+        {
+            this.InitializeComponent();
+            dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
+            dispatcherTimer.Tick += DispatcherTimer_Tick;
+        }
+
+        private void DispatcherTimer_Tick(object? sender, object e)
+        {
+            if (Time.TotalSeconds > 0)
+            {
+                Time -= TimeSpan.FromSeconds(1);
+            }
+            else
+            {
+                IsRunning = false;
+                dispatcherTimer.Stop();
+            }
+        }
 
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(TimerControl), new PropertyMetadata(""));
         public string Title
@@ -31,10 +50,10 @@ namespace AHIFusion
             set { SetValue(TitleProperty, value); }
         }
 
-        public static readonly DependencyProperty TimeProperty = DependencyProperty.Register("Time", typeof(TimeOnly), typeof(TimerControl), new PropertyMetadata(new TimeOnly(0, 1, 0)));
-        public TimeOnly Time
+        public static readonly DependencyProperty TimeProperty = DependencyProperty.Register("Time", typeof(TimeSpan), typeof(TimerControl), new PropertyMetadata(new TimeSpan(0, 1, 0)));
+        public TimeSpan Time
         {
-            get { return (TimeOnly)GetValue(TimeProperty); }
+            get { return (TimeSpan)GetValue(TimeProperty); }
             set { SetValue(TimeProperty, value); }
         }
 
@@ -51,5 +70,19 @@ namespace AHIFusion
             get { return (string)GetValue(SoundProperty); }
             set { SetValue(SoundProperty, value); }
         }
-	}
+
+        private void StartStopButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsRunning)
+            {
+                IsRunning = false;
+                dispatcherTimer.Stop();
+            }
+            else
+            {
+                IsRunning = true;
+                dispatcherTimer.Start();
+            }
+        }
+    }
 }

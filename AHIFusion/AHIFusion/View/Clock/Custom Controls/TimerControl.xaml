@@ -32,13 +32,19 @@
 
       <Viewbox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
         <TextBlock Foreground="Black"
-            Text="Timer"
+            Text="{Binding Title}"
            FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"
            TextWrapping="Wrap" MaxWidth="600"/>
       </Viewbox>
 
       <Viewbox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-        
+        <TextBlock Foreground="Black" Text="{Binding Time, Mode=TwoWay}">
+
+        </TextBlock>
+      </Viewbox>
+
+      <Viewbox Grid.Row="2" Grid.Column="0">
+        <Button x:Name="StartButton" Width="100" Click="StartStopButton_Click"/>
       </Viewbox>
 
     </Grid>

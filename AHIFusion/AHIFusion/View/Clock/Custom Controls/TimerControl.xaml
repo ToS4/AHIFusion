@@ -48,6 +48,10 @@
         <Button x:Name="StartButton" Width="100" Click="StartStopButton_Click"/>
       </Viewbox>
 
+      <Viewbox Grid.Row="2" Grid.Column="1">
+        <Button x:Name="ResetButton" Width="100" Click="ResetButton_Click"/>
+      </Viewbox>
+
     </Grid>
   </Grid>
 

@@ -415,4 +415,21 @@
     </Setter>
   </Style>
 
+  <Style x:Key="TimeTextBoxStyle" TargetType="TextBox">
+    <Setter Property="Foreground" Value="White"/>
+    <Setter Property="FontSize" Value="24"/>
+    <Setter Property="Background" Value="#2C2C2C"/>
+    <Setter Property="BorderBrush" Value="#2C2C2C"/>
+    <Setter Property="Width" Value="50"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+  </Style>
+  <Style x:Key="ArrowButtonStyle" TargetType="Button">
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="Foreground" Value="White"/>
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="HorizontalAlignment" Value="Center"/>
+  </Style>
 </ResourceDictionary>

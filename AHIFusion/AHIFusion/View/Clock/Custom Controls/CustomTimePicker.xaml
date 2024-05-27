@@ -1,0 +1,31 @@
+﻿<UserControl
+    x:Class="AHIFusion.CustomTimePicker"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AHIFusion"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+  <StackPanel Orientation="Vertical" Background="Transparent" Padding="10" HorizontalAlignment="Center" >
+    <StackPanel Orientation="Horizontal" Spacing="45.5" HorizontalAlignment="Center">
+      <Button Content="▲" Click="IncreaseHour" Style="{StaticResource ArrowButtonStyle}" />
+      <Button Content="▲" Click="IncreaseMinute" Style="{StaticResource ArrowButtonStyle}"/>
+      <Button Content="▲" Click="IncreaseSecond" Style="{StaticResource ArrowButtonStyle}"/>
+    </StackPanel>
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+      <TextBox x:Name="hoursTextBox" Width="50" Text="00" TextAlignment="Center" KeyDown="HoursTextBox_KeyDown" LostFocus="HoursTextBox_LostFocus" Style="{StaticResource TimeTextBoxStyle}"/>
+      <TextBlock Text=":" VerticalAlignment="Center" Foreground="White" FontSize="24"/>
+      <TextBox x:Name="minutesTextBox" Width="50" Text="00" TextAlignment="Center" KeyDown="MinutesTextBox_KeyDown" LostFocus="MinutesTextBox_LostFocus" Style="{StaticResource TimeTextBoxStyle}"/>
+      <TextBlock Text=":" VerticalAlignment="Center" Foreground="White" FontSize="24"/>
+      <TextBox x:Name="secondsTextBox" Width="50" Text="00" TextAlignment="Center" KeyDown="SecondsTextBox_KeyDown" LostFocus="SecondsTextBox_LostFocus" Style="{StaticResource TimeTextBoxStyle}"/>
+    </StackPanel>
+    <StackPanel Orientation="Horizontal" Spacing="45.5" HorizontalAlignment="Center">
+      <Button Content="▼" Click="DecreaseHour" Style="{StaticResource ArrowButtonStyle}"/>
+      <Button Content="▼" Click="DecreaseMinute" Style="{StaticResource ArrowButtonStyle}"/>
+      <Button Content="▼" Click="DecreaseSecond" Style="{StaticResource ArrowButtonStyle}"/>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

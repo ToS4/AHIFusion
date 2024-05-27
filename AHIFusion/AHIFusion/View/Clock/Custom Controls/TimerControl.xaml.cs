@@ -125,5 +125,15 @@ namespace AHIFusion
                 TextColor = new SolidColorBrush(Colors.Black);
             }
         }
+
+        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            Time = TimeSpan.FromSeconds(initialTime);
+            IsRunning = false;
+            dispatcherTimer.Stop();
+            RingFColor = new SolidColorBrush(Color.FromArgb(255, 220, 228, 235));
+            TextColor = new SolidColorBrush(Color.FromArgb(255, 70, 70, 70));
+            RingValue = (Time.TotalSeconds / initialTime) * 100;
+        }
     }
 }

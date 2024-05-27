@@ -1,50 +1,33 @@
-using AHIFusion.Model;
-using Windows.Graphics.Capture;
-
-namespace AHIFusion;
-
 using System.Collections.Specialized;
 using AHIFusion.Model;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media.Animation;
 using Uno;
 
+namespace AHIFusion;
 /// <summary>
 /// An empty page that can be used on its own or navigated to within a Frame.
 /// </summary>
-public partial class AlarmContent : Page
+public sealed partial class TimerContent : Page
 {
-    public AlarmContent()
+    public TimerContent()
     {
         this.InitializeComponent();
-
         DataContext = this;
-
         InitializeControls();
-
-        AlarmCollection.Alarms.CollectionChanged += Alarms_CollectionChanged;
-        
+        TimerCollection.Timers.CollectionChanged += Timers_CollectionChanged;
     }
 
     private void InitializeControls()
     {
-
-        MainGrid.Children.Clear();
-
-        for (int i = 0; i < AlarmCollection.Alarms.Count; i++)
+        for (int i = 0; i < TimerCollection.Timers.Count; i++)
         {
-            AlarmControl alarmControl = new AlarmControl
+            TimerControl timerControl = new TimerControl
             {
-                DataContext = AlarmCollection.Alarms[i],
+                DataContext = TimerCollection.Timers[i],
                 Margin = new Thickness(10),
                 MaxHeight = 320,
                 MinHeight = 320
-            };
-
-            Binding timeBinding = new Binding
-            {
-                Path = new PropertyPath("Time"),
-                Mode = BindingMode.TwoWay
             };
 
             Binding titleBinding = new Binding
@@ -53,15 +36,15 @@ public partial class AlarmContent : Page
                 Mode = BindingMode.TwoWay
             };
 
-            Binding isOnBinding = new Binding
+            Binding timeBinding = new Binding
             {
-                Path = new PropertyPath("IsOn"),
+                Path = new PropertyPath("Time"),
                 Mode = BindingMode.TwoWay
             };
 
-            Binding daysBinding = new Binding
+            Binding isRunningBinding = new Binding
             {
-                Path = new PropertyPath("Days"),
+                Path = new PropertyPath("IsRunning"),
                 Mode = BindingMode.TwoWay
             };
 
@@ -71,45 +54,46 @@ public partial class AlarmContent : Page
                 Mode = BindingMode.TwoWay
             };
 
-            alarmControl.SetBinding(AlarmControl.TimeProperty, timeBinding);
-            alarmControl.SetBinding(AlarmControl.TitleProperty, titleBinding);
-            alarmControl.SetBinding(AlarmControl.IsOnProperty, isOnBinding);
-            alarmControl.SetBinding(AlarmControl.DaysProperty, daysBinding);
-            alarmControl.SetBinding(AlarmControl.SoundProperty, soundBinding);
+            timerControl.SetBinding(TimerControl.TitleProperty, titleBinding);
+            timerControl.SetBinding(TimerControl.TimeProperty, timeBinding);
+            timerControl.SetBinding(TimerControl.IsRunningProperty, isRunningBinding);
+            timerControl.SetBinding(TimerControl.SoundProperty, soundBinding);
 
             int row = i / 2;
             int column = i % 2;
 
             if (row >= MainGrid.RowDefinitions.Count)
             {
-                MainGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                MainGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star)});
             }
 
-            Grid.SetRow(alarmControl, row);
-            Grid.SetColumn(alarmControl, column);
+            Grid.SetRow(timerControl, row);
+            Grid.SetColumn(timerControl, column);
 
-            MainGrid.Children.Add(alarmControl);
+            MainGrid.Children.Add(timerControl);
 
             for (int j = MainGrid.RowDefinitions.Count - 1; j >= 0; j--)
             {
-                bool rowIsOccupied = MainGrid.Children.Cast<UIElement>().Any(e => Grid.GetRow((FrameworkElement)e) == j);
-
-                if (!rowIsOccupied)
+                bool rowOccupied = MainGrid.Children.Cast<UIElement>().Any(e => Grid.GetRow((FrameworkElement)e) == j);
+                if (!rowOccupied)
                 {
                     MainGrid.RowDefinitions.RemoveAt(j);
                 }
             }
+
+            
         }
 
         AddRectControl addRectControl = new AddRectControl
         {
             Margin = new Thickness(10),
             MaxHeight = 320,
-            MinHeight = 320
+            MinHeight = 320,
+            Mode = "Timer"
         };
 
-        int addRectRow = AlarmCollection.Alarms.Count / 2;
-        int addRectColumn = AlarmCollection.Alarms.Count % 2;
+        int addRectRow = TimerCollection.Timers.Count / 2;
+        int addRectColumn = TimerCollection.Timers.Count % 2;
 
         if (addRectRow >= MainGrid.RowDefinitions.Count)
         {
@@ -122,13 +106,13 @@ public partial class AlarmContent : Page
         MainGrid.Children.Add(addRectControl);
     }
 
-    private void Alarms_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private void Timers_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+        if (e.Action == NotifyCollectionChangedAction.Add)
         {
-            foreach (Alarm newAlarm in e.NewItems)
+            foreach (AHIFusion.Model.Timer timer in e.NewItems)
             {
-                AddAlarmControl(newAlarm);
+                AddTimerControl(timer);
             }
         }
         else if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -137,32 +121,23 @@ public partial class AlarmContent : Page
         }
     }
 
-    private void AddAlarmControl(Alarm alarm)
+    private void AddTimerControl(AHIFusion.Model.Timer timer)
     {
-        // diesser Abschnitt löscht das AddRectControl, wenn es existiert (später wirds als letztes Element
-        // zurück hinzugefügt)
         var addRectControl = MainGrid.Children.OfType<AddRectControl>().FirstOrDefault();
         if (addRectControl != null)
         {
             MainGrid.Children.Remove(addRectControl);
         }
 
-        // das AlarmControl wird hinzugefügt
-        if (MainGrid.Children.OfType<AlarmControl>().Count() % 2 == 0)
+        if (MainGrid.Children.OfType<TimerControl>().Count() % 2 == 0)
             MainGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-        AlarmControl alarmControl = new AlarmControl
+        TimerControl timerControl = new TimerControl
         {
-            DataContext = alarm,    
+            DataContext = timer,
             Margin = new Thickness(10),
             MaxHeight = 320,
             MinHeight = 320
-        };
-
-        Binding timeBinding = new Binding
-        {
-            Path = new PropertyPath("Time"),
-            Mode = BindingMode.TwoWay
         };
 
         Binding titleBinding = new Binding
@@ -171,15 +146,15 @@ public partial class AlarmContent : Page
             Mode = BindingMode.TwoWay
         };
 
-        Binding isOnBinding = new Binding
+        Binding timeBinding = new Binding
         {
-            Path = new PropertyPath("IsOn"),
+            Path = new PropertyPath("Time"),
             Mode = BindingMode.TwoWay
         };
 
-        Binding daysBinding = new Binding
+        Binding isRunningBinding = new Binding
         {
-            Path = new PropertyPath("Days"),
+            Path = new PropertyPath("IsRunning"),
             Mode = BindingMode.TwoWay
         };
 
@@ -189,13 +164,12 @@ public partial class AlarmContent : Page
             Mode = BindingMode.TwoWay
         };
 
-        alarmControl.SetBinding(AlarmControl.TimeProperty, timeBinding);
-        alarmControl.SetBinding(AlarmControl.TitleProperty, titleBinding);
-        alarmControl.SetBinding(AlarmControl.IsOnProperty, isOnBinding);
-        alarmControl.SetBinding(AlarmControl.DaysProperty, daysBinding);
-        alarmControl.SetBinding(AlarmControl.SoundProperty, soundBinding);
+        timerControl.SetBinding(TimerControl.TitleProperty, titleBinding);
+        timerControl.SetBinding(TimerControl.TimeProperty, timeBinding);
+        timerControl.SetBinding(TimerControl.IsRunningProperty, isRunningBinding);
+        timerControl.SetBinding(TimerControl.SoundProperty, soundBinding);
 
-        int i = MainGrid.Children.OfType<AlarmControl>().Count();
+        int i = MainGrid.Children.OfType<TimerControl>().Count();
 
         int row = i / 2;
         int column = i % 2;
@@ -205,12 +179,11 @@ public partial class AlarmContent : Page
             MainGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
         }
 
-        Grid.SetRow(alarmControl, row);
-        Grid.SetColumn(alarmControl, column);
+        Grid.SetRow(timerControl, row);
+        Grid.SetColumn(timerControl, column);
 
-        MainGrid.Children.Add(alarmControl);
+        MainGrid.Children.Add(timerControl);
 
-        // Animation für das Hinzufügen des AlarmControls
         var animation = new DoubleAnimation
         {
             From = 0,
@@ -219,18 +192,16 @@ public partial class AlarmContent : Page
         };
 
         var storyboard = new Storyboard();
-        Storyboard.SetTarget(animation, alarmControl);
+        Storyboard.SetTarget(animation, timerControl);
         Storyboard.SetTargetProperty(animation, "Opacity");
         storyboard.Children.Add(animation);
 
         storyboard.Begin();
 
-        // das AddRectControl wird als letztes Element hinzugefügt
-
         if (addRectControl != null)
         {
-            int addRectRow = MainGrid.Children.OfType<AlarmControl>().Count() / 2;
-            int addRectColumn = MainGrid.Children.OfType<AlarmControl>().Count() % 2;
+            int addRectRow = MainGrid.Children.OfType<TimerControl>().Count() / 2;
+            int addRectColumn = MainGrid.Children.OfType<TimerControl>().Count() % 2;
 
             if (addRectRow >= MainGrid.RowDefinitions.Count)
             {

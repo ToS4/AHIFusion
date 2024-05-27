@@ -20,7 +20,6 @@ public sealed partial class AddRectControl : UserControl
     // Mode to see if the control is used for an alarm or a timer, ...
     public static readonly DependencyProperty ModeProperty = DependencyProperty.Register(
         "Mode", typeof(string), typeof(AddRectControl), new PropertyMetadata("Alarm")); 
-
     public string Mode
     {
         get { return (string)GetValue(ModeProperty); }
@@ -29,9 +28,19 @@ public sealed partial class AddRectControl : UserControl
 
     private async void Grid_PointerPressed(object sender, PointerRoutedEventArgs e)
     {
-        ContentDialog dialog = new AddAlarm();
-        dialog.XamlRoot = this.XamlRoot;
+        if (Mode == "Alarm")
+        {
+            ContentDialog dialog = new AddAlarm();
+            dialog.XamlRoot = this.XamlRoot;
 
-        var result = await dialog.ShowAsync();
+            var result = await dialog.ShowAsync();
+        }
+        else if (Mode == "Timer")
+        {
+            ContentDialog dialog = new AddTimer();
+            dialog.XamlRoot = this.XamlRoot;
+
+            var result = await dialog.ShowAsync();
+        }
     }
 }

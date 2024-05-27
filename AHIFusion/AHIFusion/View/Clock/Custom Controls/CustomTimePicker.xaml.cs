@@ -151,4 +151,6 @@ public sealed partial class CustomTimePicker : UserControl
         }
         OnTimeChanged();
     }
+
+    // ich mach das nie wieder :D
 }

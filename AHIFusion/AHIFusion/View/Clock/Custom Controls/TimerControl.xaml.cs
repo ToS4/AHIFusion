@@ -15,6 +15,7 @@ using Microsoft.UI.Xaml.Navigation;
 using Uno.Extensions.ValueType;
 using Microsoft.UI;
 using Windows.UI;
+using System.Diagnostics;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -23,6 +24,7 @@ namespace AHIFusion
 	public sealed partial class TimerControl : UserControl
 	{
         private DispatcherTimer dispatcherTimer = new DispatcherTimer();
+        private Stopwatch stopwatch = new Stopwatch();
         private double initialTime;
 
         public TimerControl()
@@ -31,11 +33,12 @@ namespace AHIFusion
 
             initialTime = Time.TotalSeconds;
 
-            dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
+            dispatcherTimer.Interval = TimeSpan.FromMilliseconds(300);
             dispatcherTimer.Tick += DispatcherTimer_Tick;
 
             RingBColor = new SolidColorBrush(Colors.DarkSlateGray);
             RingFColor = new SolidColorBrush(Colors.DarkSlateGray);
+            RingValue = (Time.TotalSeconds / initialTime) * 100;
         }
 
         private void DispatcherTimer_Tick(object? sender, object e)

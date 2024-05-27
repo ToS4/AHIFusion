@@ -39,8 +39,8 @@
 
       <Viewbox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
         <Grid>
-          <ProgressRing Background="{Binding RingBColor}" Foreground="{Binding RingFColor}" IsIndeterminate="False" Value="{Binding RingValue, Mode=TwoWay}" IsActive="True" Width="120" Height="120" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-          <TextBlock Text="{Binding Time, Mode=TwoWay}" Foreground="{Binding TextColor}" Margin="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          <ProgressRing Background="{x:Bind RingBColor, Mode=TwoWay}" Foreground="{x:Bind RingFColor, Mode=TwoWay}" IsIndeterminate="False" Value="{x:Bind RingValue, Mode=TwoWay}" IsActive="True" Width="120" Height="120" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+          <TextBlock Text="{x:Bind Time, Mode=TwoWay}" Foreground="{x:Bind TextColor, Mode=TwoWay}" Margin="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
       </Viewbox>
 

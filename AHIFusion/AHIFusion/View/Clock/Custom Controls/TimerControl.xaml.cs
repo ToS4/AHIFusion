@@ -24,7 +24,6 @@ namespace AHIFusion
 	public sealed partial class TimerControl : UserControl
 	{
         private DispatcherTimer dispatcherTimer = new DispatcherTimer();
-        private Stopwatch stopwatch = new Stopwatch();
         private double initialTime;
 
         public TimerControl()
@@ -33,7 +32,7 @@ namespace AHIFusion
 
             initialTime = Time.TotalSeconds;
 
-            dispatcherTimer.Interval = TimeSpan.FromMilliseconds(300);
+            dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
             dispatcherTimer.Tick += DispatcherTimer_Tick;
 
             RingBColor = new SolidColorBrush(Colors.DarkSlateGray);

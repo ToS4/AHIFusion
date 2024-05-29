@@ -16,6 +16,8 @@ using Uno.Extensions.ValueType;
 using Microsoft.UI;
 using Windows.UI;
 using System.Diagnostics;
+using Windows.Media.Core;
+using Windows.Media.Playback;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -25,12 +27,15 @@ namespace AHIFusion
 	{
         private DispatcherTimer dispatcherTimer = new DispatcherTimer();
         private double initialTime;
+        private bool isInitialiTimeSet = false;
+        private TimeOnly ringTime;
+        private string ringTimeString;
+        private MediaPlayer _mediaPlayer;
 
         public TimerControl()
         {
             this.InitializeComponent();
 
-            initialTime = Time.TotalSeconds;
 
             dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
             dispatcherTimer.Tick += DispatcherTimer_Tick;
@@ -38,6 +43,7 @@ namespace AHIFusion
             RingBColor = new SolidColorBrush(Colors.DarkSlateGray);
             RingFColor = new SolidColorBrush(Colors.DarkSlateGray);
             RingValue = (Time.TotalSeconds / initialTime) * 100;
+
         }
 
         private void DispatcherTimer_Tick(object? sender, object e)
@@ -49,6 +55,7 @@ namespace AHIFusion
             }
             else
             {
+                RingTimer();
                 IsRunning = false;
                 dispatcherTimer.Stop();
             }
@@ -112,9 +119,14 @@ namespace AHIFusion
 
         private void StartStopButton_Click(object sender, RoutedEventArgs e)
         {
+            if (Time.TotalSeconds == 0)
+            {
+                return;
+            }
             if (IsRunning)
             {
-                RingTimeVisibility = false;
+                RingTimeBorder.Visibility = Visibility.Collapsed;
+                RingTimeTextBlock.Visibility = Visibility.Collapsed;
                 IsRunning = false;
                 dispatcherTimer.Stop();
                 RingFColor = new SolidColorBrush(Color.FromArgb(255, 220, 228, 235));
@@ -122,6 +134,15 @@ namespace AHIFusion
             }
             else
             {
+                if (!isInitialiTimeSet)
+                {
+                    initialTime = Time.TotalSeconds;
+                    isInitialiTimeSet = true;
+                }
+                RingTimeTextBlock.Text = ringTimeString;
+                RingTimeBorder.Visibility = Visibility.Visible;
+                RingTimeTextBlock.Visibility = Visibility.Visible;
+                CalculateRingTime();
                 IsRunning = true;
                 dispatcherTimer.Start();
                 RingFColor = new SolidColorBrush(Colors.AliceBlue);
@@ -131,12 +152,30 @@ namespace AHIFusion
 
         private void ResetButton_Click(object sender, RoutedEventArgs e)
         {
-            Time = TimeSpan.FromSeconds(initialTime);
+            RingTimeBorder.Visibility = Visibility.Collapsed;
+            RingTimeTextBlock.Visibility = Visibility.Collapsed;
             IsRunning = false;
             dispatcherTimer.Stop();
             RingFColor = new SolidColorBrush(Color.FromArgb(255, 220, 228, 235));
             TextColor = new SolidColorBrush(Color.FromArgb(255, 70, 70, 70));
+            Time = TimeSpan.FromSeconds(initialTime);
             RingValue = (Time.TotalSeconds / initialTime) * 100;
+        }
+
+        private void CalculateRingTime()
+        {
+            TimeOnly now = TimeOnly.FromDateTime(DateTime.Now);
+            ringTime = now.AddMinutes(Time.TotalSeconds / 60);
+            ringTimeString = ringTime.ToString("hh:mm");
+        }
+
+        private void RingTimer()
+        {
+            //_mediaPlayer.Source = MediaSource.CreateFromUri(new Uri($"ms-appx:///Assets/Sounds/{Sound}"));
+
+            //_mediaPlayer.Play();
+
+            Console.Beep(1000, 2000);
         }
     }
 }

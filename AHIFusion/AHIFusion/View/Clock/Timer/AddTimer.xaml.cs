@@ -29,6 +29,11 @@ public sealed partial class AddTimer : ContentDialog
     {
         TimeAdd = CustomTimePicker.Time;
 
+        if (TimeAdd.TotalSeconds == 0)
+        {
+            return;
+        }
+
         AHIFusion.Model.Timer timerToAdd = new AHIFusion.Model.Timer()
         {
             Title = NameAdd,

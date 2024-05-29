@@ -1,31 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
-using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Navigation;
-using Uno.Extensions.ValueType;
 using Microsoft.UI;
-using Windows.UI;
-using System.Diagnostics;
 using Windows.Media.Core;
 using Windows.Media.Playback;
-
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
+using Windows.UI;
 
 namespace AHIFusion
 {
-	public sealed partial class TimerControl : UserControl
-	{
-        private DispatcherTimer dispatcherTimer = new DispatcherTimer();
+    public sealed partial class TimerControl : UserControl
+    {
+        private static DispatcherTimer dispatcherTimer;
+        private static bool isTimerInitialized = false;
         private double initialTime;
         private bool isInitialiTimeSet = false;
         private TimeOnly ringTime;
@@ -35,15 +19,31 @@ namespace AHIFusion
         public TimerControl()
         {
             this.InitializeComponent();
+            InitializeTimer();
 
-
-            dispatcherTimer.Interval = TimeSpan.FromSeconds(1);
-            dispatcherTimer.Tick += DispatcherTimer_Tick;
+            _mediaPlayer = new MediaPlayer();
+            TimerSoundPlayer.SetMediaPlayer(_mediaPlayer);
 
             RingBColor = new SolidColorBrush(Colors.DarkSlateGray);
             RingFColor = new SolidColorBrush(Colors.DarkSlateGray);
+
             RingValue = (Time.TotalSeconds / initialTime) * 100;
 
+            this.Loaded += TimerControl_Loaded;
+            this.Unloaded += TimerControl_Unloaded;
+        }
+
+        private void InitializeTimer()
+        {
+            if (!isTimerInitialized)
+            {
+                dispatcherTimer = new DispatcherTimer
+                {
+                    Interval = TimeSpan.FromSeconds(1)
+                };
+                dispatcherTimer.Tick += DispatcherTimer_Tick;
+                isTimerInitialized = true;
+            }
         }
 
         private void DispatcherTimer_Tick(object? sender, object e)
@@ -59,6 +59,24 @@ namespace AHIFusion
                 IsRunning = false;
                 dispatcherTimer.Stop();
             }
+        }
+
+        private void TimerControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Reattach the tick event if it was detached
+            dispatcherTimer.Tick -= DispatcherTimer_Tick;
+            dispatcherTimer.Tick += DispatcherTimer_Tick;
+
+            if (IsRunning && !dispatcherTimer.IsEnabled)
+            {
+                dispatcherTimer.Start();
+            }
+        }
+
+        private void TimerControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            // Detach the tick event to avoid multiple handlers
+            dispatcherTimer.Tick -= DispatcherTimer_Tick;
         }
 
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(TimerControl), new PropertyMetadata(""));
@@ -82,7 +100,7 @@ namespace AHIFusion
             set { SetValue(IsRunningProperty, value); }
         }
 
-        public static readonly DependencyProperty SoundProperty = DependencyProperty.Register("Sound", typeof(string), typeof(TimerControl), new PropertyMetadata(""));
+        public static readonly DependencyProperty SoundProperty = DependencyProperty.Register("Sound", typeof(string), typeof(TimerControl), new PropertyMetadata("Timer.mp3"));
         public string Sound
         {
             get { return (string)GetValue(SoundProperty); }
@@ -125,32 +143,37 @@ namespace AHIFusion
             }
             if (IsRunning)
             {
-                RingTimeBorder.Visibility = Visibility.Collapsed;
-                RingTimeTextBlock.Visibility = Visibility.Collapsed;
-                IsRunning = false;
-                dispatcherTimer.Stop();
-                RingFColor = new SolidColorBrush(Color.FromArgb(255, 220, 228, 235));
-                TextColor = new SolidColorBrush(Color.FromArgb(255, 70, 70, 70));
+                StopTimer();
             }
             else
             {
-                if (!isInitialiTimeSet)
-                {
-                    initialTime = Time.TotalSeconds;
-                    isInitialiTimeSet = true;
-                }
-                RingTimeTextBlock.Text = ringTimeString;
-                RingTimeBorder.Visibility = Visibility.Visible;
-                RingTimeTextBlock.Visibility = Visibility.Visible;
-                CalculateRingTime();
-                IsRunning = true;
-                dispatcherTimer.Start();
-                RingFColor = new SolidColorBrush(Colors.AliceBlue);
-                TextColor = new SolidColorBrush(Colors.Black);
+                StartTimer();
             }
         }
 
-        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        private void StartTimer()
+        {
+            if (!isInitialiTimeSet)
+            {
+                initialTime = Time.TotalSeconds;
+                isInitialiTimeSet = true;
+            }
+            CalculateRingTime();
+            RingTimeTextBlock.Text = ringTimeString;
+            RingTimeBorder.Visibility = Visibility.Visible;
+            RingTimeTextBlock.Visibility = Visibility.Visible;
+            IsRunning = true;
+
+            if (!dispatcherTimer.IsEnabled)
+            {
+                dispatcherTimer.Start();
+            }
+
+            RingFColor = new SolidColorBrush(Colors.AliceBlue);
+            TextColor = new SolidColorBrush(Colors.Black);
+        }
+
+        private void StopTimer()
         {
             RingTimeBorder.Visibility = Visibility.Collapsed;
             RingTimeTextBlock.Visibility = Visibility.Collapsed;
@@ -158,6 +181,11 @@ namespace AHIFusion
             dispatcherTimer.Stop();
             RingFColor = new SolidColorBrush(Color.FromArgb(255, 220, 228, 235));
             TextColor = new SolidColorBrush(Color.FromArgb(255, 70, 70, 70));
+        }
+
+        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            StopTimer();
             Time = TimeSpan.FromSeconds(initialTime);
             RingValue = (Time.TotalSeconds / initialTime) * 100;
         }
@@ -171,11 +199,30 @@ namespace AHIFusion
 
         private void RingTimer()
         {
-            //_mediaPlayer.Source = MediaSource.CreateFromUri(new Uri($"ms-appx:///Assets/Sounds/{Sound}"));
+            _mediaPlayer.Source = MediaSource.CreateFromUri(new Uri($"ms-appx:///Assets/Sounds/Timers/{Sound}"));
+            _mediaPlayer.Play();
+        }
 
-            //_mediaPlayer.Play();
+        private void Grid_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            rect.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 149, 149, 149));
+        }
 
-            Console.Beep(1000, 2000);
+        private void Grid_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            rect.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 169, 169, 169));
+        }
+
+        private async void Grid_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            AHIFusion.Model.Timer timer = this.DataContext as AHIFusion.Model.Timer;
+
+            if (timer != null)
+            {
+                EditTimer editTimerDialog = new EditTimer(timer);
+                editTimerDialog.XamlRoot = this.XamlRoot;
+                await editTimerDialog.ShowAsync();
+            }
         }
     }
 }

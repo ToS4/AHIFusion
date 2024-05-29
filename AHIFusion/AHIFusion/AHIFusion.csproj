@@ -56,6 +56,7 @@
     <Content Remove="Assets\Fonts\aptos-light.ttf" />
     <Content Remove="Assets\Fonts\aptos-semibold.ttf" />
     <Content Remove="Assets\Fonts\aptos.ttf" />
+    <Content Remove="Assets\Sounds\timer.mp3" />
   </ItemGroup>
 
 
@@ -75,6 +76,7 @@
     <None Remove="View\Clock\Custom Controls\CustomTimePicker.xaml" />
     <None Remove="View\Clock\Custom Controls\TimerControl.xaml" />
     <None Remove="View\Clock\Timer\AddTimer.xaml" />
+    <None Remove="View\Clock\Timer\EditTimer.xaml" />
     <None Remove="View\Notes\LinkText.xaml" />
     <None Remove="View\StopwatchContent.xaml" />
     <None Remove="View\TimerContent.xaml" />
@@ -189,5 +191,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="View\Calendar\Custom Controls\ShowEventControl.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Clock\Timer\EditTimer.xaml" />
   </ItemGroup>
 </Project>

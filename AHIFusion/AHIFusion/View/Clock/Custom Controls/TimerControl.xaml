@@ -10,8 +10,8 @@
     d:DesignWidth="400"
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
-  <Grid>
-    <MediaPlayerElement x:Name="AlarmSoundPlayer" AreTransportControlsEnabled="False" Visibility="Collapsed"></MediaPlayerElement>
+  <Grid PointerEntered="Grid_PointerEntered" PointerExited="Grid_PointerExited" PointerPressed="Grid_PointerPressed">
+    <MediaPlayerElement x:Name="TimerSoundPlayer" AreTransportControlsEnabled="False" Visibility="Collapsed"></MediaPlayerElement>
     <Border BorderThickness="4" BorderBrush="Black" CornerRadius="20">
       <Rectangle x:Name="rect" Fill="DarkGray"/>
     </Border>

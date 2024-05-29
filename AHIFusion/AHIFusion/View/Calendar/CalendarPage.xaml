@@ -62,23 +62,23 @@
       <TextBlock TextAlignment="Center" Grid.Column="5" Text="Saturday" />
       <TextBlock TextAlignment="Center" Grid.Column="6" Text="Sunday" />
 
-      <Rectangle Grid.Column="0" Grid.Row="1" Margin="10" Fill="Red"/>
-      <Rectangle Grid.Column="0" Grid.Row="2" Margin="10" Fill="Blue"/>
-      <Rectangle Grid.Column="0" Grid.Row="3" Margin="10" Fill="Green"/>
-      <Rectangle Grid.Column="0" Grid.Row="4" Margin="10" Fill="Yellow"/>
-      <Rectangle Grid.Column="0" Grid.Row="5" Margin="10" Fill="Pink"/>
+      <local:CalendarDayControl Grid.Column="0" Grid.Row="1" Margin="10" />
+      <local:CalendarDayControl Grid.Column="0" Grid.Row="2" Margin="10" />
+      <local:CalendarDayControl Grid.Column="0" Grid.Row="3" Margin="10" />
+      <local:CalendarDayControl Grid.Column="0" Grid.Row="4" Margin="10" />
+      <local:CalendarDayControl Grid.Column="0" Grid.Row="5" Margin="10" />
 
-      <Rectangle Grid.Column="1" Grid.Row="1" Margin="10" Fill="Red"/>
-      <Rectangle Grid.Column="1" Grid.Row="2" Margin="10" Fill="Blue"/>
-      <Rectangle Grid.Column="1" Grid.Row="3" Margin="10" Fill="Green"/>
-      <Rectangle Grid.Column="1" Grid.Row="4" Margin="10" Fill="Yellow"/>
-      <Rectangle Grid.Column="1" Grid.Row="5" Margin="10" Fill="Pink"/>
+      <local:CalendarDayControl Grid.Column="1" Grid.Row="1" Margin="10" />
+      <local:CalendarDayControl Grid.Column="1" Grid.Row="2" Margin="10" />
+      <local:CalendarDayControl Grid.Column="1" Grid.Row="3" Margin="10" />
+      <local:CalendarDayControl Grid.Column="1" Grid.Row="4" Margin="10" />
+      <local:CalendarDayControl Grid.Column="1" Grid.Row="5" Margin="10" />
 
-      <Rectangle Grid.Column="2" Grid.Row="1" Margin="10" Fill="Red"/>
-      <Rectangle Grid.Column="2" Grid.Row="2" Margin="10" Fill="Blue"/>
-      <Rectangle Grid.Column="2" Grid.Row="3" Margin="10" Fill="Green"/>
-      <Rectangle Grid.Column="2" Grid.Row="4" Margin="10" Fill="Yellow"/>
-      <Rectangle Grid.Column="2" Grid.Row="5" Margin="10" Fill="Pink"/>
+      <local:CalendarDayControl Grid.Column="2" Grid.Row="1" Margin="10" />
+      <local:CalendarDayControl Grid.Column="2" Grid.Row="2" Margin="10" />
+      <local:CalendarDayControl Grid.Column="2" Grid.Row="3" Margin="10" />
+      <local:CalendarDayControl Grid.Column="2" Grid.Row="4" Margin="10" />
+      <local:CalendarDayControl Grid.Column="2" Grid.Row="5" Margin="10" />
 
     </Grid>
 

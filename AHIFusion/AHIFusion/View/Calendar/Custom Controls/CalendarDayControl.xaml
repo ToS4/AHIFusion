@@ -7,10 +7,38 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="400"
+  DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
-  <Grid>
+  <UserControl.Resources>
+    <local:CalendarBoolToBorderThickness x:Key="CalendarBoolToBorderThickness"/>
+  </UserControl.Resources>
 
+  <Border BorderThickness="{Binding DaySelected, Mode=TwoWay, Converter={StaticResource CalendarBoolToBorderThickness}}" BorderBrush="AliceBlue">
+    <Grid>
 
-  </Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+
+      <TextBlock Text="29.05.2024" TextAlignment="Center" HorizontalAlignment="Stretch" Padding="5"/>
+
+      <Viewbox Grid.Row="1">
+        <StackPanel>
+          <local:ShowEventControl EventText="Example Event Name" Margin="5"/>
+          <local:ShowEventControl EventText="Example Event Name" Margin="5"/>
+          <local:ShowEventControl EventText="Example Event Name" Margin="5"/>
+          <local:ShowEventControl EventText="+2" Margin="5" />
+        </StackPanel>
+      </Viewbox>
+      
+      
+    </Grid>
+  </Border>
+
 </UserControl>

@@ -114,6 +114,7 @@ namespace AHIFusion
         {
             if (IsRunning)
             {
+                RingTimeVisibility = false;
                 IsRunning = false;
                 dispatcherTimer.Stop();
                 RingFColor = new SolidColorBrush(Color.FromArgb(255, 220, 228, 235));

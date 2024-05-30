@@ -65,9 +65,6 @@
     <None Remove="CustomStyles.xaml" />
     <None Remove="HomePage.xaml" />
     <None Remove="View\AlarmContent.xaml" />
-    <None Remove="View\Calendar\CalendarPage.xaml" />
-    <None Remove="View\Calendar\Custom Controls\CalendarDayControl.xaml" />
-    <None Remove="View\Calendar\Custom Controls\ShowEventControl.xaml" />
     <None Remove="View\ClockPage.xaml" />
     <None Remove="View\Clock\Alarm\EditAlarm.xaml" />
     <None Remove="View\Clock\Custom Controls\AddAlarm.xaml" />
@@ -155,11 +152,6 @@
 
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="View\Calendar\CalendarPage.xaml" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <CustomAdditionalCompileInputs Remove="View\Clock\Custom Controls\TimerControl.xaml" />
   </ItemGroup>
 
@@ -175,22 +167,12 @@
 
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="View\Calendar\Custom Controls\CalendarDayControl.xaml" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <UpToDateCheckInput Remove="View\Clock\Timer\AddTimer.xaml" />
   </ItemGroup>
 
 
   <ItemGroup>
     <UpToDateCheckInput Remove="View\Clock\Custom Controls\CustomTimePicker.xaml" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="View\Calendar\Custom Controls\ShowEventControl.xaml" />
   </ItemGroup>
 
 

@@ -10,10 +10,10 @@ public class CalendarBoolToBorderThickness : IValueConverter
 
         if (daySelected)
         {
-            return 1;
+            return new Thickness(1);
         }
 
-        return 0;
+        return new Thickness(0);
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)

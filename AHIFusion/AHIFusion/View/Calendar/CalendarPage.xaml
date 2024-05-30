@@ -27,13 +27,13 @@
       </Grid.RowDefinitions>
 
       <Viewbox Stretch="Fill" VerticalAlignment="Top">
-        <CalendarView SelectionMode="Single" CalendarIdentifier="GregorianCalendar"  />
+        <CalendarView x:Name="SmallCalendarView" SelectionMode="Single" CalendarIdentifier="GregorianCalendar"  SelectedDatesChanged="SmallCalendarView_SelectedDatesChanged" />
       </Viewbox>
 
       <Rectangle Fill="DarkGray" Grid.Row="2"/>
     </Grid>
 
-    <Grid Grid.Column="1" Margin="10">
+    <Grid x:Name="CalendarGrid" Grid.Column="1" Margin="10">
 
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
@@ -54,32 +54,6 @@
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 
-      <TextBlock TextAlignment="Center" Grid.Column="0" Text="Monday" />
-      <TextBlock TextAlignment="Center" Grid.Column="1" Text="Tuesday" />
-      <TextBlock TextAlignment="Center" Grid.Column="2" Text="Wednesday" />
-      <TextBlock TextAlignment="Center" Grid.Column="3" Text="Thursday" />
-      <TextBlock TextAlignment="Center" Grid.Column="4" Text="Friday" />
-      <TextBlock TextAlignment="Center" Grid.Column="5" Text="Saturday" />
-      <TextBlock TextAlignment="Center" Grid.Column="6" Text="Sunday" />
-
-      <local:CalendarDayControl Grid.Column="0" Grid.Row="1" Margin="10" />
-      <local:CalendarDayControl Grid.Column="0" Grid.Row="2" Margin="10" />
-      <local:CalendarDayControl Grid.Column="0" Grid.Row="3" Margin="10" />
-      <local:CalendarDayControl Grid.Column="0" Grid.Row="4" Margin="10" />
-      <local:CalendarDayControl Grid.Column="0" Grid.Row="5" Margin="10" />
-
-      <local:CalendarDayControl Grid.Column="1" Grid.Row="1" Margin="10" />
-      <local:CalendarDayControl Grid.Column="1" Grid.Row="2" Margin="10" />
-      <local:CalendarDayControl Grid.Column="1" Grid.Row="3" Margin="10" />
-      <local:CalendarDayControl Grid.Column="1" Grid.Row="4" Margin="10" />
-      <local:CalendarDayControl Grid.Column="1" Grid.Row="5" Margin="10" />
-
-      <local:CalendarDayControl Grid.Column="2" Grid.Row="1" Margin="10" />
-      <local:CalendarDayControl Grid.Column="2" Grid.Row="2" Margin="10" />
-      <local:CalendarDayControl Grid.Column="2" Grid.Row="3" Margin="10" />
-      <local:CalendarDayControl Grid.Column="2" Grid.Row="4" Margin="10" />
-      <local:CalendarDayControl Grid.Column="2" Grid.Row="5" Margin="10" />
-
     </Grid>
 
     <Grid Grid.Column="2">
@@ -89,13 +63,9 @@
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 
-      <TextBlock Text="26.05.2024" TextAlignment="Center" FontSize="40" Margin="15" TextWrapping="Wrap"/>
+      <TextBlock x:Name="CurrentDayDateTextBlock" Text="26.05.2024" TextAlignment="Center" FontSize="40" Margin="15" TextWrapping="Wrap"/>
 
-      <ListView Grid.Row="1" Background="DarkGray">
-        <Button Content="8:05 - Example Event Name" Margin="5" HorizontalAlignment="Stretch"/>
-        <Button Content="8:05 - Example Event Name" Margin="5" HorizontalAlignment="Stretch"/>
-        <Button Content="8:05 - Example Event Name" Margin="5" HorizontalAlignment="Stretch"/>
-      </ListView>
+      <StackPanel x:Name="CurrentDayEventsStackPanel" Grid.Row="1" Background="DarkGray" />
     </Grid>
   </Grid>
 </Page>

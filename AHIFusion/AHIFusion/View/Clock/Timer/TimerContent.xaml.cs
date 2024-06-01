@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Media.Animation;
 using Uno;
 
 namespace AHIFusion;
+
 /// <summary>
 /// An empty page that can be used on its own or navigated to within a Frame.
 /// </summary>
@@ -20,68 +21,13 @@ public sealed partial class TimerContent : Page
 
     private void InitializeControls()
     {
+        // Clear existing controls to avoid duplicates
+        MainGrid.Children.Clear();
+        MainGrid.RowDefinitions.Clear();
+
         for (int i = 0; i < TimerCollection.Timers.Count; i++)
         {
-            TimerControl timerControl = new TimerControl
-            {
-                DataContext = TimerCollection.Timers[i],
-                Margin = new Thickness(10),
-                MaxHeight = 320,
-                MinHeight = 320
-            };
-
-            Binding titleBinding = new Binding
-            {
-                Path = new PropertyPath("Title"),
-                Mode = BindingMode.TwoWay
-            };
-
-            Binding timeBinding = new Binding
-            {
-                Path = new PropertyPath("Time"),
-                Mode = BindingMode.TwoWay
-            };
-
-            Binding isRunningBinding = new Binding
-            {
-                Path = new PropertyPath("IsRunning"),
-                Mode = BindingMode.TwoWay
-            };
-
-            Binding soundBinding = new Binding
-            {
-                Path = new PropertyPath("Sound"),
-                Mode = BindingMode.TwoWay
-            };
-
-            timerControl.SetBinding(TimerControl.TitleProperty, titleBinding);
-            timerControl.SetBinding(TimerControl.TimeProperty, timeBinding);
-            timerControl.SetBinding(TimerControl.IsRunningProperty, isRunningBinding);
-            timerControl.SetBinding(TimerControl.SoundProperty, soundBinding);
-
-            int row = i / 2;
-            int column = i % 2;
-
-            if (row >= MainGrid.RowDefinitions.Count)
-            {
-                MainGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star)});
-            }
-
-            Grid.SetRow(timerControl, row);
-            Grid.SetColumn(timerControl, column);
-
-            MainGrid.Children.Add(timerControl);
-
-            for (int j = MainGrid.RowDefinitions.Count - 1; j >= 0; j--)
-            {
-                bool rowOccupied = MainGrid.Children.Cast<UIElement>().Any(e => Grid.GetRow((FrameworkElement)e) == j);
-                if (!rowOccupied)
-                {
-                    MainGrid.RowDefinitions.RemoveAt(j);
-                }
-            }
-
-            
+            AddTimerControl(TimerCollection.Timers[i]);
         }
 
         AddRectControl addRectControl = new AddRectControl
@@ -123,6 +69,12 @@ public sealed partial class TimerContent : Page
 
     private void AddTimerControl(AHIFusion.Model.Timer timer)
     {
+        // Ensure no duplicate TimerControl for the same timer
+        if (MainGrid.Children.OfType<TimerControl>().Any(tc => tc.DataContext == timer))
+        {
+            return;
+        }
+
         var addRectControl = MainGrid.Children.OfType<AddRectControl>().FirstOrDefault();
         if (addRectControl != null)
         {

@@ -8,10 +8,9 @@ namespace AHIFusion
 {
     public sealed partial class TimerControl : UserControl
     {
-        private static DispatcherTimer dispatcherTimer;
-        private static bool isTimerInitialized = false;
+        private DispatcherTimer dispatcherTimer;
         private double initialTime;
-        private bool isInitialiTimeSet = false;
+        private bool isInitialTimeSet = false;
         private TimeOnly ringTime;
         private string ringTimeString;
         private MediaPlayer _mediaPlayer;
@@ -19,7 +18,11 @@ namespace AHIFusion
         public TimerControl()
         {
             this.InitializeComponent();
-            InitializeTimer();
+
+            dispatcherTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
 
             _mediaPlayer = new MediaPlayer();
             TimerSoundPlayer.SetMediaPlayer(_mediaPlayer);
@@ -33,17 +36,10 @@ namespace AHIFusion
             this.Unloaded += TimerControl_Unloaded;
         }
 
-        private void InitializeTimer()
+        private void TimerControl_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (!isTimerInitialized)
-            {
-                dispatcherTimer = new DispatcherTimer
-                {
-                    Interval = TimeSpan.FromSeconds(1)
-                };
-                dispatcherTimer.Tick += DispatcherTimer_Tick;
-                isTimerInitialized = true;
-            }
+            dispatcherTimer.Tick -= DispatcherTimer_Tick;
+
         }
 
         private void DispatcherTimer_Tick(object? sender, object e)
@@ -63,7 +59,7 @@ namespace AHIFusion
 
         private void TimerControl_Loaded(object sender, RoutedEventArgs e)
         {
-            // Reattach the tick event if it was detached
+            // Detach and reattach to ensure only one handler
             dispatcherTimer.Tick -= DispatcherTimer_Tick;
             dispatcherTimer.Tick += DispatcherTimer_Tick;
 
@@ -71,12 +67,6 @@ namespace AHIFusion
             {
                 dispatcherTimer.Start();
             }
-        }
-
-        private void TimerControl_Unloaded(object sender, RoutedEventArgs e)
-        {
-            // Detach the tick event to avoid multiple handlers
-            dispatcherTimer.Tick -= DispatcherTimer_Tick;
         }
 
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(TimerControl), new PropertyMetadata(""));
@@ -153,10 +143,10 @@ namespace AHIFusion
 
         private void StartTimer()
         {
-            if (!isInitialiTimeSet)
+            if (!isInitialTimeSet)
             {
                 initialTime = Time.TotalSeconds;
-                isInitialiTimeSet = true;
+                isInitialTimeSet = true;
             }
             CalculateRingTime();
             RingTimeTextBlock.Text = ringTimeString;
@@ -199,8 +189,16 @@ namespace AHIFusion
 
         private void RingTimer()
         {
-            _mediaPlayer.Source = MediaSource.CreateFromUri(new Uri($"ms-appx:///Assets/Sounds/Timers/{Sound}"));
-            _mediaPlayer.Play();
+            try
+            {
+                _mediaPlayer.Source = MediaSource.CreateFromUri(new Uri($"ms-appx:///Assets/Sounds/Timers/{Sound}"));
+                _mediaPlayer.Play();
+            }
+            catch (Exception ex)
+            {
+                // Handle or log the exception as needed
+                System.Diagnostics.Debug.WriteLine($"Error playing sound: {ex.Message}");
+            }
         }
 
         private void Grid_PointerEntered(object sender, PointerRoutedEventArgs e)
@@ -215,12 +213,12 @@ namespace AHIFusion
 
         private async void Grid_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            AHIFusion.Model.Timer timer = this.DataContext as AHIFusion.Model.Timer;
-
-            if (timer != null)
+            if (this.DataContext is AHIFusion.Model.Timer timer)
             {
-                EditTimer editTimerDialog = new EditTimer(timer);
-                editTimerDialog.XamlRoot = this.XamlRoot;
+                EditTimer editTimerDialog = new EditTimer(timer)
+                {
+                    XamlRoot = this.XamlRoot
+                };
                 await editTimerDialog.ShowAsync();
             }
         }

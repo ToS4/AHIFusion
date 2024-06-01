@@ -14,12 +14,15 @@ public sealed partial class EditTimer : ContentDialog
         timerEdit = timer;
         NameEdit = timer.Title;
         TimeEdit = TimeSpan.FromSeconds(timer.Time.TotalSeconds);
+        CustomTimePicker.Time = TimeEdit;
     }
 
     private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
+        TimeEdit = CustomTimePicker.Time;
         timerEdit.Title = NameEdit;
         timerEdit.Time = TimeEdit;
+        timerEdit.InitialTime = TimeEdit.TotalSeconds;
     }
 
     private void DeleteButton_Click(object sender, RoutedEventArgs e)

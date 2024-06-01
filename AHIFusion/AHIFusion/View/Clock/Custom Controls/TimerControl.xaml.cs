@@ -9,8 +9,6 @@ namespace AHIFusion
     public sealed partial class TimerControl : UserControl
     {
         private DispatcherTimer dispatcherTimer;
-        private double initialTime;
-        private bool isInitialTimeSet = false;
         private TimeOnly ringTime;
         private string ringTimeString;
         private MediaPlayer _mediaPlayer;
@@ -29,8 +27,8 @@ namespace AHIFusion
 
             RingBColor = new SolidColorBrush(Colors.DarkSlateGray);
             RingFColor = new SolidColorBrush(Colors.DarkSlateGray);
-
-            RingValue = (Time.TotalSeconds / initialTime) * 100;
+            
+            RingValue = (Time.TotalSeconds / InitialTime) * 100;
 
             this.Loaded += TimerControl_Loaded;
             this.Unloaded += TimerControl_Unloaded;
@@ -47,7 +45,7 @@ namespace AHIFusion
             if (Time.TotalSeconds > 0)
             {
                 Time -= TimeSpan.FromSeconds(1);
-                RingValue = (Time.TotalSeconds / initialTime) * 100;
+                RingValue = (Time.TotalSeconds / InitialTime) * 100;
             }
             else
             {
@@ -81,6 +79,13 @@ namespace AHIFusion
         {
             get { return (TimeSpan)GetValue(TimeProperty); }
             set { SetValue(TimeProperty, value); }
+        }
+
+        public static readonly DependencyProperty InitialTimeProperty = DependencyProperty.Register("InitialTime", typeof(double), typeof(TimerControl), new PropertyMetadata(60.0));
+        public double InitialTime
+        {
+            get { return (double)GetValue(InitialTimeProperty); }
+            set { SetValue(InitialTimeProperty, value); }
         }
 
         public static readonly DependencyProperty IsRunningProperty = DependencyProperty.Register("IsRunning", typeof(bool), typeof(TimerControl), new PropertyMetadata(false));
@@ -143,11 +148,6 @@ namespace AHIFusion
 
         private void StartTimer()
         {
-            if (!isInitialTimeSet)
-            {
-                initialTime = Time.TotalSeconds;
-                isInitialTimeSet = true;
-            }
             CalculateRingTime();
             RingTimeTextBlock.Text = ringTimeString;
             RingTimeBorder.Visibility = Visibility.Visible;
@@ -176,8 +176,8 @@ namespace AHIFusion
         private void ResetButton_Click(object sender, RoutedEventArgs e)
         {
             StopTimer();
-            Time = TimeSpan.FromSeconds(initialTime);
-            RingValue = (Time.TotalSeconds / initialTime) * 100;
+            Time = TimeSpan.FromSeconds(InitialTime);
+            RingValue = (Time.TotalSeconds / InitialTime) * 100;
         }
 
         private void CalculateRingTime()
@@ -215,6 +215,7 @@ namespace AHIFusion
         {
             if (this.DataContext is AHIFusion.Model.Timer timer)
             {
+                StopTimer();
                 EditTimer editTimerDialog = new EditTimer(timer)
                 {
                     XamlRoot = this.XamlRoot

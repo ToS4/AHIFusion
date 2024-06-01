@@ -116,10 +116,17 @@ public sealed partial class TimerContent : Page
             Mode = BindingMode.TwoWay
         };
 
+        Binding initialTimeBinding = new Binding
+        {
+            Path = new PropertyPath("InitialTime"),
+            Mode = BindingMode.TwoWay
+        };
+
         timerControl.SetBinding(TimerControl.TitleProperty, titleBinding);
         timerControl.SetBinding(TimerControl.TimeProperty, timeBinding);
         timerControl.SetBinding(TimerControl.IsRunningProperty, isRunningBinding);
         timerControl.SetBinding(TimerControl.SoundProperty, soundBinding);
+        timerControl.SetBinding(TimerControl.InitialTimeProperty, initialTimeBinding);
 
         int i = MainGrid.Children.OfType<TimerControl>().Count();
 

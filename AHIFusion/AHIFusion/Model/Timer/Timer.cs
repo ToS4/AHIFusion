@@ -33,6 +33,20 @@ public class Timer : INotifyPropertyChanged
         }
     }
 
+    private double initialTime;
+    public double InitialTime
+    {
+        get { return initialTime; }
+        set
+        {
+            if (initialTime != value)
+            {
+                initialTime = value;
+                OnPropertyChanged(nameof(InitialTime));
+            }
+        }
+    }
+
     private bool isRunning;
     public bool IsRunning
     {

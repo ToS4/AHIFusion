@@ -36,6 +36,6 @@
       <local:CustomTimePicker x:Name="CustomTimePicker"/>
     </Viewbox>
     <TextBlock Text="Name:" Margin="0,10,0,15"/>
-    <TextBox Text="asd"/>
+    <TextBox Text="{x:Bind NameEdit, Mode=TwoWay}"/>
   </StackPanel>
 </ContentDialog>

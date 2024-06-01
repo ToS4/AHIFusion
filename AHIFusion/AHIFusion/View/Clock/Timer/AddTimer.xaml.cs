@@ -38,6 +38,7 @@ public sealed partial class AddTimer : ContentDialog
         {
             Title = NameAdd,
             Time = TimeAdd,
+            InitialTime = TimeAdd.TotalSeconds,
             IsRunning = false
         };
         TimerCollection.Timers.Add(timerToAdd);

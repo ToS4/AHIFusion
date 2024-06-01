@@ -28,8 +28,6 @@ namespace AHIFusion
             RingBColor = new SolidColorBrush(Colors.DarkSlateGray);
             RingFColor = new SolidColorBrush(Colors.DarkSlateGray);
             
-            RingValue = (Time.TotalSeconds / InitialTime) * 100;
-
             this.Loaded += TimerControl_Loaded;
             this.Unloaded += TimerControl_Unloaded;
         }
@@ -65,6 +63,8 @@ namespace AHIFusion
             {
                 dispatcherTimer.Start();
             }
+
+            RingValue = (Time.TotalSeconds / InitialTime) * 100;
         }
 
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(TimerControl), new PropertyMetadata(""));

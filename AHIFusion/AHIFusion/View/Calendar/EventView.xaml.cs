@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,12 +13,19 @@ using Microsoft.UI.Xaml.Navigation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
-namespace AHIFusion.View.Calendar;
+namespace AHIFusion;
 public sealed partial class EventView : ContentDialog
 {
+    public DayEvent Event;
     public EventView()
     {
         this.InitializeComponent();
+
+        Event = new DayEvent()
+        {
+            Title = "New Event",
+            Date = DateOnly.FromDateTime(DateTime.Today)
+        };
     }
 
     private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)

@@ -102,7 +102,7 @@ namespace AHIFusion
             set { SetValue(SoundProperty, value); }
         }
 
-        public static readonly DependencyProperty RingValueProperty = DependencyProperty.Register("RingValue", typeof(double), typeof(TimerControl), new PropertyMetadata(100));
+        public static readonly DependencyProperty RingValueProperty = DependencyProperty.Register("RingValue", typeof(double), typeof(TimerControl), new PropertyMetadata(100.0));
         public double RingValue
         {
             get { return (double)GetValue(RingValueProperty); }

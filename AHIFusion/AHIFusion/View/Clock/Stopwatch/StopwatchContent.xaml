@@ -6,9 +6,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    Background="LightPink">
 
-    <Grid Background="Beige">
+  <ScrollViewer>
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition/>
+      </Grid.RowDefinitions>
 
+      <local:StopwatchControl Grid.Row="0" Grid.RowSpan="2"></local:StopwatchControl>
     </Grid>
+  </ScrollViewer>
 </Page>

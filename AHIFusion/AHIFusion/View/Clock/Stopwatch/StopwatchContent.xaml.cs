@@ -1,5 +1,8 @@
-
-// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
+using System.Collections.Specialized;
+using AHIFusion.Model;
+using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Media.Animation;
+using Uno;
 
 namespace AHIFusion;
 /// <summary>

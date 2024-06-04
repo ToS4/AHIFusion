@@ -27,6 +27,7 @@ public sealed partial class StopwatchControl : UserControl
         this.InitializeComponent();
         dispatcherTimer.Tick += DispatcherTimer_Tick;
         dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+        ResetTextBlocks();
     }
 
     private void DispatcherTimer_Tick(object? sender, object e)
@@ -34,6 +35,11 @@ public sealed partial class StopwatchControl : UserControl
         if (stopwatch.IsRunning)
         {
             ElapsedTime = stopwatch.Elapsed;
+
+            hourTextBlock.Text = ElapsedTime.Hours.ToString("D2");
+            minuteTextBlock.Text = ElapsedTime.Minutes.ToString("D2");
+            secondTextBlock.Text = ElapsedTime.Seconds.ToString("D2");
+            msTextBlock.Text = ElapsedTime.Milliseconds.ToString("D3").Substring(0,2);
         }
     }
 
@@ -78,6 +84,17 @@ public sealed partial class StopwatchControl : UserControl
     private void ResetButton_Click(object sender, RoutedEventArgs e)
     {
         stopwatch.Reset();
+        dispatcherTimer.Stop();
+        StartStopButton.Content = "Start";
         ElapsedTime = new TimeSpan(0, 0, 0, 0, 0);
+        ResetTextBlocks();
+    }
+
+    private void ResetTextBlocks()
+    {
+        hourTextBlock.Text = "00";
+        minuteTextBlock.Text = "00";
+        secondTextBlock.Text = "00";
+        msTextBlock.Text = "00";
     }
 }

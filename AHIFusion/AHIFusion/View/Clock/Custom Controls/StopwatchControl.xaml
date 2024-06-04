@@ -13,7 +13,7 @@
   <Grid Margin="40">
     <Border BorderThickness="4" BorderBrush="Black" CornerRadius="20">
       <Rectangle x:Name="rect" Fill="DarkGray"/>
-    </Border>5
+    </Border>
 
     <Grid Margin="100">
       <Grid.ColumnDefinitions>
@@ -23,32 +23,54 @@
       </Grid.ColumnDefinitions>
 
       <Grid.RowDefinitions>
-        <RowDefinition/>
-        <RowDefinition/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="2*"/>
       </Grid.RowDefinitions>
 
-      <Viewbox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center">
+      <Viewbox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,-50,0,0">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-          <!--dieser Stackpanel ist für die Zeitdarstellung-->
-          <TextBlock Foreground="Black" Text="{Binding ElapsedTime.Hours}"/>
-          <TextBlock Foreground="Black" Text=":"/>
-          <TextBlock Foreground="Black" Text="{Binding ElapsedTime.Minutes}"/>
-          <TextBlock Foreground="Black" Text=":"/>
-          <TextBlock Foreground="Black" Text="{Binding ElapsedTime.Seconds}"/>
-          <TextBlock Foreground="Black" FontSize="7" Text="{Binding ElapsedTime.Milliseconds}"/>
+          <TextBlock x:Name="hourTextBlock" Foreground="Black" MinWidth="20" TextAlignment="Center"/>
+          <TextBlock Foreground="Black" Text=":" TextAlignment="Center"/>
+          <TextBlock x:Name="minuteTextBlock" Foreground="Black" MinWidth="20" TextAlignment="Center"/>
+          <TextBlock Foreground="Black" Text=":" TextAlignment="Center"/>
+          <TextBlock x:Name="secondTextBlock" Foreground="Black" MinWidth="20" TextAlignment="Center"/>
+          <TextBlock x:Name="msTextBlock" Foreground="Black" FontSize="7" MinWidth="20" TextAlignment="Center" Margin="-7,0,-8,0"/>
         </StackPanel>
       </Viewbox>
 
-      <Viewbox Grid.Row="1" Margin="20">
+      <Border Background="Gray" CornerRadius="20" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,-30,0,-50">
+          <Grid>
+              <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="0.6*"/>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                  <RowDefinition Height="0.55*"/>
+                  <RowDefinition Height="*"/>
+                  <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+
+              <TextBlock Grid.Column="0" Text="Lap" Foreground="Black" FontSize="30" Margin="20,10,0,0" HorizontalAlignment="Left" />
+              <TextBlock Grid.Column="1" Text="Time" Foreground="Black" FontSize="30" Margin="20,10,0,0" HorizontalAlignment="Left" />
+              <TextBlock Grid.Column="2" Text="Total" Foreground="Black" FontSize="30" Margin="20,10,0,0" HorizontalAlignment="Left" />
+
+              <Line Grid.Row="1" Grid.ColumnSpan="3" X1="0" Y1="0" X2="1500" Y2="0" Stroke="Black" StrokeThickness="5"/>
+
+          </Grid>
+      </Border>
+
+      <Viewbox Grid.Row="1" Margin="20,0,20,70" MaxWidth="250" >
         <Button x:Name="StartStopButton" Content="start" Click="StartStopButton_Click"/>
       </Viewbox>
 
-      <Viewbox Grid.Row="1" Margin="20" Grid.Column="1">
+      <Viewbox Grid.Row="1" Margin="20,0,20,70" Grid.Column="1" MaxWidth="250">
         <Button Content="flag"/>
       </Viewbox>
 
-      <Viewbox Grid.Row="1" Margin="20" Grid.Column="2">
-        <Button Content="reset" Click="ResetButton_Click"/>
+      <Viewbox Grid.Row="1" Margin="20,0,20,70" Grid.Column="2" MaxWidth="250">
+        <Button Content="Reset" Click="ResetButton_Click"/>
       </Viewbox>
 
 

@@ -13,7 +13,7 @@
   <Grid Margin="40">
     <Border BorderThickness="4" BorderBrush="Black" CornerRadius="20">
       <Rectangle x:Name="rect" Fill="DarkGray"/>
-    </Border>
+    </Border>5
 
     <Grid Margin="100">
       <Grid.ColumnDefinitions>
@@ -30,17 +30,17 @@
       <Viewbox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
           <!--dieser Stackpanel ist für die Zeitdarstellung-->
-          <TextBlock Foreground="Black" Text="00"/>
+          <TextBlock Foreground="Black" Text="{Binding ElapsedTime.Hours}"/>
           <TextBlock Foreground="Black" Text=":"/>
-          <TextBlock Foreground="Black" Text="00"/>
+          <TextBlock Foreground="Black" Text="{Binding ElapsedTime.Minutes}"/>
           <TextBlock Foreground="Black" Text=":"/>
-          <TextBlock Foreground="Black" Text="00"/>
-          <TextBlock Foreground="Black" FontSize="7" Text="00"/>
+          <TextBlock Foreground="Black" Text="{Binding ElapsedTime.Seconds}"/>
+          <TextBlock Foreground="Black" FontSize="7" Text="{Binding ElapsedTime.Milliseconds}"/>
         </StackPanel>
       </Viewbox>
 
       <Viewbox Grid.Row="1" Margin="20">
-        <Button Content="start"/>
+        <Button x:Name="StartStopButton" Content="start" Click="StartStopButton_Click"/>
       </Viewbox>
 
       <Viewbox Grid.Row="1" Margin="20" Grid.Column="1">
@@ -48,7 +48,7 @@
       </Viewbox>
 
       <Viewbox Grid.Row="1" Margin="20" Grid.Column="2">
-        <Button Content="stop"/>
+        <Button Content="reset" Click="ResetButton_Click"/>
       </Viewbox>
 
 

@@ -1,3 +1,4 @@
+using System;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.UI;
 using static System.Net.Mime.MediaTypeNames;
@@ -123,18 +124,6 @@ public sealed partial class CalendarPage : Page
                 DateOnly currentDate = firstDayToDisplay.AddDays((i-1) * 7 + j);
                 CalendarDay day = new CalendarDay { Date = currentDate };
 
-                // Populate events for the day
-                for (int k = 0; k < 3; k++) // Example: adding 3 dummy events per day
-                {
-                    DayEvent dayEvent = new DayEvent
-                    {
-                        Title = $"{k + 1}. Event for {currentDate}",
-                        Date = currentDate
-                    };
-
-                    EventCollection.Add(dayEvent);
-                }
-
                 CalendarDayControl dayControl = new CalendarDayControl
                 {
                     Padding = new Thickness(10),
@@ -164,13 +153,16 @@ public sealed partial class CalendarPage : Page
         CalendarDayControl dayControl = sender as CalendarDayControl;
         if (dayControl != null)
         {
-            _CurrentDayControl = dayControl;
+            SmallCalendarView.SelectedDates.Clear();
+
+            DateTimeOffset date = new DateTimeOffset(new DateTime(dayControl.Day.Date, TimeOnly.MinValue));
+            SmallCalendarView.SelectedDates.Add(date);
+            SmallCalendarView.SetDisplayDate(date);
         }
     }
 
     private void SmallCalendarView_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChangedEventArgs args)
     {
-
         if (SmallCalendarView.SelectedDates.Count > 0)
         {
             DateTimeOffset dateTimeOffset = SmallCalendarView.SelectedDates[0];
@@ -181,7 +173,5 @@ public sealed partial class CalendarPage : Page
                 DisplayCurrentMonth();
             }
         }
-
-
     }
 }

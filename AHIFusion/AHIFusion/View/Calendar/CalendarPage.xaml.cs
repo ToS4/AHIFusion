@@ -30,19 +30,58 @@ public sealed partial class CalendarPage : Page
             _currentDayControl = value;
             _currentDayControl.DaySelected = true;
 
-            CurrentDayDateTextBlock.Text = _currentDayControl.Day.Date.ToString();
+            DisplayEventsList();
+        }
+    }
 
-            CurrentDayEventsStackPanel.Children.Clear();
+    private async void ShowEventControl_PointerPressed(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
+    {
+        ShowEventControl showEventControl = sender as ShowEventControl;
 
-            foreach (ShowEventControl showEventControl in CurrentDayEventsStackPanel.Children)
+        if (showEventControl != null)
+        {
+            EventView eventView = new EventView()
             {
-                showEventControl.PointerPressed -= ShowEventControl_PointerPressed;
-                CurrentDayEventsStackPanel.Children.Remove(showEventControl);
+                Event = showEventControl.Event,
+            };
+
+            eventView.XamlRoot = this.XamlRoot;
+            await eventView.ShowAsync();
+
+            DisplayEventsList();
+
+            foreach (var gridObject in CalendarGrid.Children)
+            {
+                CalendarDayControl dayControl = gridObject as CalendarDayControl;
+
+                if (dayControl != null)
+                {
+                    dayControl.UpdateDay();
+                }
             }
+        }
+    }
 
-            foreach (DayEvent dayEvent in _currentDayControl.Day.Events)
+    public CalendarPage()
+    {
+        InitializeComponent();
+
+        _currentDay = DateOnly.FromDateTime(DateTime.Now);
+        _currentMonth = _currentDay.AddDays(-_currentDay.Day + 1);
+        DisplayCurrentMonth();
+    }
+
+    public void DisplayEventsList()
+    {
+        CurrentDayDateTextBlock.Text = _currentDayControl.Day.Date.ToString();
+
+        CurrentDayEventsStackPanel.Children.Clear();
+
+        foreach (DayEvent dayEvent in EventCollection.Events)
+        {
+
+            if (dayEvent.Date == _currentDayControl.Day.Date)
             {
-
                 ShowEventControl showEventControl = new ShowEventControl()
                 {
                     Margin = new Thickness(5),
@@ -55,31 +94,6 @@ public sealed partial class CalendarPage : Page
                 showEventControl.PointerPressed += ShowEventControl_PointerPressed;
             }
         }
-    }
-
-    private void ShowEventControl_PointerPressed(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
-    {
-        ShowEventControl showEventControl = sender as ShowEventControl;
-
-        if (showEventControl != null)
-        {
-            EventView eventView = new EventView()
-            {
-                Event = showEventControl.Event,
-            };
-
-            eventView.XamlRoot = this.XamlRoot;
-            eventView.ShowAsync();
-        }
-    }
-
-    public CalendarPage()
-    {
-        InitializeComponent();
-
-        _currentDay = DateOnly.FromDateTime(DateTime.Now);
-        _currentMonth = _currentDay.AddDays(-_currentDay.Day + 1);
-        DisplayCurrentMonth();
     }
 
     private void DisplayCurrentMonth()
@@ -117,7 +131,8 @@ public sealed partial class CalendarPage : Page
                         Title = $"{k + 1}. Event for {currentDate}",
                         Date = currentDate
                     };
-                    day.Events.Add(dayEvent);
+
+                    EventCollection.Add(dayEvent);
                 }
 
                 CalendarDayControl dayControl = new CalendarDayControl

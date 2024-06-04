@@ -17,6 +17,7 @@ namespace AHIFusion;
 public sealed partial class EventView : ContentDialog
 {
     public DayEvent Event;
+    public DateOnlyToDateTimeOffsetConverter DateTimeOffsetConverter;
     public EventView()
     {
         this.InitializeComponent();
@@ -30,6 +31,10 @@ public sealed partial class EventView : ContentDialog
 
     private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
+        string EventTitle = EventTextBox.Text;
+        DateOnly EventDate = DateOnly.FromDateTime(EventDatePicker.SelectedDate.Value.Date);
+        Event.Title = EventTitle;
+        Event.Date = EventDate;
     }
 
     private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)

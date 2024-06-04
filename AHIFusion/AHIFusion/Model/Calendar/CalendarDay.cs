@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 namespace AHIFusion;
 public class CalendarDay : INotifyPropertyChanged
 {
-    public ObservableCollection<DayEvent> Events { get; set; } = new ObservableCollection<DayEvent>();
-
     private DateOnly date;
     public DateOnly Date
     {

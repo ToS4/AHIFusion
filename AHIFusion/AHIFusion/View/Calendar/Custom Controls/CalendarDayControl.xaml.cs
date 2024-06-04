@@ -25,17 +25,20 @@ namespace AHIFusion
 
             EventsStackPanel.Children.Clear();
 
-            foreach (DayEvent dayEvent in Day.Events)
+            foreach (DayEvent dayEvent in EventCollection.Events)
             {
-                ShowEventControl showEventControl = new ShowEventControl()
+                if (dayEvent.Date == Day.Date)
                 {
-                    Margin = new Thickness(5),
-                    Event = dayEvent
-                };
+                    ShowEventControl showEventControl = new ShowEventControl()
+                    {
+                        Margin = new Thickness(5),
+                        Event = dayEvent
+                    };
 
-                EventsStackPanel.Children.Add(showEventControl);
+                    EventsStackPanel.Children.Add(showEventControl);
 
-                showEventControl.UpdateEvent();
+                    showEventControl.UpdateEvent();
+                }
             }
         }
     }

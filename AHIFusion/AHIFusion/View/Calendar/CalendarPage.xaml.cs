@@ -59,7 +59,18 @@ public sealed partial class CalendarPage : Page
 
     private void ShowEventControl_PointerPressed(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        ShowEventControl showEventControl = sender as ShowEventControl;
+
+        if (showEventControl != null)
+        {
+            EventView eventView = new EventView()
+            {
+                Event = showEventControl.Event,
+            };
+
+            eventView.XamlRoot = this.XamlRoot;
+            eventView.ShowAsync();
+        }
     }
 
     public CalendarPage()

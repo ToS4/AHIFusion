@@ -40,6 +40,25 @@ namespace AHIFusion
                     showEventControl.UpdateEvent();
                 }
             }
+
+            int amountEvents = EventsStackPanel.Children.Count;
+
+            if (amountEvents > 3)
+            {
+                for (int i = 0;  i < (amountEvents - 3); i++)
+                {
+                    EventsStackPanel.Children.RemoveAt(EventsStackPanel.Children.Count - 1);
+                }
+
+                TextBlock textBlock = new TextBlock()
+                {
+                    Text = $"+{amountEvents - 3}",
+                    TextAlignment = TextAlignment.Center,
+                };
+
+                EventsStackPanel.Children.Add(textBlock);
+            }
+
         }
     }
 }

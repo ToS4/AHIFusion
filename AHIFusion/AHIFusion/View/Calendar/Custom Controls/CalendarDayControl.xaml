@@ -28,9 +28,8 @@
 
       <TextBlock x:Name="DateTextBlock" Text="xx.yy.zzzz" TextAlignment="Center" HorizontalAlignment="Stretch" Padding="5"/>
 
-      <Viewbox Grid.Row="1">
-        <StackPanel x:Name="EventsStackPanel"/>
-      </Viewbox>
+      <StackPanel x:Name="EventsStackPanel" VerticalAlignment="Top" Grid.Row="1" />
+
     </Grid>
   </Border>
 

@@ -41,7 +41,7 @@ public sealed partial class CalendarPage : Page
 
         if (showEventControl != null)
         {
-            EventView eventView = new EventView()
+            EventView eventView = new EventView(false)
             {
                 Event = showEventControl.Event,
             };
@@ -173,5 +173,16 @@ public sealed partial class CalendarPage : Page
                 DisplayCurrentMonth();
             }
         }
+    }
+
+    private async void AddButton_Click(object sender, RoutedEventArgs e)
+    {
+        EventView eventView = new EventView(true);
+
+        eventView.XamlRoot = this.XamlRoot;
+        await eventView.ShowAsync();
+
+        DisplayCurrentMonth();
+        //DisplayEventsList();
     }
 }

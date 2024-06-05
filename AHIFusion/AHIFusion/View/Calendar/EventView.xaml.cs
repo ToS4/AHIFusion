@@ -18,26 +18,40 @@ public sealed partial class EventView : ContentDialog
 {
     public DayEvent Event;
     public DateOnlyToDateTimeOffsetConverter DateTimeOffsetConverter;
-    public EventView()
+    public EventView(bool isNew)
     {
         this.InitializeComponent();
 
-        Event = new DayEvent()
+        if (isNew) 
         {
-            Title = "New Event",
-            Date = DateOnly.FromDateTime(DateTime.Today)
-        };
+            Event = new DayEvent()
+            {
+                Title = "New Event",
+                Date = DateOnly.FromDateTime(DateTime.Today)
+            };
+
+            DeleteFirstButton.Visibility = Visibility.Collapsed;
+        }
     }
 
     private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
+        if (!EventCollection.Events.Contains(Event)) {
+            EventCollection.Add(Event);
+        }
+
         string EventTitle = EventTextBox.Text;
         DateOnly EventDate = DateOnly.FromDateTime(EventDatePicker.SelectedDate.Value.Date);
         Event.Title = EventTitle;
         Event.Date = EventDate;
     }
 
-    private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+    private void DeleteButton_Click(object sender, RoutedEventArgs e)
     {
+        if (EventCollection.Events.Contains(Event))
+        {
+            EventCollection.Remove(Event);
+            Hide();
+        }
     }
 }

@@ -45,14 +45,15 @@ namespace AHIFusion
 
             if (amountEvents > 3)
             {
-                for (int i = 2;  i < EventsStackPanel.Children.Count; i++)
+                for (int i = 0;  i < (amountEvents - 3); i++)
                 {
-                    EventsStackPanel.Children.RemoveAt(i);
+                    EventsStackPanel.Children.RemoveAt(EventsStackPanel.Children.Count - 1);
                 }
 
                 TextBlock textBlock = new TextBlock()
                 {
-                    Text = $"+{amountEvents - 2}"
+                    Text = $"+{amountEvents - 3}",
+                    TextAlignment = TextAlignment.Center,
                 };
 
                 EventsStackPanel.Children.Add(textBlock);

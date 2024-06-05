@@ -9,7 +9,6 @@
     PrimaryButtonText="OK"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
   <ContentDialog.Resources>
@@ -19,6 +18,7 @@
   <Grid>
 
     <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
@@ -26,7 +26,22 @@
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*"/>
       <ColumnDefinition Width="10*"/>
+      <ColumnDefinition Width="Auto"/>
     </Grid.ColumnDefinitions>
+
+    <Button x:Name="DeleteFirstButton" Grid.Column="2" Grid.Row="1" Background="Transparent">
+      <Button.Content>
+        <SymbolIcon Symbol="Delete" Foreground="Red"/>
+      </Button.Content>
+      <Button.Flyout>
+        <Flyout>
+          <StackPanel>
+            <TextBlock Text="Are you sure?" Margin="0,0,0,12" />
+            <Button Click="DeleteButton_Click" Content="Yes" />
+          </StackPanel>
+        </Flyout>
+      </Button.Flyout>
+    </Button>
 
     <TextBox x:Name="EventTextBox" Text="{x:Bind Event.Title}" Grid.Column="1" />
 

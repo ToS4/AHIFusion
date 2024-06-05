@@ -13,6 +13,7 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <PackageReference Include="Ical.Net" />
     <PackageReference Include="Uno.WinUI" />
     <PackageReference Include="Microsoft.WindowsAppSDK" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" />

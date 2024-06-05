@@ -11,6 +11,7 @@
     <Content Include="Assets\Sounds\Alarm-01.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <PackageReference Include="Ical.Net" />
     <None Update="AppHead.xaml.cs" DependentUpon="AppHead.xaml" />
   </ItemGroup>
 </Project>

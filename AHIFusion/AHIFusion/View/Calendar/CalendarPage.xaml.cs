@@ -1,5 +1,6 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
+using Ical.Net;
 using Microsoft.UI;
 using Microsoft.UI.Text;
 using Windows.Storage.Pickers;
@@ -199,11 +200,46 @@ public sealed partial class CalendarPage : Page
 
     private async void SaveButton_Click(object sender, RoutedEventArgs e)
     {
-
+        
     }
 
-    private void LoadButton_Click(object sender, RoutedEventArgs e)
+    private async void LoadButton_Click(object sender, RoutedEventArgs e)
     {
+        FileOpenPicker open = new FileOpenPicker();
+        open.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+        open.FileTypeFilter.Add(".ics");
 
+        var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
+        WinRT.Interop.InitializeWithWindow.Initialize(open, hwnd);
+
+        StorageFile file = await open.PickSingleFileAsync();
+
+        if (file != null)
+        {
+            using (IRandomAccessStream randAccStream =
+                await file.OpenAsync(FileAccessMode.Read))
+            {
+                using (Stream stream = randAccStream.AsStreamForRead())
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    string icsContent = await reader.ReadToEndAsync();
+                    var calendar = Calendar.Load(icsContent);
+
+                    foreach (var calendarEvent in calendar.Events)
+                    {
+                        string title = calendarEvent.Summary;
+                        DateOnly date = DateOnly.FromDateTime(calendarEvent.Start.AsDateTimeOffset.DateTime);
+
+                        DayEvent dayEvent = new DayEvent()
+                        {
+                            Title = title,
+                            Date = date
+                        };
+
+                        EventCollection.Add(dayEvent);
+                    }
+                }
+            }
+        }
     }
 }

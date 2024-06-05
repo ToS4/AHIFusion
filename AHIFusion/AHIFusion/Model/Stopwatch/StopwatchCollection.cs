@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using AHIFusion.Model;
 
 namespace AHIFusion;
-public class StopwatchCollection
+public static class StopwatchCollection
 {
     public static ObservableCollection<Stopwatch> Stopwatches { get; set; } = new ObservableCollection<Stopwatch>();
 
@@ -20,4 +20,7 @@ public class StopwatchCollection
     {
         Stopwatches.Remove(stopwatch);
     }
+
+    //weil ich nur eine Stopwatch will
+    public static Stopwatch sw = new Stopwatch();
 }

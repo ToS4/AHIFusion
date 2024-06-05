@@ -22,17 +22,25 @@ using Windows.Foundation.Collections;
 namespace AHIFusion;
 public sealed partial class StopwatchControl : UserControl
 {
-    DispatcherTimer dispatcherTimer = new DispatcherTimer();
-    System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
-    public ObservableCollection<string> LapList = new ObservableCollection<string>();
+    public DispatcherTimer dispatcherTimer = new DispatcherTimer();
+    StopwatchManager stopwatch = StopwatchManager.Instance;
+    bool TextInit = false;
 
     public StopwatchControl()
     {
         this.InitializeComponent();
         dispatcherTimer.Tick += DispatcherTimer_Tick;
         dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 1);
-        LapList.CollectionChanged += LapList_CollectionChanged;
-        ResetTextBlocks();
+        stopwatch.LapList.CollectionChanged += LapList_CollectionChanged;
+
+        if (stopwatch.LapList.Count > 0)
+        {
+            LapList_CollectionChanged(null, null);
+        }
+        hourTextBlock.Text = stopwatch.StopwatchInstance.Elapsed.Hours.ToString("D2");
+        minuteTextBlock.Text = stopwatch.StopwatchInstance.Elapsed.Minutes.ToString("D2");
+        secondTextBlock.Text = stopwatch.StopwatchInstance.Elapsed.Seconds.ToString("D2");
+        msTextBlock.Text = stopwatch.StopwatchInstance.Elapsed.Milliseconds.ToString("D3").Substring(0, 2);
     }
 
     private void LapList_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -40,9 +48,9 @@ public sealed partial class StopwatchControl : UserControl
         LapListView.Items.Clear();
         double flagGridHeight = FlagGrid.ActualHeight;
 
-        for (int i = 0; i < LapList.Count; i++)
+        for (int i = 0; i < stopwatch.LapList.Count; i++)
         {
-            List<string> parts = LapList[i].Split(";").ToList();
+            List<string> parts = stopwatch.LapList[i].Split(";").ToList();
             // "1", "00:00:20,35", "00:01:53:81"
 
             string countString = parts[0];
@@ -86,9 +94,9 @@ public sealed partial class StopwatchControl : UserControl
 
     private void DispatcherTimer_Tick(object? sender, object e)
     {
-        if (stopwatch.IsRunning)
+        if (stopwatch.StopwatchInstance.IsRunning)
         {
-            ElapsedTime = stopwatch.Elapsed;
+            ElapsedTime = stopwatch.StopwatchInstance.Elapsed;
 
             hourTextBlock.Text = ElapsedTime.Hours.ToString("D2");
             minuteTextBlock.Text = ElapsedTime.Minutes.ToString("D2");
@@ -97,7 +105,7 @@ public sealed partial class StopwatchControl : UserControl
         }
     }
 
-    public static readonly DependencyProperty StartTimeProperty = DependencyProperty.Register("StartTime", typeof(DateTime), typeof(StopwatchControl), new PropertyMetadata(0));
+    public static readonly DependencyProperty StartTimeProperty = DependencyProperty.Register("StartTime", typeof(DateTime), typeof(StopwatchControl), new PropertyMetadata(new DateTime(0)));
     public DateTime StartTime
     {
         get { return (DateTime)GetValue(StartTimeProperty); }
@@ -120,29 +128,28 @@ public sealed partial class StopwatchControl : UserControl
 
     private void StartStopButton_Click(object sender, RoutedEventArgs e)
     {
-        if (!stopwatch.IsRunning)
+        if (!stopwatch.StopwatchInstance.IsRunning)
         {
-            stopwatch.Start();
+            stopwatch.StopwatchInstance.Start();
             dispatcherTimer.Start();
             IsRunning = true;
             StartStopButton.Content = "Stop";
         }
         else
         {
-            stopwatch.Stop();
+            stopwatch.StopwatchInstance.Stop();
             dispatcherTimer.Stop();
             IsRunning = false;
             StartStopButton.Content = "Start";
         }
-
     }
 
     private void ResetButton_Click(object sender, RoutedEventArgs e)
     {
-        stopwatch.Reset();
+        stopwatch.StopwatchInstance.Reset();
         dispatcherTimer.Stop();
         StartStopButton.Content = "Start";
-        LapList.Clear();
+        stopwatch.LapList.Clear();
         ElapsedTime = new TimeSpan(0, 0, 0, 0, 0);
         ResetTextBlocks();
     }
@@ -157,22 +164,22 @@ public sealed partial class StopwatchControl : UserControl
 
     private void FlagButton_Click(object sender, RoutedEventArgs e)
     {
-        if (!stopwatch.IsRunning)
+        if (!stopwatch.StopwatchInstance.IsRunning)
         {
             return;
         }
         TimeSpan flagTime = new TimeSpan(0, 0, 0, 0, 0);
 
-        if (LapList.Count == 0)
+        if (stopwatch.LapList.Count == 0)
         {
             flagTime = ElapsedTime;
         }
         else
         {
             TimeSpan totalFlagTime = new TimeSpan(0, 0, 0, 0, 0);
-            for (int i = 0; i < LapList.Count; i++)
+            for (int i = 0; i < stopwatch.LapList.Count; i++)
             {
-                List<string> parts = LapList[i].Split(";").ToList();
+                List<string> parts = stopwatch.LapList[i].Split(";").ToList();
                 // "1", "00:00:20,35", "00:01:53:81"
 
                 string format = @"hh\:mm\:ss\,ff";
@@ -183,7 +190,7 @@ public sealed partial class StopwatchControl : UserControl
             flagTime = ElapsedTime.Subtract(totalFlagTime);
         }
 
-        string countString = $"{LapList.Count + 1}";
+        string countString = $"{stopwatch.LapList.Count + 1}";
         string timeString = $"{flagTime.Hours.ToString("D2")}:" +
             $"{flagTime.Minutes.ToString("D2")}:" +
             $"{flagTime.Seconds.ToString("D2")}," +
@@ -193,6 +200,6 @@ public sealed partial class StopwatchControl : UserControl
             $"{ElapsedTime.Seconds.ToString("D2")}," +
             $"{ElapsedTime.Milliseconds.ToString("D3").Substring(0, 2)}";
 
-        LapList.Add($"{countString};{timeString};{totalString}");
+        stopwatch.LapList.Add($"{countString};{timeString};{totalString}");
     }
 }

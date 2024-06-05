@@ -9,8 +9,7 @@
     Background="LightPink">
 
   <ScrollViewer>
-    <Grid>
-      <local:StopwatchControl></local:StopwatchControl>
+    <Grid x:Name="MainGrid">
     </Grid>
   </ScrollViewer>
 </Page>

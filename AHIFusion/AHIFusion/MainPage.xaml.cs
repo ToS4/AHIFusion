@@ -4,10 +4,21 @@ namespace AHIFusion;
 
 public sealed partial class MainPage : Page
 {
+
     public ObservableCollection<TabViewItem> Tabs { get; set; }
+
     public MainPage()
     {
         this.InitializeComponent();
+
+        AHIFusion.Stopwatch sw = new AHIFusion.Stopwatch()
+        {
+            StartTime = new DateTime(0),
+            ElapsedTime = new TimeSpan(0),
+            IsRunning = false
+        };
+
+        AHIFusion.StopwatchCollection.Stopwatches.Add(sw);
 
         Tabs = new ObservableCollection<TabViewItem>();
         Tabs.CollectionChanged += Tabs_CollectionChanged;

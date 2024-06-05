@@ -26,8 +26,22 @@ public sealed partial class EventView : ContentDialog
         {
             Event = new DayEvent()
             {
-                Title = "New Event",
                 Date = DateOnly.FromDateTime(DateTime.Today)
+            };
+
+            DeleteFirstButton.Visibility = Visibility.Collapsed;
+        }
+    }
+
+    public EventView(bool isNew, DateOnly givenDate)
+    {
+        this.InitializeComponent();
+
+        if (isNew)
+        {
+            Event = new DayEvent()
+            {
+                Date = givenDate
             };
 
             DeleteFirstButton.Visibility = Visibility.Collapsed;
@@ -36,12 +50,19 @@ public sealed partial class EventView : ContentDialog
 
     private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
-        if (!EventCollection.Events.Contains(Event)) {
-            EventCollection.Add(Event);
-        }
-
         string EventTitle = EventTextBox.Text;
         DateOnly EventDate = DateOnly.FromDateTime(EventDatePicker.SelectedDate.Value.Date);
+
+        if (string.IsNullOrEmpty(EventTitle))
+        {
+            return;
+        }
+
+        if (!EventCollection.Events.Contains(Event)) 
+        {
+            EventCollection.Add(Event);
+        }
+        
         Event.Title = EventTitle;
         Event.Date = EventDate;
     }

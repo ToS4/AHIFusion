@@ -1,6 +1,9 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.UI;
+using Microsoft.UI.Text;
+using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace AHIFusion;
@@ -177,12 +180,30 @@ public sealed partial class CalendarPage : Page
 
     private async void AddButton_Click(object sender, RoutedEventArgs e)
     {
-        EventView eventView = new EventView(true);
+        EventView eventView = new EventView(true, _currentDayControl.Day.Date);
 
         eventView.XamlRoot = this.XamlRoot;
         await eventView.ShowAsync();
 
         DisplayCurrentMonth();
         //DisplayEventsList();
+    }
+
+    private void Page_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (_currentDay != null && _currentMonth != null)
+        {
+            DisplayCurrentMonth();
+        }        
+    }
+
+    private async void SaveButton_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void LoadButton_Click(object sender, RoutedEventArgs e)
+    {
+
     }
 }

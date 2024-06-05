@@ -29,7 +29,7 @@
       <ColumnDefinition Width="Auto"/>
     </Grid.ColumnDefinitions>
 
-    <Button x:Name="DeleteFirstButton" Grid.Column="2" Grid.Row="1" Background="Transparent">
+    <Button x:Name="DeleteFirstButton" Grid.Column="2" Grid.Row="0" Background="Transparent">
       <Button.Content>
         <SymbolIcon Symbol="Delete" Foreground="Red"/>
       </Button.Content>
@@ -43,12 +43,12 @@
       </Button.Flyout>
     </Button>
 
-    <TextBox x:Name="EventTextBox" Text="{x:Bind Event.Title}" Grid.Column="1" />
+    <TextBox PlaceholderText="Event Title" x:Name="EventTextBox" Text="{x:Bind Event.Title}" Grid.Row="1" Grid.Column="1" />
 
     <DatePicker x:Name="EventDatePicker" 
                     Date="{x:Bind Event.Date, Converter={StaticResource DateOnlyToDateTimeOffsetConverter}}" 
                     Grid.Column="1" 
-                    Grid.Row="1" />
+                    Grid.Row="2" />
 
   </Grid>
 </ContentDialog>

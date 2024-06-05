@@ -40,33 +40,36 @@
       </Viewbox>
 
       <Border Background="Gray" CornerRadius="20" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,-30,0,-50">
-          <Grid>
-              <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="0.6*"/>
-                  <ColumnDefinition Width="*"/>
-                  <ColumnDefinition Width="*"/>
-              </Grid.ColumnDefinitions>
-              <Grid.RowDefinitions>
-                  <RowDefinition Height="0.55*"/>
-                  <RowDefinition Height="*"/>
-                  <RowDefinition Height="*"/>
-              </Grid.RowDefinitions>
+        <Grid x:Name="FlagGrid">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.6*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="0.55*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="4*"/>
+          </Grid.RowDefinitions>
 
-              <TextBlock Grid.Column="0" Text="Lap" Foreground="Black" FontSize="30" Margin="20,10,0,0" HorizontalAlignment="Left" />
-              <TextBlock Grid.Column="1" Text="Time" Foreground="Black" FontSize="30" Margin="20,10,0,0" HorizontalAlignment="Left" />
-              <TextBlock Grid.Column="2" Text="Total" Foreground="Black" FontSize="30" Margin="20,10,0,0" HorizontalAlignment="Left" />
+          <TextBlock Grid.Column="0" Text="Lap" Foreground="Black" FontSize="30" Margin="20,10,0,0" HorizontalAlignment="Left" />
+          <TextBlock Grid.Column="1" Text="Time" Foreground="Black" FontSize="30" Margin="20,10,0,0" HorizontalAlignment="Left" />
+          <TextBlock Grid.Column="2" Text="Total" Foreground="Black" FontSize="30" Margin="20,10,0,0" HorizontalAlignment="Left" />
 
-              <Line Grid.Row="1" Grid.ColumnSpan="3" X1="0" Y1="0" X2="1500" Y2="0" Stroke="Black" StrokeThickness="5"/>
+          <Line Grid.Row="1" Grid.ColumnSpan="3" Margin="10,10" X1="0" Y1="0" X2="1500" Y2="0" Stroke="Black" StrokeThickness="5"/>
 
-          </Grid>
+          <ListView x:Name="LapListView" Grid.ColumnSpan="3" Grid.Row="2" VerticalAlignment="Top"></ListView>
+
+        </Grid>
       </Border>
 
+
       <Viewbox Grid.Row="1" Margin="20,0,20,70" MaxWidth="250" >
-        <Button x:Name="StartStopButton" Content="start" Click="StartStopButton_Click"/>
+        <Button x:Name="StartStopButton" Content="Start" Click="StartStopButton_Click"/>
       </Viewbox>
 
       <Viewbox Grid.Row="1" Margin="20,0,20,70" Grid.Column="1" MaxWidth="250">
-        <Button Content="flag"/>
+        <Button x:Name="FlagButton" Content="Flag" Click="FlagButton_Click"/>
       </Viewbox>
 
       <Viewbox Grid.Row="1" Margin="20,0,20,70" Grid.Column="2" MaxWidth="250">

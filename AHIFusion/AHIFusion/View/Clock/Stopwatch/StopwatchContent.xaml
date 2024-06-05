@@ -10,11 +10,7 @@
 
   <ScrollViewer>
     <Grid>
-      <Grid.RowDefinitions>
-        <RowDefinition/>
-      </Grid.RowDefinitions>
-
-      <local:StopwatchControl Grid.Row="0" Grid.RowSpan="2"></local:StopwatchControl>
+      <local:StopwatchControl></local:StopwatchControl>
     </Grid>
   </ScrollViewer>
 </Page>

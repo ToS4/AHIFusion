@@ -60,6 +60,8 @@ namespace AHIFusion
 
         private void TimerControl_Loaded(object sender, RoutedEventArgs e)
         {
+            timer.Elapsed -= Timer_Elapsed;
+            timer.Elapsed += Timer_Elapsed;
             if (IsRunning && !timer.Enabled)
             {
                 timer.Start();

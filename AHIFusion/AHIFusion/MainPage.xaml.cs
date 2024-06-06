@@ -1,15 +1,20 @@
 using System.Collections.ObjectModel;
+using Serilog;
 
 namespace AHIFusion;
 
 public sealed partial class MainPage : Page
 {
-
     public ObservableCollection<TabViewItem> Tabs { get; set; }
 
     public MainPage()
     {
         this.InitializeComponent();
+
+        Log.Logger = new LoggerConfiguration()
+           .WriteTo.Console()
+           .WriteTo.File("log-.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
+           .CreateLogger();
 
         AHIFusion.Stopwatch sw = new AHIFusion.Stopwatch()
         {

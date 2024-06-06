@@ -24,6 +24,7 @@ using Microsoft.UI;
 using Windows.ApplicationModel.DataTransfer;
 using System.Text.RegularExpressions;
 using ABI.System;
+using Serilog;
 
 namespace AHIFusion
 {
@@ -32,7 +33,11 @@ namespace AHIFusion
         private ObservableCollection<SelectableNote> notesFiltered = new ObservableCollection<SelectableNote>();
         public NotesPage()
         {
+            Log.Information("Initializing NotesPage");
+
             this.InitializeComponent();
+
+            Log.Information("Loading notes from NoteCollection");
 
             foreach (Note note in NoteCollection.Notes)
             {
@@ -41,13 +46,20 @@ namespace AHIFusion
 
             NotesListView.ItemsSource = notesFiltered;
 
+            Log.Information("Connecting XAML events");
+
             NoteCollection.Notes.CollectionChanged += Notes_CollectionChanged;
 
             EditorRichEditBox.IsTabStop = true;
             EditorRichEditBox.TabNavigation = KeyboardNavigationMode.Local;
             EditorRichEditBox.Paste += EditorRichEditBox_Paste;
 
+            Log.Information("Updating Filter");
+
             Update();
+
+            Log.Information("Appling default text style");
+
             ApplyStyle(16, "Arial");
 
             this.DataContext = this;
@@ -55,9 +67,12 @@ namespace AHIFusion
 
         private async void EditorRichEditBox_Paste(object sender, TextControlPasteEventArgs e)
         {
+            Log.Information("Paste text event triggered");
             e.Handled = true;
 
+            Log.Information("Getting clipboard content");
             var dataPackageView = Clipboard.GetContent();
+
             if (dataPackageView.Contains(StandardDataFormats.Text))
             {
                 var text = await dataPackageView.GetTextAsync();
@@ -67,6 +82,8 @@ namespace AHIFusion
         }
         private void Menu_Opening(object sender, object e)
         {
+            Log.Information("Menu opening event triggered");
+
             CommandBarFlyout myFlyout = sender as CommandBarFlyout;
             if (myFlyout.Target == EditorRichEditBox)
             {
@@ -270,8 +287,11 @@ namespace AHIFusion
 
         private void NotesListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            Log.Information("NotesListView_SelectionChanged event triggered");
+
             if (e.AddedItems.Count > 0)
             {
+                Log.Information("An item was selected in NotesListView");
 
                 RightViewGrid.Visibility = Visibility.Visible;
                 
@@ -294,6 +314,8 @@ namespace AHIFusion
             }
             else
             {
+                Log.Information("No items are selected in NotesListView");
+
                 RightViewGrid.Visibility = Visibility.Collapsed;
                 RightViewNoteTitleTextBlock.Text = "";
             }
@@ -301,6 +323,8 @@ namespace AHIFusion
 
         private async void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("OpenFileButton_Click event triggered");
+
             FileOpenPicker open = new FileOpenPicker();
             open.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
             open.FileTypeFilter.Add(".rtf");
@@ -312,16 +336,24 @@ namespace AHIFusion
 
             if (file != null)
             {
+                Log.Information("A file was selected to open");
+
                 using (IRandomAccessStream randAccStream =
                     await file.OpenAsync(FileAccessMode.Read))
                 {
                     EditorRichEditBox.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
                 }
+            } 
+            else
+            {
+                Log.Information("No file was selected to open");
             }
         }
 
         private async void SaveFileButton_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("SaveFileButton_Click event triggered");
+
             var fileSavePicker = new FileSavePicker();
             fileSavePicker.SuggestedStartLocation = PickerLocationId.ComputerFolder;
             fileSavePicker.SuggestedFileName = "New Document";
@@ -333,6 +365,8 @@ namespace AHIFusion
             StorageFile saveFile = await fileSavePicker.PickSaveFileAsync();
             if (saveFile != null)
             {
+                Log.Information("A file was selected to save");
+
                 CachedFileManager.DeferUpdates(saveFile);
 
                 using (IRandomAccessStream randAccStream =
@@ -343,10 +377,16 @@ namespace AHIFusion
 
                 //await CachedFileManager.CompleteUpdatesAsync(saveFile);
             }
+            else
+            {
+                Log.Information("No file was selected to save");
+            }
         }
 
         private void SaveText()
         {
+            Log.Information("Saving text");
+
             var selectedItem = NotesListView.SelectedItem as SelectableNote;
 
             if (selectedItem != null)
@@ -358,11 +398,15 @@ namespace AHIFusion
 
         private void EditorRichEditBox_TextChanged(object sender, RoutedEventArgs e)
         {
+            Log.Information("EditorRichEditBox text changed");
+
             SaveText();
         }
 
         private void ColorButton_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("ColorButton_Click event triggered");
+
             Button clickedColor = (Button)sender;
             var rectangle = (Microsoft.UI.Xaml.Shapes.Rectangle)clickedColor.Content;
             var color = ((Microsoft.UI.Xaml.Media.SolidColorBrush)rectangle.Fill).Color;
@@ -374,6 +418,8 @@ namespace AHIFusion
 
             fontColorButton.Flyout.Hide();
             EditorRichEditBox.Focus(Microsoft.UI.Xaml.FocusState.Keyboard);
+
+            Log.Information("Text color changed and text reloaded");
         }
     }
 }

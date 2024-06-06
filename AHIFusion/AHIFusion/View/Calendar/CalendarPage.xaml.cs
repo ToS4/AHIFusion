@@ -1,11 +1,14 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
 using Ical.Net;
+using Ical.Net.DataTypes;
 using Microsoft.UI;
 using Microsoft.UI.Text;
+using Serilog;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AHIFusion;
 
@@ -69,10 +72,15 @@ public sealed partial class CalendarPage : Page
 
     public CalendarPage()
     {
+        Log.Information("Initializing CalendarPage");
+
         InitializeComponent();
 
         _currentDay = DateOnly.FromDateTime(DateTime.Now);
         _currentMonth = _currentDay.AddDays(-_currentDay.Day + 1);
+
+        Log.Information("Initialized CalendarPage with current day: {currentDay} and current month: {currentMonth}", _currentDay, _currentMonth);
+
         DisplayCurrentMonth();
     }
 
@@ -103,6 +111,8 @@ public sealed partial class CalendarPage : Page
 
     private void DisplayCurrentMonth()
     {
+        Log.Information("Displaying current month: {currentMonth}", _currentMonth);
+
         CalendarGrid.Children.Clear();
         DateOnly firstDayOfMonth = new DateOnly(_currentMonth.Year, _currentMonth.Month, 1);
         int firstDayOffset = (int)firstDayOfMonth.DayOfWeek;
@@ -136,6 +146,7 @@ public sealed partial class CalendarPage : Page
 
                 if (day.Date == _currentDay)
                 {
+                    Log.Information("Setting _CurrentDayControl for current day: {currentDay}", _currentDay);
                     _CurrentDayControl = dayControl;
                 }
 
@@ -154,6 +165,8 @@ public sealed partial class CalendarPage : Page
 
     private void DayControl_PointerPressed(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
     {
+        Log.Information("DayControl_PointerPressed event triggered");
+
         CalendarDayControl dayControl = sender as CalendarDayControl;
         if (dayControl != null)
         {
@@ -162,16 +175,22 @@ public sealed partial class CalendarPage : Page
             DateTimeOffset date = new DateTimeOffset(new DateTime(dayControl.Day.Date, TimeOnly.MinValue));
             SmallCalendarView.SelectedDates.Add(date);
             SmallCalendarView.SetDisplayDate(date);
+
+            Log.Information("Date: {date}", date);
         }
     }
 
     private void SmallCalendarView_SelectedDatesChanged(CalendarView sender, CalendarViewSelectedDatesChangedEventArgs args)
     {
+        Log.Information("SmallCalendarView_SelectedDatesChanged event triggered");
+
         if (SmallCalendarView.SelectedDates.Count > 0)
         {
             DateTimeOffset dateTimeOffset = SmallCalendarView.SelectedDates[0];
             if (dateTimeOffset != null)
             {
+                Log.Information("Selected date: {dateTimeOffset}", dateTimeOffset);
+
                 _currentDay = DateOnly.FromDateTime(dateTimeOffset.DateTime);
                 _currentMonth = _currentDay.AddDays(-_currentDay.Day + 1);
                 DisplayCurrentMonth();
@@ -181,6 +200,8 @@ public sealed partial class CalendarPage : Page
 
     private async void AddButton_Click(object sender, RoutedEventArgs e)
     {
+        Log.Information("AddButton_Click event triggered");
+
         EventView eventView = new EventView(true, _currentDayControl.Day.Date);
 
         eventView.XamlRoot = this.XamlRoot;
@@ -192,6 +213,8 @@ public sealed partial class CalendarPage : Page
 
     private void Page_Loaded(object sender, RoutedEventArgs e)
     {
+        Log.Information("Page_Loaded event triggered");
+
         if (_currentDay != null && _currentMonth != null)
         {
             DisplayCurrentMonth();
@@ -200,11 +223,13 @@ public sealed partial class CalendarPage : Page
 
     private async void SaveButton_Click(object sender, RoutedEventArgs e)
     {
-        
+        Log.Information("SaveButton_Click event triggered");
     }
 
     private async void LoadButton_Click(object sender, RoutedEventArgs e)
     {
+        Log.Information("LoadButton_Click event triggered");
+
         FileOpenPicker open = new FileOpenPicker();
         open.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
         open.FileTypeFilter.Add(".ics");

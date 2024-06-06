@@ -36,9 +36,13 @@ public sealed partial class MainPage : Page
         calendarTab1.Header = "Calendar";
         calendarTab1.IconSource = new SymbolIconSource { Symbol = Symbol.Calendar };
 
-        var clockTabe = AddTab(new ClockPage());
-        clockTabe.Header = "Clock";
-        clockTabe.IconSource = new SymbolIconSource { Symbol = Symbol.Clock };
+        var clockTab = AddTab(new ClockPage());
+        clockTab.Header = "Clock";
+        clockTab.IconSource = new SymbolIconSource { Symbol = Symbol.Clock };
+
+        var clockTab1 = AddTab(new ClockPage());
+        clockTab1.Header = "Clock";
+        clockTab1.IconSource = new SymbolIconSource { Symbol = Symbol.Clock };
 
 
         DataContext = this;

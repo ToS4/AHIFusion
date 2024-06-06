@@ -192,4 +192,10 @@
   <ItemGroup>
     <UpToDateCheckInput Remove="View\Clock\Custom Controls\StopwatchControl.xaml" />
   </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Model\Todo\" />
+    <Folder Include="View\Todo\" />
+  </ItemGroup>
 </Project>

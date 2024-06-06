@@ -40,9 +40,9 @@ public sealed partial class MainPage : Page
         clockTab.Header = "Clock";
         clockTab.IconSource = new SymbolIconSource { Symbol = Symbol.Clock };
 
-        var clockTab1 = AddTab(new ClockPage());
-        clockTab1.Header = "Clock";
-        clockTab1.IconSource = new SymbolIconSource { Symbol = Symbol.Clock };
+        var todoTab = AddTab(new TodoPage());
+        todoTab.Header = "Todo";
+        todoTab.IconSource = new SymbolIconSource { Symbol = Symbol.Go};
 
 
         DataContext = this;

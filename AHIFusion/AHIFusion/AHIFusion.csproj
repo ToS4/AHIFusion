@@ -80,6 +80,7 @@
     <None Remove="View\Notes\LinkText.xaml" />
     <None Remove="View\StopwatchContent.xaml" />
     <None Remove="View\TimerContent.xaml" />
+    <None Remove="View\Todo\TodoPage.xaml" />
     <None Remove="View\WorldClockContent.xaml" />
   </ItemGroup>
 
@@ -195,7 +196,6 @@
 
 
   <ItemGroup>
-    <Folder Include="Model\Todo\" />
-    <Folder Include="View\Todo\" />
+    <UpToDateCheckInput Remove="View\Todo\TodoPage.xaml" />
   </ItemGroup>
 </Project>

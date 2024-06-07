@@ -18,12 +18,12 @@ public sealed partial class MainPage : Page
            .CreateLogger();
 
         EventCollection.LoadFromFile("events.json");
-        NoteCollection.LoadFromFile("notes.json");
+        NoteCollection.LoadFromFile("notesled .json");
         AlarmCollection.LoadFromFile("alarms.json");
-        StopwatchCollection.LoadFromFile("stopwatches.json");
+        //StopwatchCollection.LoadFromFile("stopwatches.json");
         TimerCollection.LoadFromFile("timers.json");
         TodoCollection.LoadFromFile("todos.json");
-        StopwatchManager.Instance.LoadFromFile("stopwatch-managers.json");
+        //StopwatchManager.Instance.LoadFromFile("stopwatch-managers.json");
 
         if (StopwatchCollection.Stopwatches.Count <= 0)
         {

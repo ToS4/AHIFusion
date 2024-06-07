@@ -1,4 +1,7 @@
 using System.Collections.ObjectModel;
+using Microsoft.Extensions.Logging;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 using Windows.ApplicationModel.VoiceCommands;
 
 namespace AHIFusion.Model;
@@ -13,5 +16,24 @@ public static class NoteCollection
     public static void Remove(Note note)
     {
         Notes.Remove(note);
+    }
+    public static void SaveEventsToFile(string filePath)
+    {
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true, // For pretty printing
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
+        string jsonString = JsonSerializer.Serialize(Notes, options);
+        File.WriteAllText(filePath, jsonString);
+    }
+
+    public static void LoadEventsFromFile(string filePath)
+    {
+        if (File.Exists(filePath))
+        {
+            string jsonString = File.ReadAllText(filePath);
+            Notes = JsonSerializer.Deserialize<ObservableCollection<Note>>(jsonString);
+        }
     }
 }

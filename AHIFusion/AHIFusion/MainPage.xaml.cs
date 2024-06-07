@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using AHIFusion.Model;
 using Serilog;
 
 namespace AHIFusion;
@@ -15,6 +16,9 @@ public sealed partial class MainPage : Page
            .WriteTo.Console()
            .WriteTo.File("log-.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
            .CreateLogger();
+
+        EventCollection.LoadEventsFromFile("events.json");
+        NoteCollection.LoadEventsFromFile("notes.json");
 
         AHIFusion.Stopwatch sw = new AHIFusion.Stopwatch()
         {

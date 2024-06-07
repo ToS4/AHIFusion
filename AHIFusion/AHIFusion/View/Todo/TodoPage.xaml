@@ -34,8 +34,7 @@
           
       </Viewbox>-->
 
-
-    <Viewbox Grid.ColumnSpan="3" Grid.Row="0">
+      <Viewbox Grid.ColumnSpan="3" Grid.Row="0">
         <TextBlock  Text="Todo" Foreground="Black" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2"/>
       </Viewbox>
 
@@ -49,18 +48,11 @@
 
       <Line Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Center" X1="0" Y1="0" X2="1500" Y2="0" Stroke="Black" StrokeThickness="3"/>
 
-      <ListView Grid.Row="3" Grid.ColumnSpan="3">
-        <ListViewItem>
-          <local:TodoListControl/>
-        </ListViewItem>
-        <ListViewItem>
-          <local:TodoListControl/>
-        </ListViewItem>
-      </ListView>
-      
+      <ListView x:Name="TodoListListView" Grid.Row="3" Grid.ColumnSpan="3"/>
+
       <Line Grid.Row="4" Grid.ColumnSpan="3" VerticalAlignment="Center" X1="0" Y1="0" X2="1500" Y2="0" Stroke="Black" StrokeThickness="3"/>
       <Viewbox Grid.Row="5" Grid.ColumnSpan="3">
-        <Button x:Name="AddButton" Content="Add Todo List" VerticalAlignment="Center" Margin="0,0,0,5" Width="200" Click="AddButton_Click"/>
+      <Button x:Name="AddButton" Content="Add Todo List" VerticalAlignment="Center" Margin="0,0,0,5" Width="200" Click="AddButton_Click"/>
       </Viewbox>
         
     </Grid>

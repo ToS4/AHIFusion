@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
 
 namespace AHIFusion;
 public class TodoList : INotifyPropertyChanged
@@ -12,6 +13,7 @@ public class TodoList : INotifyPropertyChanged
     private int id;
     private string name;
     private ObservableCollection<Todo> todos;
+    private Color color;
 
     public int Id
     {
@@ -49,6 +51,19 @@ public class TodoList : INotifyPropertyChanged
             {
                 todos = value;
                 OnPropertyChanged("Todos");
+            }
+        }
+    }
+
+    public Color Color
+    {
+        get { return color; }
+        set
+        {
+            if (value != color)
+            {
+                color = value;
+                OnPropertyChanged("Color");
             }
         }
     }

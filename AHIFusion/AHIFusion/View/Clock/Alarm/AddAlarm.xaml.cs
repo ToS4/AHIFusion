@@ -8,7 +8,7 @@ namespace AHIFusion;
 public sealed partial class AddAlarm : ContentDialog
 {
     public string NameAdd { get; set; } = $"Alarm {AlarmCollection.Alarms.Count + 1}";
-    public TimeSpan TimeAdd { get; set; } = new TimeSpan(12, 0, 0);
+    public TimeSpan TimeAdd { get; set; } = DateTime.Now.TimeOfDay;
     public Dictionary<string, bool> DaysAdd { get; set; } = new Dictionary<string, bool>
         {
             { "Mo", true },

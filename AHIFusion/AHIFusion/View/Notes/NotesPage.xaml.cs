@@ -97,6 +97,8 @@ namespace AHIFusion
         }
         private async void HyperlinkButton_Click(object sender, RoutedEventArgs e)
         {
+            Log.Information("Hyperlink button click event triggered");
+
             List<SelectableNote> allNotes = new List<SelectableNote>();
 
             foreach (Note note in NoteCollection.Notes)

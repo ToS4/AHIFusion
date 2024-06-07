@@ -24,7 +24,6 @@ public sealed partial class StopwatchControl : UserControl
 {
     public DispatcherTimer dispatcherTimer = new DispatcherTimer();
     StopwatchManager stopwatch = StopwatchManager.Instance;
-    bool TextInit = false;
 
     public StopwatchControl()
     {

@@ -1,3 +1,6 @@
+using AHIFusion.Model;
+using Microsoft.Extensions.Logging;
+
 namespace AHIFusion;
 
 public class App : Application
@@ -7,6 +10,7 @@ public class App : Application
 
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
+
         var builder = this.CreateBuilder(args)
             .Configure(host => host
 #if DEBUG
@@ -78,5 +82,18 @@ public class App : Application
         }
         // Ensure the current window is active
         MainWindow.Activate();
+
+        MainWindow.Closed += MainWindow_Closed;
+    }
+
+    private void MainWindow_Closed(object sender, WindowEventArgs args)
+    {
+        EventCollection.SaveToFile("events.json");
+        NoteCollection.SaveToFile("notes.json");
+        AlarmCollection.SaveToFile("alarms.json");
+        StopwatchCollection.SaveToFile("stopwatches.json");
+        TimerCollection.SaveToFile("timers.json");
+        TodoCollection.SaveToFile("todos.json");
+        StopwatchManager.Instance.SaveToFile("stopwatch-managers.json");
     }
 }

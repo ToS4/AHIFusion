@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using AHIFusion.Model;
 using Serilog;
 
 namespace AHIFusion;
@@ -16,14 +17,25 @@ public sealed partial class MainPage : Page
            .WriteTo.File("log-.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
            .CreateLogger();
 
-        AHIFusion.Stopwatch sw = new AHIFusion.Stopwatch()
-        {
-            StartTime = new DateTime(0),
-            ElapsedTime = new TimeSpan(0),
-            IsRunning = false
-        };
+        EventCollection.LoadFromFile("events.json");
+        NoteCollection.LoadFromFile("notes.json");
+        AlarmCollection.LoadFromFile("alarms.json");
+        StopwatchCollection.LoadFromFile("stopwatches.json");
+        TimerCollection.LoadFromFile("timers.json");
+        TodoCollection.LoadFromFile("todos.json");
+        StopwatchManager.Instance.LoadFromFile("stopwatch-managers.json");
 
-        AHIFusion.StopwatchCollection.Stopwatches.Add(sw);
+        if (StopwatchCollection.Stopwatches.Count <= 0)
+        {
+            Stopwatch sw = new AHIFusion.Stopwatch()
+            {
+                StartTime = new DateTime(0),
+                ElapsedTime = new TimeSpan(0),
+                IsRunning = false
+            };
+
+            StopwatchCollection.Stopwatches.Add(sw);
+        }
 
         Tabs = new ObservableCollection<TabViewItem>();
         Tabs.CollectionChanged += Tabs_CollectionChanged;

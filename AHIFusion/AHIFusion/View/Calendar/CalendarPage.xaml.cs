@@ -1,7 +1,9 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
 using Ical.Net;
+using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
+using Ical.Net.Serialization;
 using Microsoft.UI;
 using Microsoft.UI.Text;
 using Serilog;
@@ -224,6 +226,39 @@ public sealed partial class CalendarPage : Page
     private async void SaveButton_Click(object sender, RoutedEventArgs e)
     {
         Log.Information("SaveButton_Click event triggered");
+
+        FileSavePicker savePicker = new FileSavePicker();
+        savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+        savePicker.FileTypeChoices.Add("iCalendar file", new List<string>() { ".ics" });
+        savePicker.SuggestedFileName = "Calendar";
+
+        var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
+        WinRT.Interop.InitializeWithWindow.Initialize(savePicker, hwnd);
+
+        StorageFile file = await savePicker.PickSaveFileAsync();
+
+        if (file != null)
+        {
+            var calendar = new Calendar();
+
+            foreach (var dayEvent in EventCollection.Events)
+            {
+                var calendarEvent = new CalendarEvent
+                {
+                    Summary = dayEvent.Title,
+                    Start = new CalDateTime(dayEvent.Date.ToDateTime(TimeOnly.MinValue), "UTC"),
+                    IsAllDay = true,
+                    Uid = Guid.NewGuid().ToString(),
+                    DtStamp = new CalDateTime(DateTime.UtcNow)
+                };
+                calendar.Events.Add(calendarEvent);
+            }
+
+            var serializer = new CalendarSerializer();
+            var serializedCalendar = serializer.SerializeToString(calendar);
+
+            await FileIO.WriteTextAsync(file, serializedCalendar);
+        }
     }
 
     private async void LoadButton_Click(object sender, RoutedEventArgs e)
@@ -266,5 +301,7 @@ public sealed partial class CalendarPage : Page
                 }
             }
         }
+
+        DisplayCurrentMonth();
     }
 }

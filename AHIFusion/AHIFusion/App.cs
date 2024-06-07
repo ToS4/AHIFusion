@@ -88,7 +88,11 @@ public class App : Application
 
     private void MainWindow_Closed(object sender, WindowEventArgs args)
     {
-        EventCollection.SaveEventsToFile("events.json");
-        NoteCollection.SaveEventsToFile("notes.json");
+        EventCollection.SaveToFile("events.json");
+        NoteCollection.SaveToFile("notes.json");
+        AlarmCollection.SaveToFile("alarms.json");
+        StopwatchCollection.SaveToFile("stopwatchs.json");
+        TimerCollection.SaveToFile("timers.json");
+        TodoCollection.SaveToFile("todos.json");
     }
 }

@@ -17,8 +17,12 @@ public sealed partial class MainPage : Page
            .WriteTo.File("log-.txt", rollingInterval: RollingInterval.Day, retainedFileCountLimit: 7)
            .CreateLogger();
 
-        EventCollection.LoadEventsFromFile("events.json");
-        NoteCollection.LoadEventsFromFile("notes.json");
+        EventCollection.LoadFromFile("events.json");
+        NoteCollection.LoadFromFile("notes.json");
+        AlarmCollection.LoadFromFile("alarms.json");
+        StopwatchCollection.LoadFromFile("stopwatchs.json");
+        TimerCollection.LoadFromFile("timers.json");
+        TodoCollection.LoadFromFile("todos.json");
 
         AHIFusion.Stopwatch sw = new AHIFusion.Stopwatch()
         {

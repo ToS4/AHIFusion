@@ -17,7 +17,7 @@ public static class NoteCollection
     {
         Notes.Remove(note);
     }
-    public static void SaveEventsToFile(string filePath)
+    public static void SaveToFile(string filePath)
     {
         var options = new JsonSerializerOptions
         {
@@ -28,7 +28,7 @@ public static class NoteCollection
         File.WriteAllText(filePath, jsonString);
     }
 
-    public static void LoadEventsFromFile(string filePath)
+    public static void LoadFromFile(string filePath)
     {
         if (File.Exists(filePath))
         {

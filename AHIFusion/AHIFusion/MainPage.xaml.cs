@@ -18,7 +18,7 @@ public sealed partial class MainPage : Page
            .CreateLogger();
 
         EventCollection.LoadFromFile("events.json");
-        NoteCollection.LoadFromFile("notesled .json");
+        NoteCollection.LoadFromFile("notes.json");
         AlarmCollection.LoadFromFile("alarms.json");
         //StopwatchCollection.LoadFromFile("stopwatches.json");
         TimerCollection.LoadFromFile("timers.json");

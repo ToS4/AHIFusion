@@ -123,6 +123,33 @@ public sealed partial class TodoListControl : UserControl
         set { SetValue(IdProperty, value); }
     }
 
+    public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register("IsSelected", typeof(bool), typeof(TodoListControl), new PropertyMetadata(false, OnIsSelectedChanged));
+    public bool IsSelected
+    {
+        get { return (bool)GetValue(IsSelectedProperty); }
+        set { SetValue(IsSelectedProperty, value); }
+    }
+
+    private static void OnIsSelectedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is TodoListControl control)
+        {
+            control.UpdateSelectedColor();
+        }
+    }
+
+    private void UpdateSelectedColor()
+    {
+        if (IsSelected)
+        {
+            BackgroundRect.Fill= new SolidColorBrush(Color.FromArgb(255, 94, 109, 124));
+        }
+        else
+        {
+            BackgroundRect.Fill = new SolidColorBrush(Color.FromArgb(255, 119, 136, 153));
+        }
+    }
+
     private void NameTextBox_FocusDisengaged(Control sender, FocusDisengagedEventArgs args)
     {
         NameTextBlock.Visibility = Visibility.Visible;

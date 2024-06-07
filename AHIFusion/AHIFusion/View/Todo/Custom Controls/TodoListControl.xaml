@@ -17,7 +17,7 @@
     </Grid.ColumnDefinitions>
 
     <Border CornerRadius="3" BorderThickness="1" BorderBrush="Black" Grid.ColumnSpan="2">
-      <Rectangle Fill="LightSlateGray"/>
+      <Rectangle x:Name="BackgroundRect" Fill="LightSlateGray"/>
     </Border>
     <Viewbox Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
       <Grid>

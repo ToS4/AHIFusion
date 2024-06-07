@@ -23,11 +23,33 @@ namespace AHIFusion;
 /// </summary>
 public sealed partial class TodoPage : Page
 {
+
     public TodoPage()
     {
         this.InitializeComponent();
 
         TodoCollection.TodoLists.CollectionChanged += TodoLists_CollectionChanged;
+
+        TodoListListView.SelectionChanged += TodoListListView_SelectionChanged;
+
+        TitleTextBlock.Text = TodoListListView.Items.OfType<TodoListControl>().FirstOrDefault()?.Name;
+    }
+
+    private void TodoListListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.RemovedItems.Count > 0 && e.RemovedItems[0] is TodoListControl oldControl)
+        {
+            oldControl.IsSelected = false;
+        }
+
+        if (e.AddedItems.Count > 0 && e.AddedItems[0] is TodoListControl newControl)
+        {
+            newControl.IsSelected = true;
+            TitleTextBlock.Text = newControl.Name;
+            UpdateTodoListView(newControl.DataContext as TodoList);
+
+            TitleTextBlockStoryboard.Begin();
+        }
     }
 
     private void TodoLists_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -93,5 +115,76 @@ public sealed partial class TodoPage : Page
         AddButton.IsEnabled = false;
         await Task.Delay(TimeSpan.FromSeconds(0.1));
         AddButton.IsEnabled = true;
+    }
+
+    private async void AddTodoItemButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (TodoListListView.SelectedItem is TodoListControl selectedControl && selectedControl.DataContext is TodoList selectedTodoList)
+        {
+            AddTodo addTodo = new AddTodo(selectedTodoList);
+            addTodo.XamlRoot = this.XamlRoot;
+            await addTodo.ShowAsync();
+
+            UpdateTodoListView(selectedTodoList);
+        }
+    }
+
+    private void UpdateTodoListView(TodoList selected)
+    {
+        TodoItemListView.Items.Clear();
+        foreach (Todo todo in selected.Todos)
+        {
+            TodoControl todoItemControl = new TodoControl()
+            {
+                DataContext = todo,
+                Height = 70,
+                Margin = new Thickness(40, 0, 40, 0)
+            };
+
+            Binding TitleBinding = new Binding
+            {
+                Path = new PropertyPath("Title"),
+                Mode = BindingMode.TwoWay
+            };
+
+            Binding DescriptionBinding = new Binding
+            {
+                Path = new PropertyPath("Description"),
+                Mode = BindingMode.TwoWay
+            };
+
+            Binding DueDateBinding = new Binding
+            {
+                Path = new PropertyPath("DueDate"),
+                Mode = BindingMode.TwoWay
+            };
+
+            Binding IsCompletedBinding = new Binding
+            {
+                Path = new PropertyPath("IsCompleted"),
+                Mode = BindingMode.TwoWay
+            };
+
+            Binding PriorityBinding = new Binding
+            {
+                Path = new PropertyPath("Priority"),
+                Mode = BindingMode.TwoWay
+            };
+
+            Binding SubtasksBinding = new Binding
+            {
+                Path = new PropertyPath("Subtasks"),
+                Mode = BindingMode.TwoWay
+            };
+
+            todoItemControl.SetBinding(TodoControl.TitleProperty, TitleBinding);
+            todoItemControl.SetBinding(TodoControl.DescriptionProperty, DescriptionBinding);
+            todoItemControl.SetBinding(TodoControl.DueDateProperty, DueDateBinding);
+            todoItemControl.SetBinding(TodoControl.IsCompletedProperty, IsCompletedBinding);
+            todoItemControl.SetBinding(TodoControl.PriorityProperty, PriorityBinding);
+            todoItemControl.SetBinding(TodoControl.SubtasksProperty, SubtasksBinding);
+
+            TodoItemListView.Items.Add(todoItemControl);
+        }
     }
 }

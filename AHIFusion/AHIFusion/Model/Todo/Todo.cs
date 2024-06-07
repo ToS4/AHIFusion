@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace AHIFusion;
 public class Todo : INotifyPropertyChanged
 {
-    private int id;
+    private Guid id;
     private string title;
     private string description;
     private DateTime dueDate;
@@ -17,7 +17,7 @@ public class Todo : INotifyPropertyChanged
     private int priority;
     private ObservableCollection<TodoSub> subtasks;
 
-    public int Id
+    public Guid Id
     {
         get { return id; }
         set
@@ -111,7 +111,6 @@ public class Todo : INotifyPropertyChanged
 
     public Todo()
     {
-        subtasks = new ObservableCollection<TodoSub>();
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

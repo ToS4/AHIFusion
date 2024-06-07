@@ -1,0 +1,60 @@
+﻿<ContentDialog
+  x:Class="AHIFusion.AddTodo"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:local="using:AHIFusion"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  Title="Add Task"
+  Style="{ThemeResource DefaultContentDialogStyle}"
+  PrimaryButtonText="Add"
+  PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+  CloseButtonText="Cancel"
+  DefaultButton="Primary"
+  DataContext="{Binding RelativeSource={RelativeSource Self}}">
+
+  <StackPanel>
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="5*" />
+      </Grid.ColumnDefinitions>
+
+      <CheckBox Grid.Column="0" IsChecked="{Binding IsCompletedAdd, Mode=TwoWay}" />
+      <TextBox Grid.Column="1" Text="{Binding TitleAdd, Mode=TwoWay}" PlaceholderText="Task" Margin="0,10,0,15"/>
+    </Grid>
+    <TextBox Grid.Column="1" Text="{Binding DescriptionAdd, Mode=TwoWay}" PlaceholderText="Description" Margin="0,0,0,17"/>
+
+    <Line Grid.Row="2" Grid.ColumnSpan="3" Margin="0,0,0,15" VerticalAlignment="Center" X1="0" Y1="0" X2="380" Y2="0" Stroke="White" StrokeThickness="3"/>
+
+    <Grid Margin="0,0,0,15">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="3*" />
+      </Grid.ColumnDefinitions>
+
+      <CalendarDatePicker x:Name="DueDatePicker" Date="{Binding DueDateAdd,Mode=TwoWay}" Margin="0,0,20,0"/>
+      <Grid Grid.Column="1">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Priority" HorizontalAlignment="Center" Margin="10,0,0,0" FontSize="15"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0">
+          <RadioButton Content="Low" GroupName="PriorityGroup" Margin="0,0,10,0" Checked="RadioButton_Checked"/>
+          <RadioButton Content="Medium" GroupName="PriorityGroup" Margin="0,0,10,0" Checked="RadioButton_Checked"/>
+          <RadioButton Content="High" GroupName="PriorityGroup" Margin="0,0,0,0" Checked="RadioButton_Checked"/>
+        </StackPanel>
+      </Grid>
+    </Grid>
+
+    <Line Grid.Row="2" Grid.ColumnSpan="3" Margin="0,0,0,15" VerticalAlignment="Center" X1="0" Y1="0" X2="380" Y2="0" Stroke="White" StrokeThickness="3"/>
+
+    <Button Content="Add SubTask" HorizontalAlignment="Left" Margin="0,0,0,10" Width="380"/>
+    <Border x:Name="SubTasksBorder" BorderBrush="White" BorderThickness="2" CornerRadius="1" Visibility="Collapsed">
+      <ListView>
+      </ListView>
+    </Border>
+
+  </StackPanel>
+</ContentDialog>

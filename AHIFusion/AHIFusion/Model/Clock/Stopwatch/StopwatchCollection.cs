@@ -24,9 +24,6 @@ public static class StopwatchCollection
         Stopwatches.Remove(stopwatch);
     }
 
-    //weil ich nur eine Stopwatch will
-    public static Stopwatch sw = new Stopwatch();
-
     public static void SaveToFile(string filePath)
     {
         var options = new JsonSerializerOptions

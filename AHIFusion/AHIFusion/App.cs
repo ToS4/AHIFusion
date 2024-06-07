@@ -91,8 +91,9 @@ public class App : Application
         EventCollection.SaveToFile("events.json");
         NoteCollection.SaveToFile("notes.json");
         AlarmCollection.SaveToFile("alarms.json");
-        StopwatchCollection.SaveToFile("stopwatchs.json");
+        StopwatchCollection.SaveToFile("stopwatches.json");
         TimerCollection.SaveToFile("timers.json");
         TodoCollection.SaveToFile("todos.json");
+        StopwatchManager.Instance.SaveToFile("stopwatch-managers.json");
     }
 }

@@ -20,18 +20,22 @@ public sealed partial class MainPage : Page
         EventCollection.LoadFromFile("events.json");
         NoteCollection.LoadFromFile("notes.json");
         AlarmCollection.LoadFromFile("alarms.json");
-        StopwatchCollection.LoadFromFile("stopwatchs.json");
+        StopwatchCollection.LoadFromFile("stopwatches.json");
         TimerCollection.LoadFromFile("timers.json");
         TodoCollection.LoadFromFile("todos.json");
+        StopwatchManager.Instance.LoadFromFile("stopwatch-managers.json");
 
-        AHIFusion.Stopwatch sw = new AHIFusion.Stopwatch()
+        if (StopwatchCollection.Stopwatches.Count <= 0)
         {
-            StartTime = new DateTime(0),
-            ElapsedTime = new TimeSpan(0),
-            IsRunning = false
-        };
+            Stopwatch sw = new AHIFusion.Stopwatch()
+            {
+                StartTime = new DateTime(0),
+                ElapsedTime = new TimeSpan(0),
+                IsRunning = false
+            };
 
-        AHIFusion.StopwatchCollection.Stopwatches.Add(sw);
+            StopwatchCollection.Stopwatches.Add(sw);
+        }
 
         Tabs = new ObservableCollection<TabViewItem>();
         Tabs.CollectionChanged += Tabs_CollectionChanged;

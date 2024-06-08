@@ -61,21 +61,23 @@
 
     <Grid x:Name="RightViewGrid" Grid.Column="1" Grid.Row="0" Visibility="Collapsed">
       <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
         <RowDefinition Height="95*"/>
         <RowDefinition Height="5*"/>
       </Grid.RowDefinitions>
 
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-      <RichEditBox Loaded="EditorRichEditBox_Loaded" Unloaded="EditorRichEditBox_Unloaded" TextChanged="EditorRichEditBox_TextChanged" x:Name="EditorRichEditBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="0" Margin="10" Padding="10">
-        <RichEditBox.Header>
-          <TextBlock x:Name="RightViewNoteTitleTextBlock" Padding="5"/>
-        </RichEditBox.Header>
-      </RichEditBox>
+      <TextBlock Grid.Row="0" x:Name="RightViewNoteTitleTextBlock" Text="Title" TextAlignment="Left"  Grid.ColumnSpan="2" Padding="5"/>
 
-      <StackPanel Height="Auto" VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left">
+      <RichEditBox Grid.Row="1" Loaded="EditorRichEditBox_Loaded" Unloaded="EditorRichEditBox_Unloaded" TextChanged="EditorRichEditBox_TextChanged" x:Name="EditorRichEditBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" Padding="10"/>
+
+      <WebView2 Grid.Row="1" x:Name="EditorWebView" Grid.Column="1" Source="get-good" Margin="10" />
+
+      <StackPanel Grid.Row="2" Height="Auto" VerticalAlignment="Center" Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Left">
         <Button x:Name="OpenFileButton" AutomationProperties.Name="Open file" ToolTipService.ToolTip="Open file"
                 Margin="5,0,5,0" Click="OpenFileButton_Click">
           <Button.Content>

@@ -24,12 +24,14 @@ using Microsoft.UI;
 using Windows.ApplicationModel.DataTransfer;
 using System.Text.RegularExpressions;
 using Serilog;
+using Markdig;
 
 namespace AHIFusion
 {
     public partial class NotesPage : Page
 	{
         private ObservableCollection<SelectableNote> notesFiltered = new ObservableCollection<SelectableNote>();
+        private bool navigationUsage = true;
         public NotesPage()
         {
             try
@@ -55,6 +57,8 @@ namespace AHIFusion
                 EditorRichEditBox.TabNavigation = KeyboardNavigationMode.Local;
                 EditorRichEditBox.Paste += EditorRichEditBox_Paste;
 
+                EditorWebView.NavigationStarting += EditorWebView_NavigationStarting;
+
                 Log.Debug("Updating Filter");
 
                 Update();
@@ -73,6 +77,17 @@ namespace AHIFusion
             {
                 Log.CloseAndFlush();
             }
+        }
+
+        private async void EditorWebView_NavigationStarting(WebView2 sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs args)
+        {
+            // Cancel the navigation
+            if (!navigationUsage)
+            {
+                args.Cancel = true;
+            }
+
+            navigationUsage = false;
         }
 
         private async void EditorRichEditBox_Paste(object sender, TextControlPasteEventArgs e)
@@ -234,7 +249,6 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while applying style");
-                
             }
             finally
             {
@@ -272,6 +286,8 @@ namespace AHIFusion
                 }
 
                 ApplyStyle();
+
+                UpdateMarkdownView();
             }
 
             catch (Exception ex)
@@ -697,11 +713,25 @@ namespace AHIFusion
             }
         }
 
+        private void UpdateMarkdownView()
+        {
+            Log.Information("Updating text changed event triggered");
+
+            navigationUsage = true;
+
+            EditorRichEditBox.Document.GetText(TextGetOptions.None, out string currentText);
+            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+            string htmlText = Markdown.ToHtml(currentText, pipeline);
+            EditorWebView.NavigateToString(htmlText);
+        }
+
         private void EditorRichEditBox_TextChanged(object sender, RoutedEventArgs e)
         {
             try
             {
                 Log.Information("EditorRichEditBox text changed event triggered");
+
+                UpdateMarkdownView();
 
                 SaveText();
             }

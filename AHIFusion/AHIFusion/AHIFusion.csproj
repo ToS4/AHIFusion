@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="Ical.Net" />
+    <PackageReference Include="Markdig" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" />
     <PackageReference Include="Uno.WinUI">
       <TreatAsUsed>true</TreatAsUsed>

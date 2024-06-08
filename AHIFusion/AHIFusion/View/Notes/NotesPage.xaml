@@ -91,7 +91,7 @@
           </Button.Content>
         </Button>
 
-        <DropDownButton x:Name="fontColorButton" AutomationProperties.Name="Font color"
+        <DropDownButton Visibility="Collapsed" x:Name="fontColorButton" AutomationProperties.Name="Font color"
                                 BorderThickness="0" ToolTipService.ToolTip="Font color"
                                 Background="Transparent"
                                 RelativePanel.AlignRightWithPanel="True">

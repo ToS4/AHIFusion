@@ -66,6 +66,9 @@ namespace AHIFusion
                 Log.Debug("Loading text");
                 LoadText();
 
+                Log.Debug("Changing default CommandBarFlyout");
+                SetupCustomCommandBarFlyout();
+
                 this.DataContext = this;
             }
             catch (Exception ex)
@@ -76,6 +79,50 @@ namespace AHIFusion
             finally
             {
                 Log.CloseAndFlush();
+            }
+        }
+
+        private void SetupCustomCommandBarFlyout()
+        {
+            // Create a new CommandBarFlyout
+            CommandBarFlyout myFlyout = new CommandBarFlyout();
+
+            // Create new AppBarButtons
+            AppBarButton boldButton = new AppBarButton { Icon = new SymbolIcon(Symbol.Bold), Label = "Bold" };
+            ToolTipService.SetToolTip(boldButton, "Make text bold");
+            boldButton.Click += (s, ev) => { ApplyMarkdownSyntax("**"); };
+
+            AppBarButton italicButton = new AppBarButton { Icon = new SymbolIcon(Symbol.Italic), Label = "Italic" };
+            ToolTipService.SetToolTip(italicButton, "Make text italic");
+            italicButton.Click += (s, ev) => { ApplyMarkdownSyntax("*"); };
+
+            AppBarButton strikethroughButton = new AppBarButton
+            {
+                Icon = new FontIcon { Glyph = "\uEDE0", FontFamily = new FontFamily("Segoe MDL2 Assets") },
+                Label = "Strikethrough"
+            };
+            ToolTipService.SetToolTip(strikethroughButton, "Strike through text");
+            strikethroughButton.Click += (s, ev) => { ApplyMarkdownSyntax("~~"); };
+
+            // Add the AppBarButtons to the CommandBarFlyout
+            myFlyout.PrimaryCommands.Add(boldButton);
+            myFlyout.PrimaryCommands.Add(italicButton);
+            myFlyout.PrimaryCommands.Add(strikethroughButton);
+
+            // Assign the CommandBarFlyout to the RichEditBox's ContextFlyout property
+            EditorRichEditBox.ContextFlyout = myFlyout;
+            EditorRichEditBox.SelectionFlyout = myFlyout;
+        }
+
+        private void ApplyMarkdownSyntax(string syntax)
+        {
+            // Get the current selection
+            ITextSelection selection = EditorRichEditBox.Document.Selection;
+
+            if (!string.IsNullOrEmpty(selection.Text))
+            {
+                // Apply the markdown syntax to the selected text
+                selection.Text = syntax + selection.Text + syntax;
             }
         }
 

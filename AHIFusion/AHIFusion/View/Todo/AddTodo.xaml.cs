@@ -31,8 +31,45 @@ namespace AHIFusion
 		{
 			this.InitializeComponent();
             todoList = tl;
-
+            SubtasksAdd.CollectionChanged += SubtasksAdd_CollectionChanged;
 		}
+
+        private void SubtasksAdd_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                AddSubTodo(e.NewItems.Cast<TodoSub>());
+            }
+        }
+
+        private void AddSubTodo(IEnumerable<TodoSub> list)
+        {
+            foreach (TodoSub todoSub in list)
+            {
+                TodoSubControl todoSubControl = new TodoSubControl(true)
+                {
+                    DataContext = todoSub,
+                    Height = 40
+                };
+
+                Binding TitleBinding = new Binding
+                {
+                    Path = new PropertyPath("Title"),
+                    Mode = BindingMode.TwoWay
+                };
+
+                Binding IsCompletedBinding = new Binding
+                {
+                    Path = new PropertyPath("IsCompleted"),
+                    Mode = BindingMode.TwoWay
+                };
+
+                todoSubControl.SetBinding(TodoSubControl.TitleProperty, TitleBinding);
+                todoSubControl.SetBinding(TodoSubControl.IsCompletedProperty, IsCompletedBinding);
+
+                SubTaskListView.Items.Add(todoSubControl);
+            }
+        }
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
@@ -76,6 +113,17 @@ namespace AHIFusion
                         break;
                 }
             }
+        }
+
+        private void SubTaskButton_Click(object sender, RoutedEventArgs e)
+        {
+            TodoSub todoSub = new TodoSub()
+            {
+                Id = Guid.NewGuid(),
+                Title = "New Subtask",
+                IsCompleted = false
+            };
+            SubtasksAdd.Add(new TodoSub());
         }
     }
 }

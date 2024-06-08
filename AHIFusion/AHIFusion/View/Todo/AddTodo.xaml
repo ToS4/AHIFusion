@@ -50,9 +50,9 @@
 
     <Line Grid.Row="2" Grid.ColumnSpan="3" Margin="0,0,0,15" VerticalAlignment="Center" X1="0" Y1="0" X2="380" Y2="0" Stroke="White" StrokeThickness="3"/>
 
-    <Button Content="Add SubTask" HorizontalAlignment="Left" Margin="0,0,0,10" Width="380"/>
-    <Border x:Name="SubTasksBorder" BorderBrush="White" BorderThickness="2" CornerRadius="1" Visibility="Collapsed">
-      <ListView>
+    <Button Content="Add SubTask" HorizontalAlignment="Left" Margin="0,0,0,10" Width="380" Click="SubTaskButton_Click"/>
+    <Border x:Name="SubTasksBorder" BorderBrush="White" BorderThickness="2" CornerRadius="1" Visibility="Visible">
+      <ListView x:Name="SubTaskListView" Margin="8">
       </ListView>
     </Border>
 

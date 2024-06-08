@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace AHIFusion;
 public class TodoSub : INotifyPropertyChanged
 {
-    private int id;
+    private Guid id;
     private string title;
     private bool isCompleted;
 
-    public int Id
+    public Guid Id
     {
         get { return id; }
         set

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -19,7 +20,7 @@ using Windows.UI;
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace AHIFusion;
-public sealed partial class TodoListControl : UserControl
+public sealed partial class TodoListControl : UserControl, INotifyPropertyChanged
 {
     private ObservableCollection<Todo> Todos { get; set; }
     public bool IsNew { get; set; }
@@ -96,17 +97,24 @@ public sealed partial class TodoListControl : UserControl
         FocusOnTextBox();
     }
 
+    public event EventHandler DeleteClicked;
     private void DeleteButton_Click(object sender, RoutedEventArgs e)
     {
         TodoList currentTodoList = this.DataContext as TodoList;
         TodoCollection.TodoLists.Remove(currentTodoList);
+
+        DeleteClicked?.Invoke(this, EventArgs.Empty);
     }
 
     public static readonly DependencyProperty NameProperty = DependencyProperty.Register("Name", typeof(string), typeof(TodoListControl), new PropertyMetadata(""));
     public string Name
     {
         get { return (string)GetValue(NameProperty); }
-        set { SetValue(NameProperty, value); }
+        set
+        {
+            SetValue(NameProperty, value);
+            OnPropertyChanged("Name");
+        }
     }
 
     public static readonly DependencyProperty ColorProperty = DependencyProperty.Register("Color", typeof(Color), typeof(TodoListControl), new PropertyMetadata(Color.FromArgb(255,255,255,255)));
@@ -177,5 +185,11 @@ public sealed partial class TodoListControl : UserControl
         };
 
         flyout.ShowAt(sender as FrameworkElement);
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+    private void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

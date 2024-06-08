@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -36,6 +37,10 @@ public sealed partial class TodoPage : Page
         TodoListListView.SelectionChanged += TodoListListView_SelectionChanged;
 
         TitleTextBlock.Text = TodoListListView.Items.OfType<TodoListControl>().FirstOrDefault()?.Name;
+        if (TitleTextBlock.Text == "" || TitleTextBlock.Text is null)
+        {
+            AddTodoItemButton.Visibility = Visibility.Collapsed;
+        }
     }
 
     private void TodoListListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -52,6 +57,12 @@ public sealed partial class TodoPage : Page
             UpdateTodoListView(newControl.DataContext as TodoList);
 
             TitleTextBlockStoryboard.Begin();
+
+            AddTodoItemButton.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            AddTodoItemButton.Visibility = Visibility.Collapsed;
         }
     }
 
@@ -84,12 +95,49 @@ public sealed partial class TodoPage : Page
                 Mode = BindingMode.TwoWay
             };
 
+            todoListControl.PropertyChanged += TodoListControl_PropertyChanged;
+            todoListControl.DeleteClicked += TodoListControl_DeleteClicked;
+
             todoListControl.SetBinding(TodoListControl.IdProperty, IdBinding);
             todoListControl.SetBinding(TodoListControl.NameProperty, NameBinding);
             todoListControl.SetBinding(TodoListControl.ColorProperty, ColorBinding);
 
             TodoListListView.Items.Add(todoListControl);
         }
+    }
+
+    private void TodoListControl_DeleteClicked(object? sender, EventArgs e)
+    {
+        TodoListControl deletedControl = sender as TodoListControl;
+        if (deletedControl != null)
+        {
+            int index = TodoListListView.Items.IndexOf(deletedControl);
+            int newIndex = Math.Max(index - 1, 0);
+            TodoListControl newControl = TodoListListView.Items.OfType<TodoListControl>().ElementAtOrDefault(newIndex);
+            if (newControl != null)
+            {
+                TodoListListView.SelectedItem = newControl;
+            }
+            else
+            {
+                TitleTextBlock.Text = "";
+                AddTodoItemButton.Visibility = Visibility.Collapsed;
+                TodoItemListView.Items.Clear();
+            }
+        }
+    }
+
+    private void TodoListControl_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == "Name")
+        {
+            TodoListControl control = sender as TodoListControl;
+            if (control != null && control.IsSelected)
+            {
+                TitleTextBlock.Text = control.Name;
+            }
+        }
+        
     }
 
     private void TodoLists_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -119,6 +167,12 @@ public sealed partial class TodoPage : Page
         };
 
         TodoCollection.TodoLists.Add(todoList);
+
+        TodoListControl newControl = TodoListListView.Items.OfType<TodoListControl>().LastOrDefault();
+        if (newControl != null)
+        {
+            TodoListListView.SelectedItem = newControl;
+        }
 
         AddButton.IsEnabled = false;
         await Task.Delay(TimeSpan.FromSeconds(0.1));

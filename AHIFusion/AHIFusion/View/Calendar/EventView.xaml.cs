@@ -38,7 +38,7 @@ public sealed partial class EventView : ContentDialog
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while initializing EventView");
-            throw new ArgumentException("Error, please check logs!");
+
         }
         finally
         {
@@ -65,7 +65,7 @@ public sealed partial class EventView : ContentDialog
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while initializing EventView");
-            throw new ArgumentException("Error, please check logs!");
+
         }
         finally
         {
@@ -96,7 +96,7 @@ public sealed partial class EventView : ContentDialog
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while handling ContentDialog_PrimaryButton click event");
-            throw new ArgumentException("Error, please check logs!");
+
         }
         finally
         {
@@ -118,7 +118,7 @@ public sealed partial class EventView : ContentDialog
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while handling DeleteButton click event");
-            throw new ArgumentException("Error, please check logs!");
+
         }
         finally
         {

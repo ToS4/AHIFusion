@@ -13,7 +13,7 @@ public sealed partial class ShowEventControl : UserControl
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while initializing ShowEventControl");
-            throw new ArgumentException("Error, please check logs!");
+            
         }
         finally
         {
@@ -32,7 +32,7 @@ public sealed partial class ShowEventControl : UserControl
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while updating event");
-            throw new ArgumentException("Error, please check logs!");
+            
         }
         finally
         {

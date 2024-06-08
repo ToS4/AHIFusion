@@ -72,7 +72,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while initializing NotesPage");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -101,7 +101,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling paste event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -157,7 +157,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling hyperlink button click event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -188,8 +188,8 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while inserting hyperlink into RTF");
-                //return rtf;
-                throw new ArgumentException("Error, please check logs!");
+                return rtf;
+                
             }
             finally
             {
@@ -239,7 +239,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while applying style");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -281,7 +281,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while loading text");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -301,7 +301,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while loading EditorRichEditBox");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -318,7 +318,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while unloading EditorRichEditBox");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -337,7 +337,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling notes collection change");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -358,7 +358,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while updating notes");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -377,8 +377,8 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while filtering notes");
-                //return false;
-                throw new ArgumentException("Error, please check logs!");
+                return false;
+                
             }
             finally
             {
@@ -404,7 +404,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while removing non-matching notes");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -437,8 +437,8 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while getting selectable note");
-                //return null;
-                throw new ArgumentException("Error, please check logs!");
+                return null;
+                
             }
             finally
             {
@@ -468,7 +468,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while adding matching notes");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -493,7 +493,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling AddButton click event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -517,7 +517,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling DeleteButton click event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -536,7 +536,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling SearchTextBox text changed event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -584,7 +584,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling NotesListView selection changed event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -625,7 +625,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling OpenFileButton click event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -670,7 +670,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling SaveFileButton click event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -695,7 +695,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while saving text");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -714,7 +714,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling EditorRichEditBox text changed event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -746,7 +746,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling ColorButton click event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {

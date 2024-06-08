@@ -24,7 +24,6 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while initializing CalendarDayControl");
-                throw new ArgumentException("Error, please check logs!");
             }
             finally
             {
@@ -79,7 +78,6 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while updating day");
-                throw new ArgumentException("Error, please check logs!");
             }
             finally
             {

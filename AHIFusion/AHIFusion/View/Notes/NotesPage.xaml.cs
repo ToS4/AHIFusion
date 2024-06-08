@@ -89,40 +89,14 @@ namespace AHIFusion
                 if (dataPackageView.Contains(StandardDataFormats.Text))
                 {
                     var text = await dataPackageView.GetTextAsync();
-                    ITextRange textRange = EditorRichEditBox.Document.GetRange(TextConstants.MaxUnitCount, TextConstants.MaxUnitCount);
+                    ITextRange textRange = EditorRichEditBox.Document.Selection;
                     textRange.Text = text;
+                    EditorRichEditBox.Document.Selection.StartPosition = EditorRichEditBox.Document.Selection.EndPosition;
                 }
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling paste event");
-                throw new ArgumentException("Error, please check logs!");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
-        }
-
-        private void Menu_Opening(object sender, object e)
-        {
-            try
-            {
-                Log.Information("Menu opening event triggered");
-
-                CommandBarFlyout myFlyout = sender as CommandBarFlyout;
-                if (myFlyout.Target == EditorRichEditBox)
-                {
-                    AppBarButton hyperlinkButton = new AppBarButton();
-                    hyperlinkButton.Icon = new SymbolIcon(Symbol.Link);
-                    hyperlinkButton.Click += HyperlinkButton_Click;
-
-                    myFlyout.PrimaryCommands.Add(hyperlinkButton);
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Error occurred while opening menu");
                 throw new ArgumentException("Error, please check logs!");
             }
             finally
@@ -292,8 +266,8 @@ namespace AHIFusion
             {
                 Log.Information("EditorRichEditBox loaded");
 
-                EditorRichEditBox.SelectionFlyout.Opening += Menu_Opening;
-                EditorRichEditBox.ContextFlyout.Opening += Menu_Opening;
+                ApplyStyle(16, "Arial");
+
                 LoadText();
             }
             catch (Exception ex)
@@ -312,9 +286,6 @@ namespace AHIFusion
             try
             {
                 Log.Information("EditorRichEditBox unloaded");
-
-                EditorRichEditBox.SelectionFlyout.Opening -= Menu_Opening;
-                EditorRichEditBox.ContextFlyout.Opening -= Menu_Opening;
             }
             catch (Exception ex)
             {

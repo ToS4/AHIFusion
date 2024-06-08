@@ -153,6 +153,14 @@
             </Flyout>
           </DropDownButton.Flyout>
         </DropDownButton>
+
+        <Button x:Name="HyperlinkButton" AutomationProperties.Name="Link text" ToolTipService.ToolTip="Link text"
+        Margin="5,0,5,0" Click="HyperlinkButton_Click" Visibility="Collapsed">
+          <Button.Content>
+            <FontIcon Glyph="&#xE71B;"/>
+          </Button.Content>
+        </Button>
+
       </StackPanel>
     </Grid>
     

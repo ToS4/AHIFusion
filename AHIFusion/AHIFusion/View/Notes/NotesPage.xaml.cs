@@ -502,7 +502,7 @@ namespace AHIFusion
             }
         }
         
-void DeleteButton_Click(object sender, RoutedEventArgs e)
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {

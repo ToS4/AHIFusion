@@ -260,6 +260,12 @@ namespace AHIFusion
             {
                 Log.Information("Applying style to text");
 
+                if (true)
+                {
+                    Log.Information("ApplyStyle is disabled");
+                    return;
+                }
+
                 int size = 16;
                 string name = "Arial";
 

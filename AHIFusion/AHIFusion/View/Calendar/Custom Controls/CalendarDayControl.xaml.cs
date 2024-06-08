@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using Serilog;
 using Windows.UI.Core;
 
 namespace AHIFusion
@@ -16,49 +17,74 @@ namespace AHIFusion
 
         public CalendarDayControl()
 		{
-			this.InitializeComponent();
+            try
+            {
+                this.InitializeComponent();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error occurred while initializing CalendarDayControl");
+                throw new ArgumentException("Error, please check logs!");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         public void UpdateDay()
         {
-            DateTextBlock.Text = Day.Date.ToString();
-
-            EventsStackPanel.Children.Clear();
-
-            foreach (DayEvent dayEvent in EventCollection.Events)
+            try
             {
-                if (dayEvent.Date == Day.Date)
+                Log.Information("Updating day");
+
+                DateTextBlock.Text = Day.Date.ToString();
+
+                EventsStackPanel.Children.Clear();
+
+                foreach (DayEvent dayEvent in EventCollection.Events)
                 {
-                    ShowEventControl showEventControl = new ShowEventControl()
+                    if (dayEvent.Date == Day.Date)
                     {
-                        Margin = new Thickness(5),
-                        Event = dayEvent
+                        ShowEventControl showEventControl = new ShowEventControl()
+                        {
+                            Margin = new Thickness(5),
+                            Event = dayEvent
+                        };
+
+                        EventsStackPanel.Children.Add(showEventControl);
+
+                        showEventControl.UpdateEvent();
+                    }
+                }
+
+                int amountEvents = EventsStackPanel.Children.Count;
+
+                if (amountEvents > 3)
+                {
+                    for (int i = 0; i < (amountEvents - 3); i++)
+                    {
+                        EventsStackPanel.Children.RemoveAt(EventsStackPanel.Children.Count - 1);
+                    }
+
+                    TextBlock textBlock = new TextBlock()
+                    {
+                        Text = $"+{amountEvents - 3}",
+                        TextAlignment = TextAlignment.Center,
                     };
 
-                    EventsStackPanel.Children.Add(showEventControl);
-
-                    showEventControl.UpdateEvent();
+                    EventsStackPanel.Children.Add(textBlock);
                 }
             }
-
-            int amountEvents = EventsStackPanel.Children.Count;
-
-            if (amountEvents > 3)
+            catch (Exception ex)
             {
-                for (int i = 0;  i < (amountEvents - 3); i++)
-                {
-                    EventsStackPanel.Children.RemoveAt(EventsStackPanel.Children.Count - 1);
-                }
-
-                TextBlock textBlock = new TextBlock()
-                {
-                    Text = $"+{amountEvents - 3}",
-                    TextAlignment = TextAlignment.Center,
-                };
-
-                EventsStackPanel.Children.Add(textBlock);
+                Log.Error(ex, "Error occurred while updating day");
+                throw new ArgumentException("Error, please check logs!");
             }
-
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
     }
 }

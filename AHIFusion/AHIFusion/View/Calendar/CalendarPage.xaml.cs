@@ -115,6 +115,8 @@ public sealed partial class CalendarPage : Page
     {
         try
         {
+            Log.Information("Displaying current day events");
+
             CurrentDayDateTextBlock.Text = _currentDayControl.Day.Date.ToString();
 
             CurrentDayEventsStackPanel.Children.Clear();

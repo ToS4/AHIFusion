@@ -46,7 +46,7 @@ namespace AHIFusion
         {
             foreach (TodoSub todoSub in list)
             {
-                TodoSubControl todoSubControl = new TodoSubControl(true)
+                TodoSubControl todoSubControl = new TodoSubControl()
                 {
                     DataContext = todoSub,
                     Height = 40

@@ -25,7 +25,7 @@
     </Viewbox>
 
     <Grid Grid.Column="1" HorizontalAlignment="Left" Margin="10">
-      <TextBox x:Name="TitleTextBox" Text="{x:Bind Title, Mode=TwoWay}" VerticalAlignment="Center" Margin="-10,0,0,0" Foreground="White" KeyDown="TitleTextBox_KeyDown"/>
+      <TextBox x:Name="TitleTextBox" Text="{x:Bind Title, Mode=TwoWay}" VerticalAlignment="Center" Margin="-10,0,0,0" Foreground="White"/>
     </Grid>
   </Grid>
 </UserControl>

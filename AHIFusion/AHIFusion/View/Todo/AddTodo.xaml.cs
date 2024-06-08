@@ -22,7 +22,7 @@ namespace AHIFusion
         public string DescriptionAdd { get; set; } = "";
         public DateTimeOffset DueDateAdd { get; set; } = DateTime.Now;
         public bool IsCompletedAdd { get; set; } = false;
-        public int PriorityAdd { get; set; } = 0;
+        public int PriorityAdd { get; set; } = 1;
         public ObservableCollection<TodoSub> SubtasksAdd { get; set; } = new ObservableCollection<TodoSub>();
 
         public TodoList todoList { get; set; }

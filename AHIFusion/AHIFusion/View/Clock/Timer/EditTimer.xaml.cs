@@ -13,7 +13,7 @@ public sealed partial class EditTimer : ContentDialog
         this.InitializeComponent();
         timerEdit = timer;
         NameEdit = timer.Title;
-        TimeEdit = TimeSpan.FromSeconds(timer.Time.TotalSeconds);
+        TimeEdit = TimeSpan.FromSeconds(timer.Time  .TotalSeconds);
         CustomTimePicker.Time = TimeEdit;
     }
 

@@ -10,14 +10,14 @@
   d:DesignWidth="400"
   DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
-  <Grid>
+  <Grid PointerEntered="Grid_PointerEntered" PointerExited="Grid_PointerExited" PointerPressed="Grid_PointerPressed">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*"/>
       <ColumnDefinition Width="10*"/>
     </Grid.ColumnDefinitions>
 
     <Border CornerRadius="10" BorderThickness="2" Grid.ColumnSpan="2">
-      <Rectangle Fill="Lavender" ></Rectangle>
+      <Rectangle x:Name="BackgroundRect" ></Rectangle>
     </Border>
 
     <Viewbox>

@@ -20,10 +20,13 @@ namespace AHIFusion
 {
 	public sealed partial class TodoControl : UserControl
 	{
+        public event Action<Todo> DeleteTodo;
+
 		public TodoControl()
 		{
 			this.InitializeComponent();
-		}
+            BackgroundRect.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 181, 126, 220));
+        }
 
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(TodoControl), new PropertyMetadata(""));
         public string Title
@@ -66,5 +69,33 @@ namespace AHIFusion
             get { return (ObservableCollection<TodoSub>)GetValue(SubtasksProperty); }
             set { SetValue(SubtasksProperty, value); }
         }
-	}
+
+        private void Grid_PointerEntered(object sender, PointerRoutedEventArgs e)
+        {
+            BackgroundRect.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 150, 110, 200));
+        }
+
+        private void Grid_PointerExited(object sender, PointerRoutedEventArgs e)
+        {
+            BackgroundRect.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 181, 126, 220));
+        }
+
+        private async void Grid_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            if (this.DataContext is Todo todo)
+            {
+                EditTodo editTodoDialog = new EditTodo(todo)
+                {
+                    XamlRoot = this.XamlRoot
+                };
+                editTodoDialog.DeleteTodo += Todo_Delete;
+                await editTodoDialog.ShowAsync();
+            }
+        }
+
+        private void Todo_Delete(Todo todo)
+        {
+            DeleteTodo?.Invoke(todo);
+        }
+    }
 }

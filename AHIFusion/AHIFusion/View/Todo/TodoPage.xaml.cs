@@ -246,7 +246,18 @@ public sealed partial class TodoPage : Page
             todoItemControl.SetBinding(TodoControl.PriorityProperty, PriorityBinding);
             todoItemControl.SetBinding(TodoControl.SubtasksProperty, SubtasksBinding);
 
+            todoItemControl.DeleteTodo += TodoItemControl_DeleteTodo;
+
             TodoItemListView.Items.Add(todoItemControl);
+        }
+    }
+
+    private void TodoItemControl_DeleteTodo(Todo todo)
+    {
+        if (TodoListListView.SelectedItem is TodoListControl selectedControl && selectedControl.DataContext is TodoList selectedTodoList)
+        {
+            selectedTodoList.Todos.Remove(todo);
+            UpdateTodoListView(selectedTodoList);
         }
     }
 }

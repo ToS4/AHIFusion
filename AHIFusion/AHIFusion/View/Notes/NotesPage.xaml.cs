@@ -59,9 +59,13 @@ namespace AHIFusion
 
                 Update();
 
-                Log.Debug("Applying default text style");
+                Log.Debug("Loading text");
 
-                ApplyStyle(16, "Arial");
+                LoadText();
+
+                Log.Debug("Applying text style");
+
+                ApplyStyle();
 
                 this.DataContext = this;
             }
@@ -193,11 +197,34 @@ namespace AHIFusion
             }
         }
 
-        private void ApplyStyle(int size, string name)
+        private void ApplyStyle()
         {
             try
             {
-                Log.Debug("Applying style: size {size}, name {name}", size, name);
+                Log.Information("Applying style to text");
+
+                int size = 16;
+                string name = "Arial";
+
+                var selectedItem = NotesListView.SelectedItem as SelectableNote;
+
+                if (selectedItem != null)
+                {
+                    if (selectedItem.FontName == null)
+                    {
+                        selectedItem.FontName = name;
+                    }
+
+                    if (selectedItem.FontSize <= 0)
+                    {
+                        selectedItem.FontSize = size;
+                    }
+
+                    size = selectedItem.FontSize;
+                    name = selectedItem.FontName;
+                }
+
+                Log.Debug($"size {size}, name {name}");
 
                 ITextCharacterFormat noteFormat = EditorRichEditBox.Document.GetDefaultCharacterFormat();
                 noteFormat.Size = size;
@@ -242,18 +269,13 @@ namespace AHIFusion
 
                     EditorRichEditBox.Document.SetText(TextSetOptions.FormatRtf, selectedItem.Note.Text);
 
-                    // Remove all trailing newlines
                     ITextRange textRange = EditorRichEditBox.Document.GetRange(0, TextConstants.MaxUnitCount);
                     while (textRange.Text.EndsWith("\r"))
                     {
                         textRange.Text = textRange.Text.Remove(textRange.Text.Length - 1);
                     }
 
-                    ApplyStyle(selectedItem.FontSize, selectedItem.FontName);
-                }
-                else
-                {
-                    ApplyStyle(16, "Arial");
+                    ApplyStyle();
                 }
             }
             catch (Exception ex)
@@ -273,9 +295,8 @@ namespace AHIFusion
             {
                 Log.Information("EditorRichEditBox loaded");
 
-                ApplyStyle(16, "Arial");
-
                 LoadText();
+                ApplyStyle();
             }
             catch (Exception ex)
             {
@@ -550,6 +571,7 @@ namespace AHIFusion
                     }
 
                     LoadText();
+                    ApplyStyle();
                 }
                 else
                 {
@@ -714,6 +736,7 @@ namespace AHIFusion
 
                 SaveText();
                 LoadText();
+                ApplyStyle();
 
                 fontColorButton.Flyout.Hide();
                 EditorRichEditBox.Focus(Microsoft.UI.Xaml.FocusState.Keyboard);

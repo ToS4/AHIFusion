@@ -76,7 +76,7 @@ public sealed partial class CalendarPage : Page
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while handling ShowEventControl_PointerPressed click event");
-            throw new ArgumentException("Error, please check logs!");
+
         }
         finally
         {
@@ -102,7 +102,7 @@ public sealed partial class CalendarPage : Page
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while initializing CalendarPage");
-            throw new ArgumentException("Error, please check logs!");
+
         }
         finally
         {
@@ -142,7 +142,7 @@ public sealed partial class CalendarPage : Page
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while displaying events list");
-            throw new ArgumentException("Error, please check logs!");
+
         }
         finally
         {
@@ -209,7 +209,7 @@ public sealed partial class CalendarPage : Page
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while displaying current month list");
-            throw new ArgumentException("Error, please check logs!");
+
         }
         finally
         {
@@ -238,7 +238,7 @@ public sealed partial class CalendarPage : Page
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while handling DayControl click event");
-            throw new ArgumentException("Error, please check logs!");
+
         }
         finally
         {
@@ -268,7 +268,7 @@ public sealed partial class CalendarPage : Page
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while handling SmallCalendarView selection changed event");
-            throw new ArgumentException("Error, please check logs!");
+
         }
         finally
         {
@@ -293,7 +293,7 @@ public sealed partial class CalendarPage : Page
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while handling AddButton click event");
-            throw new ArgumentException("Error, please check logs!");
+
         }
         finally
         {
@@ -316,7 +316,7 @@ public sealed partial class CalendarPage : Page
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while loading Page");
-            throw new ArgumentException("Error, please check logs!");
+
         }
         finally
         {
@@ -373,7 +373,7 @@ public sealed partial class CalendarPage : Page
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while handling SaveButton click event");
-            throw new ArgumentException("Error, please check logs!");
+
         }
         finally
         {
@@ -436,7 +436,7 @@ public sealed partial class CalendarPage : Page
         catch (Exception ex)
         {
             Log.Error(ex, "Error occurred while handling LoadButton click event");
-            throw new ArgumentException("Error, please check logs!");
+
         }
         finally
         {

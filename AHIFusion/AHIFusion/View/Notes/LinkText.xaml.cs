@@ -32,7 +32,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while initializing LinkText");
-                throw new ArgumentException("Error, please check logs!");
+    
             }
             finally
             {
@@ -51,7 +51,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling ContentDialog_PrimaryButton click event");
-                throw new ArgumentException("Error, please check logs!");
+    
             }
             finally 
             {

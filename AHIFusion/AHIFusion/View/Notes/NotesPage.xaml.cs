@@ -24,12 +24,14 @@ using Microsoft.UI;
 using Windows.ApplicationModel.DataTransfer;
 using System.Text.RegularExpressions;
 using Serilog;
+using Markdig;
 
 namespace AHIFusion
 {
     public partial class NotesPage : Page
 	{
         private ObservableCollection<SelectableNote> notesFiltered = new ObservableCollection<SelectableNote>();
+        private bool navigationUsage = true;
         public NotesPage()
         {
             try
@@ -55,29 +57,84 @@ namespace AHIFusion
                 EditorRichEditBox.TabNavigation = KeyboardNavigationMode.Local;
                 EditorRichEditBox.Paste += EditorRichEditBox_Paste;
 
+                EditorWebView.NavigationStarting += EditorWebView_NavigationStarting;
+
                 Log.Debug("Updating Filter");
 
                 Update();
 
                 Log.Debug("Loading text");
-
                 LoadText();
 
-                Log.Debug("Applying text style");
-
-                ApplyStyle();
+                Log.Debug("Changing default CommandBarFlyout");
+                SetupCustomCommandBarFlyout();
 
                 this.DataContext = this;
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while initializing NotesPage");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
                 Log.CloseAndFlush();
             }
+        }
+
+        private void SetupCustomCommandBarFlyout()
+        {
+            // Create a new CommandBarFlyout
+            CommandBarFlyout myFlyout = new CommandBarFlyout();
+
+            // Create new AppBarButtons
+            AppBarButton boldButton = new AppBarButton { Icon = new SymbolIcon(Symbol.Bold), Label = "Bold" };
+            ToolTipService.SetToolTip(boldButton, "Make text bold");
+            boldButton.Click += (s, ev) => { ApplyMarkdownSyntax("**"); };
+
+            AppBarButton italicButton = new AppBarButton { Icon = new SymbolIcon(Symbol.Italic), Label = "Italic" };
+            ToolTipService.SetToolTip(italicButton, "Make text italic");
+            italicButton.Click += (s, ev) => { ApplyMarkdownSyntax("*"); };
+
+            AppBarButton strikethroughButton = new AppBarButton
+            {
+                Icon = new FontIcon { Glyph = "\uEDE0", FontFamily = new FontFamily("Segoe MDL2 Assets") },
+                Label = "Strikethrough"
+            };
+            ToolTipService.SetToolTip(strikethroughButton, "Strike through text");
+            strikethroughButton.Click += (s, ev) => { ApplyMarkdownSyntax("~~"); };
+
+            // Add the AppBarButtons to the CommandBarFlyout
+            myFlyout.PrimaryCommands.Add(boldButton);
+            myFlyout.PrimaryCommands.Add(italicButton);
+            myFlyout.PrimaryCommands.Add(strikethroughButton);
+
+            // Assign the CommandBarFlyout to the RichEditBox's ContextFlyout property
+            EditorRichEditBox.ContextFlyout = myFlyout;
+            EditorRichEditBox.SelectionFlyout = myFlyout;
+        }
+
+        private void ApplyMarkdownSyntax(string syntax)
+        {
+            // Get the current selection
+            ITextSelection selection = EditorRichEditBox.Document.Selection;
+
+            if (!string.IsNullOrEmpty(selection.Text))
+            {
+                // Apply the markdown syntax to the selected text
+                selection.Text = syntax + selection.Text + syntax;
+            }
+        }
+
+        private async void EditorWebView_NavigationStarting(WebView2 sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs args)
+        {
+            // Cancel the navigation
+            if (!navigationUsage)
+            {
+                args.Cancel = true;
+            }
+
+            navigationUsage = false;
         }
 
         private async void EditorRichEditBox_Paste(object sender, TextControlPasteEventArgs e)
@@ -101,7 +158,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling paste event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -157,7 +214,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling hyperlink button click event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -188,8 +245,8 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while inserting hyperlink into RTF");
-                //return rtf;
-                throw new ArgumentException("Error, please check logs!");
+                return rtf;
+                
             }
             finally
             {
@@ -202,6 +259,12 @@ namespace AHIFusion
             try
             {
                 Log.Information("Applying style to text");
+
+                if (true)
+                {
+                    Log.Information("ApplyStyle is disabled");
+                    return;
+                }
 
                 int size = 16;
                 string name = "Arial";
@@ -239,7 +302,6 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while applying style");
-                throw new ArgumentException("Error, please check logs!");
             }
             finally
             {
@@ -274,14 +336,17 @@ namespace AHIFusion
                     {
                         textRange.Text = textRange.Text.Remove(textRange.Text.Length - 1);
                     }
-
-                    ApplyStyle();
                 }
+
+                ApplyStyle();
+
+                UpdateMarkdownView();
             }
+
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while loading text");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -296,12 +361,11 @@ namespace AHIFusion
                 Log.Information("EditorRichEditBox loaded");
 
                 LoadText();
-                ApplyStyle();
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while loading EditorRichEditBox");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -318,7 +382,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while unloading EditorRichEditBox");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -337,7 +401,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling notes collection change");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -358,7 +422,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while updating notes");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -377,8 +441,8 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while filtering notes");
-                //return false;
-                throw new ArgumentException("Error, please check logs!");
+                return false;
+                
             }
             finally
             {
@@ -404,7 +468,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while removing non-matching notes");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -437,8 +501,8 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while getting selectable note");
-                //return null;
-                throw new ArgumentException("Error, please check logs!");
+                return null;
+                
             }
             finally
             {
@@ -468,7 +532,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while adding matching notes");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -493,7 +557,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling AddButton click event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -517,7 +581,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling DeleteButton click event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -536,7 +600,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling SearchTextBox text changed event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -571,7 +635,6 @@ namespace AHIFusion
                     }
 
                     LoadText();
-                    ApplyStyle();
                 }
                 else
                 {
@@ -584,7 +647,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling NotesListView selection changed event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -625,7 +688,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling OpenFileButton click event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -670,7 +733,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling SaveFileButton click event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
@@ -695,12 +758,24 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while saving text");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {
                 Log.CloseAndFlush();
             }
+        }
+
+        private void UpdateMarkdownView()
+        {
+            Log.Information("Updating text changed event triggered");
+
+            navigationUsage = true;
+
+            EditorRichEditBox.Document.GetText(TextGetOptions.None, out string currentText);
+            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+            string htmlText = Markdown.ToHtml(currentText, pipeline);
+            EditorWebView.NavigateToString(htmlText);
         }
 
         private void EditorRichEditBox_TextChanged(object sender, RoutedEventArgs e)
@@ -709,12 +784,13 @@ namespace AHIFusion
             {
                 Log.Information("EditorRichEditBox text changed event triggered");
 
+                UpdateMarkdownView();
+
                 SaveText();
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling EditorRichEditBox text changed event");
-                throw new ArgumentException("Error, please check logs!");
             }
             finally
             {
@@ -736,7 +812,6 @@ namespace AHIFusion
 
                 SaveText();
                 LoadText();
-                ApplyStyle();
 
                 fontColorButton.Flyout.Hide();
                 EditorRichEditBox.Focus(Microsoft.UI.Xaml.FocusState.Keyboard);
@@ -746,7 +821,7 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling ColorButton click event");
-                throw new ArgumentException("Error, please check logs!");
+                
             }
             finally
             {

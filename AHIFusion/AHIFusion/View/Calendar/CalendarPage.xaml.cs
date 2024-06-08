@@ -338,12 +338,12 @@ public sealed partial class CalendarPage : Page
             var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
             WinRT.Interop.InitializeWithWindow.Initialize(savePicker, hwnd);
 
-            Log.Information($"Selecting file");
+            Log.Debug($"Selecting file");
             StorageFile file = await savePicker.PickSaveFileAsync();
 
             if (file != null)
             {
-                Log.Information($"File selected, Path: {file.Path}");
+                Log.Debug($"File selected, Path: {file.Path}");
 
                 var calendar = new Calendar();
 
@@ -367,7 +367,7 @@ public sealed partial class CalendarPage : Page
             }
             else
             {
-                Log.Information($"File has not been selected");
+                Log.Debug($"File has not been selected");
             }
         }
         catch (Exception ex)
@@ -395,12 +395,12 @@ public sealed partial class CalendarPage : Page
             var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
             WinRT.Interop.InitializeWithWindow.Initialize(open, hwnd);
 
-            Log.Information($"Selecting file");
+            Log.Debug($"Selecting file");
             StorageFile file = await open.PickSingleFileAsync();
 
             if (file != null)
             {
-                Log.Information($"File selected, Path: {file.Path}");
+                Log.Debug($"File selected, Path: {file.Path}");
                 using (IRandomAccessStream randAccStream =
                     await file.OpenAsync(FileAccessMode.Read))
                 {
@@ -428,7 +428,7 @@ public sealed partial class CalendarPage : Page
             }
             else
             {
-                Log.Information($"File has not been selected");
+                Log.Debug($"File has not been selected");
             }
 
             DisplayCurrentMonth();

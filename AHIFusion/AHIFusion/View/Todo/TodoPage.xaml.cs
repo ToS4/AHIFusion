@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -28,6 +29,8 @@ public sealed partial class TodoPage : Page
     {
         this.InitializeComponent();
 
+        LoadTodoFromList(TodoCollection.TodoLists);
+
         TodoCollection.TodoLists.CollectionChanged += TodoLists_CollectionChanged;
 
         TodoListListView.SelectionChanged += TodoListListView_SelectionChanged;
@@ -52,43 +55,48 @@ public sealed partial class TodoPage : Page
         }
     }
 
+    private void LoadTodoFromList(IEnumerable<TodoList> list)
+    {
+        foreach (TodoList item in list)
+        {
+            TodoListControl todoListControl = new TodoListControl(true)
+            {
+                DataContext = item,
+                Height = 70,
+                Margin = new Thickness(10, 7, 10, 7)
+            };
+
+            Binding IdBinding = new Binding
+            {
+                Path = new PropertyPath("Id"),
+                Mode = BindingMode.OneWay
+            };
+
+            Binding NameBinding = new Binding
+            {
+                Path = new PropertyPath("Name"),
+                Mode = BindingMode.TwoWay
+            };
+
+            Binding ColorBinding = new Binding
+            {
+                Path = new PropertyPath("Color"),
+                Mode = BindingMode.TwoWay
+            };
+
+            todoListControl.SetBinding(TodoListControl.IdProperty, IdBinding);
+            todoListControl.SetBinding(TodoListControl.NameProperty, NameBinding);
+            todoListControl.SetBinding(TodoListControl.ColorProperty, ColorBinding);
+
+            TodoListListView.Items.Add(todoListControl);
+        }
+    }
+
     private void TodoLists_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
         {
-            foreach (TodoList item in e.NewItems)
-            {
-                TodoListControl todoListControl = new TodoListControl(true)
-                {
-                    DataContext = item,
-                    Height = 70,
-                    Margin= new Thickness(10,7,10,7)
-                };
-
-                Binding IdBinding = new Binding
-                {
-                    Path = new PropertyPath("Id"),
-                    Mode = BindingMode.OneWay
-                };
-
-                Binding NameBinding = new Binding
-                {
-                    Path = new PropertyPath("Name"),
-                    Mode = BindingMode.TwoWay
-                };
-
-                Binding ColorBinding = new Binding
-                {
-                    Path = new PropertyPath("Color"),
-                    Mode = BindingMode.TwoWay
-                };
-
-                todoListControl.SetBinding(TodoListControl.IdProperty, IdBinding);
-                todoListControl.SetBinding(TodoListControl.NameProperty, NameBinding);
-                todoListControl.SetBinding(TodoListControl.ColorProperty, ColorBinding);
-
-                TodoListListView.Items.Add(todoListControl);
-            }
+            LoadTodoFromList(e.NewItems.Cast<TodoList>());
         }
         else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
         {

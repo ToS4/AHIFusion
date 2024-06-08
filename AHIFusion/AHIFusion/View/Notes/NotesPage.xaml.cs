@@ -60,12 +60,7 @@ namespace AHIFusion
                 Update();
 
                 Log.Debug("Loading text");
-
                 LoadText();
-
-                Log.Debug("Applying text style");
-
-                ApplyStyle();
 
                 this.DataContext = this;
             }
@@ -274,10 +269,11 @@ namespace AHIFusion
                     {
                         textRange.Text = textRange.Text.Remove(textRange.Text.Length - 1);
                     }
-
-                    ApplyStyle();
                 }
+
+                ApplyStyle();
             }
+
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while loading text");
@@ -296,7 +292,6 @@ namespace AHIFusion
                 Log.Information("EditorRichEditBox loaded");
 
                 LoadText();
-                ApplyStyle();
             }
             catch (Exception ex)
             {
@@ -571,7 +566,6 @@ namespace AHIFusion
                     }
 
                     LoadText();
-                    ApplyStyle();
                 }
                 else
                 {
@@ -714,7 +708,6 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while handling EditorRichEditBox text changed event");
-                
             }
             finally
             {
@@ -736,7 +729,6 @@ namespace AHIFusion
 
                 SaveText();
                 LoadText();
-                ApplyStyle();
 
                 fontColorButton.Flyout.Hide();
                 EditorRichEditBox.Focus(Microsoft.UI.Xaml.FocusState.Keyboard);

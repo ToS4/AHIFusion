@@ -242,6 +242,13 @@ namespace AHIFusion
 
                     EditorRichEditBox.Document.SetText(TextSetOptions.FormatRtf, selectedItem.Note.Text);
 
+                    // Remove all trailing newlines
+                    ITextRange textRange = EditorRichEditBox.Document.GetRange(0, TextConstants.MaxUnitCount);
+                    while (textRange.Text.EndsWith("\r"))
+                    {
+                        textRange.Text = textRange.Text.Remove(textRange.Text.Length - 1);
+                    }
+
                     ApplyStyle(selectedItem.FontSize, selectedItem.FontName);
                 }
                 else

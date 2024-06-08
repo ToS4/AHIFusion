@@ -74,16 +74,28 @@ public sealed partial class CalendarPage : Page
 
     public CalendarPage()
     {
-        Log.Information("Initializing CalendarPage");
+        try
+        {
+            Log.Information("Initializing CalendarPage");
 
-        InitializeComponent();
+            InitializeComponent();
 
-        _currentDay = DateOnly.FromDateTime(DateTime.Now);
-        _currentMonth = _currentDay.AddDays(-_currentDay.Day + 1);
+            _currentDay = DateOnly.FromDateTime(DateTime.Now);
+            _currentMonth = _currentDay.AddDays(-_currentDay.Day + 1);
 
-        Log.Information("Initialized CalendarPage with current day: {currentDay} and current month: {currentMonth}", _currentDay, _currentMonth);
+            Log.Information("Initialized CalendarPage with current day: {currentDay} and current month: {currentMonth}", _currentDay, _currentMonth);
 
-        DisplayCurrentMonth();
+            DisplayCurrentMonth();
+        }
+        catch
+        {
+
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
+        
     }
 
     public void DisplayEventsList()

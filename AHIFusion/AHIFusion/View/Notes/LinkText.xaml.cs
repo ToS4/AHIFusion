@@ -12,6 +12,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Serilog;
 
 namespace AHIFusion
 {
@@ -22,15 +23,40 @@ namespace AHIFusion
 
 		public LinkText(List<SelectableNote> notes)
 		{
-			this.InitializeComponent();
+            try 
+            {
+                this.InitializeComponent();
 
-            NotesListView.ItemsSource = notes;
+                NotesListView.ItemsSource = notes;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error occurred while initializing LinkText");
+                throw new ArgumentException("Error, please check logs!");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
+
         }
 
 		private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
 		{
-            selectedLink = LinkTextBox.Text;
-            selectedNote = NotesListView.SelectedItem as SelectableNote;
+            try
+            {
+                selectedLink = LinkTextBox.Text;
+                selectedNote = NotesListView.SelectedItem as SelectableNote;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error occurred while handling ContentDialog_PrimaryButton click event");
+                throw new ArgumentException("Error, please check logs!");
+            }
+            finally 
+            {
+                Log.CloseAndFlush();
+            }    
         }
 	}
 }

@@ -70,6 +70,10 @@ namespace AHIFusion
                 Log.Error(ex, "Error occurred while initializing NotesPage");
                 throw new ArgumentException("Error, please check logs!");
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private async void EditorRichEditBox_Paste(object sender, TextControlPasteEventArgs e)
@@ -94,6 +98,10 @@ namespace AHIFusion
                 Log.Error(ex, "Error occurred while handling paste event");
                 throw new ArgumentException("Error, please check logs!");
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private void Menu_Opening(object sender, object e)
@@ -116,6 +124,10 @@ namespace AHIFusion
             {
                 Log.Error(ex, "Error occurred while opening menu");
                 throw new ArgumentException("Error, please check logs!");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
             }
         }
 
@@ -169,6 +181,10 @@ namespace AHIFusion
                 Log.Error(ex, "Error occurred while handling hyperlink button click event");
                 throw new ArgumentException("Error, please check logs!");
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private string InsertHyperlink(string rtf, string selectedText, string url)
@@ -197,6 +213,10 @@ namespace AHIFusion
                 //return rtf;
                 throw new ArgumentException("Error, please check logs!");
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private void ApplyStyle(int size, string name)
@@ -219,6 +239,10 @@ namespace AHIFusion
             {
                 Log.Error(ex, "Error occurred while applying style");
                 throw new ArgumentException("Error, please check logs!");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
             }
         }
 
@@ -256,6 +280,10 @@ namespace AHIFusion
                 Log.Error(ex, "Error occurred while loading text");
                 throw new ArgumentException("Error, please check logs!");
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private void EditorRichEditBox_Loaded(object sender, RoutedEventArgs e)
@@ -273,6 +301,10 @@ namespace AHIFusion
                 Log.Error(ex, "Error occurred while loading EditorRichEditBox");
                 throw new ArgumentException("Error, please check logs!");
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private void EditorRichEditBox_Unloaded(object sender, RoutedEventArgs e)
@@ -289,6 +321,10 @@ namespace AHIFusion
                 Log.Error(ex, "Error occurred while unloading EditorRichEditBox");
                 throw new ArgumentException("Error, please check logs!");
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private void Notes_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -303,6 +339,10 @@ namespace AHIFusion
             {
                 Log.Error(ex, "Error occurred while handling notes collection change");
                 throw new ArgumentException("Error, please check logs!");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
             }
         }
 
@@ -321,6 +361,10 @@ namespace AHIFusion
                 Log.Error(ex, "Error occurred while updating notes");
                 throw new ArgumentException("Error, please check logs!");
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private bool Filter(Note note)
@@ -336,6 +380,10 @@ namespace AHIFusion
                 Log.Error(ex, "Error occurred while filtering notes");
                 //return false;
                 throw new ArgumentException("Error, please check logs!");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
             }
         }
         
@@ -358,6 +406,10 @@ namespace AHIFusion
             {
                 Log.Error(ex, "Error occurred while removing non-matching notes");
                 throw new ArgumentException("Error, please check logs!");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
             }
         }
         
@@ -389,6 +441,10 @@ namespace AHIFusion
                 //return null;
                 throw new ArgumentException("Error, please check logs!");
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private void AddMatching(IEnumerable<Note> filteredData)
@@ -415,6 +471,10 @@ namespace AHIFusion
                 Log.Error(ex, "Error occurred while adding matching notes");
                 throw new ArgumentException("Error, please check logs!");
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -436,6 +496,10 @@ namespace AHIFusion
                 Log.Error(ex, "Error occurred while handling AddButton click event");
                 throw new ArgumentException("Error, please check logs!");
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
         
 void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -456,6 +520,10 @@ void DeleteButton_Click(object sender, RoutedEventArgs e)
                 Log.Error(ex, "Error occurred while handling DeleteButton click event");
                 throw new ArgumentException("Error, please check logs!");
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
         
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -470,6 +538,10 @@ void DeleteButton_Click(object sender, RoutedEventArgs e)
             {
                 Log.Error(ex, "Error occurred while handling SearchTextBox text changed event");
                 throw new ArgumentException("Error, please check logs!");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
             }
         }
 
@@ -514,34 +586,50 @@ void DeleteButton_Click(object sender, RoutedEventArgs e)
                 Log.Error(ex, "Error occurred while handling NotesListView selection changed event");
                 throw new ArgumentException("Error, please check logs!");
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private async void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
-            Log.Information("OpenFileButton_Click event triggered");
-
-            FileOpenPicker open = new FileOpenPicker();
-            open.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-            open.FileTypeFilter.Add(".rtf");
-
-            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
-            WinRT.Interop.InitializeWithWindow.Initialize(open, hwnd);
-
-            StorageFile file = await open.PickSingleFileAsync();
-
-            if (file != null)
+            try
             {
-                Log.Information("A file was selected to open");
+                Log.Information("OpenFileButton_Click event triggered");
 
-                using (IRandomAccessStream randAccStream =
-                    await file.OpenAsync(FileAccessMode.Read))
+                FileOpenPicker open = new FileOpenPicker();
+                open.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+                open.FileTypeFilter.Add(".rtf");
+
+                var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
+                WinRT.Interop.InitializeWithWindow.Initialize(open, hwnd);
+
+                StorageFile file = await open.PickSingleFileAsync();
+
+                if (file != null)
                 {
-                    EditorRichEditBox.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
+                    Log.Information("A file was selected to open");
+
+                    using (IRandomAccessStream randAccStream =
+                        await file.OpenAsync(FileAccessMode.Read))
+                    {
+                        EditorRichEditBox.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
+                    }
                 }
-            } 
-            else
+                else
+                {
+                    Log.Information("No file was selected to open");
+                }
+            }
+            catch (Exception ex)
             {
-                Log.Information("No file was selected to open");
+                Log.Error(ex, "Error occurred while handling OpenFileButton click event");
+                throw new ArgumentException("Error, please check logs!");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
             }
         }
 
@@ -584,6 +672,10 @@ void DeleteButton_Click(object sender, RoutedEventArgs e)
                 Log.Error(ex, "Error occurred while handling SaveFileButton click event");
                 throw new ArgumentException("Error, please check logs!");
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private void SaveText()
@@ -605,6 +697,10 @@ void DeleteButton_Click(object sender, RoutedEventArgs e)
                 Log.Error(ex, "Error occurred while saving text");
                 throw new ArgumentException("Error, please check logs!");
             }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private void EditorRichEditBox_TextChanged(object sender, RoutedEventArgs e)
@@ -619,6 +715,10 @@ void DeleteButton_Click(object sender, RoutedEventArgs e)
             {
                 Log.Error(ex, "Error occurred while handling EditorRichEditBox text changed event");
                 throw new ArgumentException("Error, please check logs!");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
             }
         }
 
@@ -646,6 +746,10 @@ void DeleteButton_Click(object sender, RoutedEventArgs e)
             {
                 Log.Error(ex, "Error occurred while handling ColorButton click event");
                 throw new ArgumentException("Error, please check logs!");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
             }
         }
     }

@@ -1,5 +1,6 @@
 using AHIFusion.Model;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace AHIFusion;
 
@@ -95,5 +96,6 @@ public class App : Application
         TimerCollection.SaveToFile("timers.json");
         TodoCollection.SaveToFile("todos.json");
         //StopwatchManager.Instance.SaveToFile("stopwatch-managers.json");
+        Log.CloseAndFlush();
     }
 }

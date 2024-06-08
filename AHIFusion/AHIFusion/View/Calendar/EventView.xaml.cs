@@ -10,6 +10,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Serilog;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -20,59 +21,108 @@ public sealed partial class EventView : ContentDialog
     public DateOnlyToDateTimeOffsetConverter DateTimeOffsetConverter;
     public EventView(bool isNew)
     {
-        this.InitializeComponent();
-
-        if (isNew) 
+        try
         {
-            Event = new DayEvent()
-            {
-                Date = DateOnly.FromDateTime(DateTime.Today)
-            };
+            this.InitializeComponent();
 
-            DeleteFirstButton.Visibility = Visibility.Collapsed;
+            if (isNew)
+            {
+                Event = new DayEvent()
+                {
+                    Date = DateOnly.FromDateTime(DateTime.Today)
+                };
+
+                DeleteFirstButton.Visibility = Visibility.Collapsed;
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error occurred while initializing EventView");
+            throw new ArgumentException("Error, please check logs!");
+        }
+        finally
+        {
+            Log.CloseAndFlush();
         }
     }
 
     public EventView(bool isNew, DateOnly givenDate)
     {
-        this.InitializeComponent();
-
-        if (isNew)
+        try
         {
-            Event = new DayEvent()
-            {
-                Date = givenDate
-            };
+            this.InitializeComponent();
 
-            DeleteFirstButton.Visibility = Visibility.Collapsed;
+            if (isNew)
+            {
+                Event = new DayEvent()
+                {
+                    Date = givenDate
+                };
+
+                DeleteFirstButton.Visibility = Visibility.Collapsed;
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error occurred while initializing EventView");
+            throw new ArgumentException("Error, please check logs!");
+        }
+        finally
+        {
+            Log.CloseAndFlush();
         }
     }
 
     private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
-        string EventTitle = EventTextBox.Text;
-        DateOnly EventDate = DateOnly.FromDateTime(EventDatePicker.SelectedDate.Value.Date);
-
-        if (string.IsNullOrEmpty(EventTitle))
+        try
         {
-            return;
+            string EventTitle = EventTextBox.Text;
+            DateOnly EventDate = DateOnly.FromDateTime(EventDatePicker.SelectedDate.Value.Date);
+
+            if (string.IsNullOrEmpty(EventTitle))
+            {
+                return;
+            }
+
+            if (!EventCollection.Events.Contains(Event))
+            {
+                EventCollection.Add(Event);
+            }
+
+            Event.Title = EventTitle;
+            Event.Date = EventDate;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error occurred while handling ContentDialog_PrimaryButton click event");
+            throw new ArgumentException("Error, please check logs!");
+        }
+        finally
+        {
+            Log.CloseAndFlush();
         }
 
-        if (!EventCollection.Events.Contains(Event)) 
-        {
-            EventCollection.Add(Event);
-        }
-        
-        Event.Title = EventTitle;
-        Event.Date = EventDate;
     }
 
     private void DeleteButton_Click(object sender, RoutedEventArgs e)
     {
-        if (EventCollection.Events.Contains(Event))
+        try
         {
-            EventCollection.Remove(Event);
-            Hide();
+            if (EventCollection.Events.Contains(Event))
+            {
+                EventCollection.Remove(Event);
+                Hide();
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "Error occurred while handling DeleteButton click event");
+            throw new ArgumentException("Error, please check logs!");
+        }
+        finally
+        {
+            Log.CloseAndFlush();
         }
     }
 }

@@ -85,6 +85,7 @@
     <None Remove="View\Todo\Custom Controls\TodoControl.xaml" />
     <None Remove="View\Todo\Custom Controls\TodoListControl.xaml" />
     <None Remove="View\Todo\TodoPage.xaml" />
+    <None Remove="View\Todo\TodoSubControl.xaml" />
     <None Remove="View\WorldClockContent.xaml" />
   </ItemGroup>
 
@@ -216,5 +217,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="View\Todo\AddTodo.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Todo\TodoSubControl.xaml" />
   </ItemGroup>
 </Project>

@@ -21,8 +21,15 @@
       <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
 
-    <TextBlock Text="Weather Today API (TODO)" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextAlignment="Center" />
-
+    <Viewbox Grid.ColumnSpan="2">
+      <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <TextBlock x:Name="CityTextBlock" FontSize="24" TextAlignment="Center" />
+        <Image x:Name="WeatherIcon" Width="100" Height="100" />
+        <TextBlock x:Name="WeatherDescriptionTextBlock" FontSize="18" TextAlignment="Center" />
+        <TextBlock x:Name="TemperatureTextBlock" FontSize="24" TextAlignment="Center" />
+      </StackPanel>
+    </Viewbox>
+    
     <Button x:Name="Todo" Content="Todo" Click="Todo_Click" Grid.Column="0" Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20" />
     <Button x:Name="Calendar" Content="Calendar" Click="Calendar_Click" Grid.Column="1" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20" />
     <Button x:Name="Notes" Content="Notes" Click="Notes_Click" Grid.Column="0" Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20" />

@@ -58,6 +58,7 @@
     <Content Remove="Assets\Fonts\aptos-semibold.ttf" />
     <Content Remove="Assets\Fonts\aptos.ttf" />
     <Content Remove="Assets\Sounds\timer.mp3" />
+    <Content Remove="Assets\weather.html" />
   </ItemGroup>
 
 

@@ -25,6 +25,11 @@ using Windows.ApplicationModel.DataTransfer;
 using System.Text.RegularExpressions;
 using Serilog;
 using Markdig;
+using iText.Kernel.Pdf;
+using iText.Html2pdf;
+using Windows.ApplicationModel.Core;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace AHIFusion
 {
@@ -662,7 +667,8 @@ namespace AHIFusion
                 var fileSavePicker = new FileSavePicker();
                 fileSavePicker.SuggestedStartLocation = PickerLocationId.ComputerFolder;
                 fileSavePicker.SuggestedFileName = "New Document";
-                fileSavePicker.FileTypeChoices.Add("Rich Text", new List<string>() { ".rtf" });
+                fileSavePicker.FileTypeChoices.Add("Markdown", new List<string>() { ".md" });
+                fileSavePicker.FileTypeChoices.Add("PDF", new List<string>() { ".pdf" });
 
                 var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
                 WinRT.Interop.InitializeWithWindow.Initialize(fileSavePicker, hwnd);
@@ -674,10 +680,27 @@ namespace AHIFusion
 
                     CachedFileManager.DeferUpdates(saveFile);
 
-                    using (IRandomAccessStream randAccStream =
-                        await saveFile.OpenAsync(FileAccessMode.ReadWrite))
+                    EditorRichEditBox.Document.GetText(TextGetOptions.None, out string currentText);
+                    string htmlText = getHtmlString();
+
+                    if (saveFile.FileType == ".pdf")
                     {
-                        EditorRichEditBox.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
+
+                        // Creating temp.html file
+                        File.WriteAllText("temp.html", htmlText);
+
+                        // Converting to pdf
+                        HtmlConverter.ConvertToPdf(
+                                new FileInfo("temp.html"),
+                                new FileInfo(saveFile.Path)
+                                );
+
+                        // Deleting temp.html file
+                        File.Delete("temp.html");
+                    }
+                    else // Markdown
+                    {
+                        await FileIO.WriteTextAsync(saveFile, currentText);
                     }
 
                     //await CachedFileManager.CompleteUpdatesAsync(saveFile);
@@ -690,7 +713,6 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "An error occurred");
-                
             }
         }
 
@@ -715,16 +737,22 @@ namespace AHIFusion
             }
         }
 
-        private void UpdateMarkdownView()
+        private string getHtmlString()
         {
-            Log.Information("Updating text changed event triggered");
-
-            navigationUsage = true;
-
             EditorRichEditBox.Document.GetText(TextGetOptions.None, out string currentText);
             var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
             string htmlText = Markdown.ToHtml(currentText, pipeline);
-            EditorWebView.NavigateToString(htmlText);
+            return htmlText;
+        }
+
+        private async void UpdateMarkdownView()
+        {
+            Log.Information("Updating text changed event triggered");
+
+            await EditorWebView.EnsureCoreWebView2Async();
+
+            navigationUsage = true;
+            EditorWebView.NavigateToString(getHtmlString());
         }
 
         private void EditorRichEditBox_TextChanged(object sender, RoutedEventArgs e)

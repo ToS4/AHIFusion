@@ -25,6 +25,11 @@ using Windows.ApplicationModel.DataTransfer;
 using System.Text.RegularExpressions;
 using Serilog;
 using Markdig;
+using iText.Kernel.Pdf;
+using iText.Html2pdf;
+using Windows.ApplicationModel.Core;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace AHIFusion
 {
@@ -42,10 +47,15 @@ namespace AHIFusion
 
                 Log.Debug("Loading notes from NoteCollection");
 
+                int loaded = 0;
+
                 foreach (Note note in NoteCollection.Notes)
                 {
+                    loaded += 1;
                     notesFiltered.Add(new SelectableNote { Note = note, IsSelected = false });
                 }
+
+                Log.Debug("Loaded {LoadedCount} out of {TotalCount} notes", loaded, NoteCollection.Notes.Count);
 
                 NotesListView.ItemsSource = notesFiltered;
 
@@ -59,82 +69,101 @@ namespace AHIFusion
 
                 EditorWebView.NavigationStarting += EditorWebView_NavigationStarting;
 
-                Log.Debug("Updating Filter");
+                Log.Debug("Setup");
 
                 Update();
-
-                Log.Debug("Loading text");
                 LoadText();
-
-                Log.Debug("Changing default CommandBarFlyout");
                 SetupCustomCommandBarFlyout();
 
                 this.DataContext = this;
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while initializing NotesPage");
-                
-            }
-            finally
-            {
-                Log.CloseAndFlush();
+                Log.Error(ex, "An error occurred");
             }
         }
 
         private void SetupCustomCommandBarFlyout()
         {
-            // Create a new CommandBarFlyout
-            CommandBarFlyout myFlyout = new CommandBarFlyout();
-
-            // Create new AppBarButtons
-            AppBarButton boldButton = new AppBarButton { Icon = new SymbolIcon(Symbol.Bold), Label = "Bold" };
-            ToolTipService.SetToolTip(boldButton, "Make text bold");
-            boldButton.Click += (s, ev) => { ApplyMarkdownSyntax("**"); };
-
-            AppBarButton italicButton = new AppBarButton { Icon = new SymbolIcon(Symbol.Italic), Label = "Italic" };
-            ToolTipService.SetToolTip(italicButton, "Make text italic");
-            italicButton.Click += (s, ev) => { ApplyMarkdownSyntax("*"); };
-
-            AppBarButton strikethroughButton = new AppBarButton
+            try
             {
-                Icon = new FontIcon { Glyph = "\uEDE0", FontFamily = new FontFamily("Segoe MDL2 Assets") },
-                Label = "Strikethrough"
-            };
-            ToolTipService.SetToolTip(strikethroughButton, "Strike through text");
-            strikethroughButton.Click += (s, ev) => { ApplyMarkdownSyntax("~~"); };
+                Log.Information("Changing default CommandBarFlyout for RichtEditBox");
 
-            // Add the AppBarButtons to the CommandBarFlyout
-            myFlyout.PrimaryCommands.Add(boldButton);
-            myFlyout.PrimaryCommands.Add(italicButton);
-            myFlyout.PrimaryCommands.Add(strikethroughButton);
+                Log.Debug("Create a new CommandBarFlyout");
+                CommandBarFlyout myFlyout = new CommandBarFlyout();
 
-            // Assign the CommandBarFlyout to the RichEditBox's ContextFlyout property
-            EditorRichEditBox.ContextFlyout = myFlyout;
-            EditorRichEditBox.SelectionFlyout = myFlyout;
+                Log.Debug("Create new AppBarButtons");
+                AppBarButton boldButton = new AppBarButton { Icon = new SymbolIcon(Symbol.Bold), Label = "Bold" };
+                ToolTipService.SetToolTip(boldButton, "Make text bold");
+                boldButton.Click += (s, ev) => { ApplyMarkdownSyntax("**"); };
+
+                AppBarButton italicButton = new AppBarButton { Icon = new SymbolIcon(Symbol.Italic), Label = "Italic" };
+                ToolTipService.SetToolTip(italicButton, "Make text italic");
+                italicButton.Click += (s, ev) => { ApplyMarkdownSyntax("*"); };
+
+                AppBarButton strikethroughButton = new AppBarButton
+                {
+                    Icon = new FontIcon { Glyph = "\uEDE0", FontFamily = new FontFamily("Segoe MDL2 Assets") },
+                    Label = "Strikethrough"
+                };
+                ToolTipService.SetToolTip(strikethroughButton, "Strike through text");
+                strikethroughButton.Click += (s, ev) => { ApplyMarkdownSyntax("~~"); };
+
+                Log.Debug("Add the AppBarButtons to the CommandBarFlyout");
+                myFlyout.PrimaryCommands.Add(boldButton);
+                myFlyout.PrimaryCommands.Add(italicButton);
+                myFlyout.PrimaryCommands.Add(strikethroughButton);
+
+                Log.Debug("Assign the CommandBarFlyout to the RichEditBox's ContextFlyout property");
+                EditorRichEditBox.ContextFlyout = myFlyout;
+                EditorRichEditBox.SelectionFlyout = myFlyout;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
+            }
         }
 
         private void ApplyMarkdownSyntax(string syntax)
         {
-            // Get the current selection
-            ITextSelection selection = EditorRichEditBox.Document.Selection;
-
-            if (!string.IsNullOrEmpty(selection.Text))
+            try
             {
-                // Apply the markdown syntax to the selected text
-                selection.Text = syntax + selection.Text + syntax;
+                Log.Information($"Applying markdown syntax {syntax} to selected text");
+
+                Log.Debug("Get the current selection");
+                ITextSelection selection = EditorRichEditBox.Document.Selection;
+
+                if (!string.IsNullOrEmpty(selection.Text))
+                {
+                    Log.Debug("Apply the markdown syntax to the selected text");
+                    selection.Text = syntax + selection.Text + syntax;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
             }
         }
 
         private async void EditorWebView_NavigationStarting(WebView2 sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs args)
         {
-            // Cancel the navigation
-            if (!navigationUsage)
+            try
             {
-                args.Cancel = true;
-            }
+                Log.Information("EditorWebView navigation changing");
 
-            navigationUsage = false;
+                if (!navigationUsage)
+                {
+                    Log.Debug("Cancel the navigation");
+                    args.Cancel = true;
+                }
+
+                navigationUsage = false;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
+            }
+            
         }
 
         private async void EditorRichEditBox_Paste(object sender, TextControlPasteEventArgs e)
@@ -149,20 +178,21 @@ namespace AHIFusion
 
                 if (dataPackageView.Contains(StandardDataFormats.Text))
                 {
+                    Log.Debug("Pasting clipboard content");
                     var text = await dataPackageView.GetTextAsync();
                     ITextRange textRange = EditorRichEditBox.Document.Selection;
                     textRange.Text = text;
                     EditorRichEditBox.Document.Selection.StartPosition = EditorRichEditBox.Document.Selection.EndPosition;
+                    Log.Debug("Pasted text of length {Length}", text.Length);
+                }
+                else
+                {
+                    Log.Debug("Clipboard content contains no text");
                 }
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while handling paste event");
-                
-            }
-            finally
-            {
-                Log.CloseAndFlush();
+                Log.Error(ex, "An error occurred while pasting text");
             }
         }
 
@@ -208,17 +238,13 @@ namespace AHIFusion
                 }
                 else
                 {
-                    Log.Warning("No text selected or no link selected");
+                    Log.Debug("No text selected or no link selected");
                 }
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while handling hyperlink button click event");
+                Log.Error(ex, "An error occurred");
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
 
@@ -226,31 +252,27 @@ namespace AHIFusion
         {
             try
             {
-                Log.Debug("Inserting hyperlink into RTF");
+                Log.Information("Inserting hyperlink into RTF");
 
-                // Find the position of the selected text in the RTF
+                Log.Debug("Find the position of the selected text in the RTF");
                 int startIndex = rtf.IndexOf(selectedText);
                 if (startIndex < 0)
                 {
-                    Log.Warning("Selected text not found in RTF");
-                    return rtf; // Selected text not found in RTF
+                    Log.Debug("Selected text not found in RTF");
+                    return rtf;
                 }
 
-                // Create RTF for the hyperlink
+                Log.Debug("Create RTF for the hyperlink");
                 string hyperlinkRtf = @"{\field{\*\fldinst HYPERLINK """ + url + @"""}{\fldrslt " + selectedText + @"}}";
 
-                // Insert the hyperlink RTF at the position of the selected text
+                Log.Debug("Insert the hyperlink RTF at the position of the selected text");
                 return rtf.Substring(0, startIndex) + hyperlinkRtf + rtf.Substring(startIndex + selectedText.Length);
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while inserting hyperlink into RTF");
+                Log.Error(ex, "An error occurred");
                 return rtf;
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
 
@@ -262,7 +284,7 @@ namespace AHIFusion
 
                 if (true)
                 {
-                    Log.Information("ApplyStyle is disabled");
+                    Log.Debug("ApplyStyle is disabled");
                     return;
                 }
 
@@ -301,11 +323,7 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while applying style");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
+                Log.Error(ex, "An error occurred");
             }
         }
 
@@ -313,7 +331,7 @@ namespace AHIFusion
         {
             try
             {
-                Log.Debug("Loading text");
+                Log.Information("Loading text");
 
                 var selectedItem = NotesListView.SelectedItem as SelectableNote;
 
@@ -329,8 +347,10 @@ namespace AHIFusion
                         selectedItem.FontSize = 16;
                     }
 
+                    Log.Debug("Setting text from selected note");
                     EditorRichEditBox.Document.SetText(TextSetOptions.FormatRtf, selectedItem.Note.Text);
 
+                    Log.Debug("Removing all empty lines");
                     ITextRange textRange = EditorRichEditBox.Document.GetRange(0, TextConstants.MaxUnitCount);
                     while (textRange.Text.EndsWith("\r"))
                     {
@@ -345,12 +365,8 @@ namespace AHIFusion
 
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while loading text");
+                Log.Error(ex, "An error occurred");
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
 
@@ -358,18 +374,12 @@ namespace AHIFusion
         {
             try
             {
-                Log.Information("EditorRichEditBox loaded");
-
                 LoadText();
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while loading EditorRichEditBox");
+                Log.Error(ex, "An error occurred");
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
 
@@ -381,12 +391,8 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while unloading EditorRichEditBox");
+                Log.Error(ex, "An error occurred");
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
 
@@ -400,12 +406,8 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while handling notes collection change");
+                Log.Error(ex, "An error occurred");
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
 
@@ -421,12 +423,8 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while updating notes");
+                Log.Error(ex, "An error occurred");
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
 
@@ -440,13 +438,9 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while filtering notes");
+                Log.Error(ex, "An error occurred");
                 return false;
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
         
@@ -467,12 +461,8 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while removing non-matching notes");
+                Log.Error(ex, "An error occurred");
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
         
@@ -500,13 +490,9 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while getting selectable note");
+                Log.Error(ex, "An error occurred");
                 return null;
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
 
@@ -531,12 +517,8 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while adding matching notes");
+                Log.Error(ex, "An error occurred");
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
 
@@ -556,12 +538,8 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while handling AddButton click event");
+                Log.Error(ex, "An error occurred");
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
         
@@ -580,12 +558,8 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while handling DeleteButton click event");
+                Log.Error(ex, "An error occurred");
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
         
@@ -599,12 +573,8 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while handling SearchTextBox text changed event");
+                Log.Error(ex, "An error occurred");
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
 
@@ -646,12 +616,8 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while handling NotesListView selection changed event");
+                Log.Error(ex, "An error occurred");
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
 
@@ -687,12 +653,8 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while handling OpenFileButton click event");
+                Log.Error(ex, "An error occurred");
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
 
@@ -705,7 +667,8 @@ namespace AHIFusion
                 var fileSavePicker = new FileSavePicker();
                 fileSavePicker.SuggestedStartLocation = PickerLocationId.ComputerFolder;
                 fileSavePicker.SuggestedFileName = "New Document";
-                fileSavePicker.FileTypeChoices.Add("Rich Text", new List<string>() { ".rtf" });
+                fileSavePicker.FileTypeChoices.Add("Markdown", new List<string>() { ".md" });
+                fileSavePicker.FileTypeChoices.Add("PDF", new List<string>() { ".pdf" });
 
                 var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
                 WinRT.Interop.InitializeWithWindow.Initialize(fileSavePicker, hwnd);
@@ -713,14 +676,30 @@ namespace AHIFusion
                 StorageFile saveFile = await fileSavePicker.PickSaveFileAsync();
                 if (saveFile != null)
                 {
-                    Log.Information("A file was selected to save");
+                    Log.Information($"A file was selected to save: {saveFile.Path}");
 
                     CachedFileManager.DeferUpdates(saveFile);
 
-                    using (IRandomAccessStream randAccStream =
-                        await saveFile.OpenAsync(FileAccessMode.ReadWrite))
+                    EditorRichEditBox.Document.GetText(TextGetOptions.None, out string currentText);
+                    string htmlText = getHtmlString();
+
+                    if (saveFile.FileType == ".pdf")
                     {
-                        EditorRichEditBox.Document.SaveToStream(TextGetOptions.FormatRtf, randAccStream);
+                        Log.Debug("Creating temp.html file");
+                        File.WriteAllText("temp.html", htmlText);
+
+                        Log.Debug("Converting to pdf");
+                        HtmlConverter.ConvertToPdf(
+                                new FileInfo("temp.html"),
+                                new FileInfo(saveFile.Path)
+                                );
+
+                        Log.Debug("Deleting temp.html file");
+                        File.Delete("temp.html");
+                    }
+                    else
+                    {
+                        await FileIO.WriteTextAsync(saveFile, currentText);
                     }
 
                     //await CachedFileManager.CompleteUpdatesAsync(saveFile);
@@ -732,12 +711,7 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while handling SaveFileButton click event");
-                
-            }
-            finally
-            {
-                Log.CloseAndFlush();
+                Log.Error(ex, "An error occurred");
             }
         }
 
@@ -757,25 +731,27 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while saving text");
+                Log.Error(ex, "An error occurred");
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
 
-        private void UpdateMarkdownView()
+        private string getHtmlString()
         {
-            Log.Information("Updating text changed event triggered");
-
-            navigationUsage = true;
-
             EditorRichEditBox.Document.GetText(TextGetOptions.None, out string currentText);
             var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
             string htmlText = Markdown.ToHtml(currentText, pipeline);
-            EditorWebView.NavigateToString(htmlText);
+            return htmlText;
+        }
+
+        private async void UpdateMarkdownView()
+        {
+            Log.Information("Updating text changed event triggered");
+
+            await EditorWebView.EnsureCoreWebView2Async();
+
+            navigationUsage = true;
+            EditorWebView.NavigateToString(getHtmlString());
         }
 
         private void EditorRichEditBox_TextChanged(object sender, RoutedEventArgs e)
@@ -790,11 +766,7 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while handling EditorRichEditBox text changed event");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
+                Log.Error(ex, "An error occurred");
             }
         }
 
@@ -820,12 +792,8 @@ namespace AHIFusion
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Error occurred while handling ColorButton click event");
+                Log.Error(ex, "An error occurred");
                 
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
     }

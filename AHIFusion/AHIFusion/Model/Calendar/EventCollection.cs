@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Serilog;
 
 namespace AHIFusion
 {
@@ -10,31 +11,65 @@ namespace AHIFusion
 
         public static void Add(DayEvent Event)
         {
-            Events.Add(Event);
+            try
+            {
+                Events.Add(Event);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
+            }
         }
         public static void Remove(DayEvent Event)
         {
-            Events.Remove(Event);
+            try
+            {
+                Events.Remove(Event);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
+            }
         }
 
         public static void SaveToFile(string filePath)
         {
-            var options = new JsonSerializerOptions
+            try
             {
-                WriteIndented = true, // For pretty printing
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-            };
-            string jsonString = JsonSerializer.Serialize(Events, options);
-            File.WriteAllText(filePath, jsonString);
+                Log.Information($"Saving EventCollection to file: {filePath}");
+
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true, // For pretty printing
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                };
+                string jsonString = JsonSerializer.Serialize(Events, options);
+                File.WriteAllText(filePath, jsonString);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
+            }
+            
         }
 
         public static void LoadFromFile(string filePath)
         {
-            if (File.Exists(filePath))
+            try
             {
-                string jsonString = File.ReadAllText(filePath);
-                Events = JsonSerializer.Deserialize<ObservableCollection<DayEvent>>(jsonString);
+                Log.Information($"Loading EventCollection from file: {filePath}");
+
+                if (File.Exists(filePath))
+                {
+                    string jsonString = File.ReadAllText(filePath);
+                    Events = JsonSerializer.Deserialize<ObservableCollection<DayEvent>>(jsonString);
+                }
             }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
+            }
+            
         }
 
     }

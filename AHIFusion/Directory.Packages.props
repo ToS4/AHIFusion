@@ -2,6 +2,9 @@
   <ItemGroup>
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageVersion Include="Ical.Net" Version="4.2.0" />
+    <PackageVersion Include="itext7" Version="8.0.4" />
+    <PackageVersion Include="itext7.bouncy-castle-adapter" Version="8.0.4" />
+    <PackageVersion Include="itext7.pdfhtml" Version="5.0.4" />
     <PackageVersion Include="Markdig" Version="0.37.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />

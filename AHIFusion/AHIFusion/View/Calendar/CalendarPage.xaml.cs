@@ -48,6 +48,8 @@ public sealed partial class CalendarPage : Page
     {
         try
         {
+            Log.Information("ShowEventControl has been pressed");
+
             ShowEventControl showEventControl = sender as ShowEventControl;
 
             if (showEventControl != null)
@@ -78,10 +80,6 @@ public sealed partial class CalendarPage : Page
             Log.Error(ex, "Error occurred while handling ShowEventControl_PointerPressed click event");
 
         }
-        finally
-        {
-            Log.CloseAndFlush();
-        }
     }
 
     public CalendarPage()
@@ -104,11 +102,6 @@ public sealed partial class CalendarPage : Page
             Log.Error(ex, "Error occurred while initializing CalendarPage");
 
         }
-        finally
-        {
-            Log.CloseAndFlush();
-        }
-
     }
 
     public void DisplayEventsList()
@@ -144,11 +137,6 @@ public sealed partial class CalendarPage : Page
             Log.Error(ex, "Error occurred while displaying events list");
 
         }
-        finally
-        {
-            Log.CloseAndFlush();
-        }
-        
     }
 
     private void DisplayCurrentMonth()
@@ -211,10 +199,6 @@ public sealed partial class CalendarPage : Page
             Log.Error(ex, "Error occurred while displaying current month list");
 
         }
-        finally
-        {
-            Log.CloseAndFlush();
-        }   
     }
 
     private void DayControl_PointerPressed(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
@@ -239,10 +223,6 @@ public sealed partial class CalendarPage : Page
         {
             Log.Error(ex, "Error occurred while handling DayControl click event");
 
-        }
-        finally
-        {
-            Log.CloseAndFlush();
         }
     }
 
@@ -270,10 +250,6 @@ public sealed partial class CalendarPage : Page
             Log.Error(ex, "Error occurred while handling SmallCalendarView selection changed event");
 
         }
-        finally
-        {
-            Log.CloseAndFlush();
-        }
     }
 
     private async void AddButton_Click(object sender, RoutedEventArgs e)
@@ -295,11 +271,6 @@ public sealed partial class CalendarPage : Page
             Log.Error(ex, "Error occurred while handling AddButton click event");
 
         }
-        finally
-        {
-            Log.CloseAndFlush();
-        }
-
     }
 
     private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -317,10 +288,6 @@ public sealed partial class CalendarPage : Page
         {
             Log.Error(ex, "Error occurred while loading Page");
 
-        }
-        finally
-        {
-            Log.CloseAndFlush();
         }
     }
 
@@ -375,11 +342,6 @@ public sealed partial class CalendarPage : Page
             Log.Error(ex, "Error occurred while handling SaveButton click event");
 
         }
-        finally
-        {
-            Log.CloseAndFlush();
-        }
-        
     }
 
     private async void LoadButton_Click(object sender, RoutedEventArgs e)
@@ -437,10 +399,6 @@ public sealed partial class CalendarPage : Page
         {
             Log.Error(ex, "Error occurred while handling LoadButton click event");
 
-        }
-        finally
-        {
-            Log.CloseAndFlush();
         }
     }
 }

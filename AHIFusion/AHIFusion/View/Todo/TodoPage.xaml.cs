@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using AHIFusion.Model;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -16,6 +17,7 @@ using Microsoft.UI.Xaml.Navigation;
 using Serilog;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Effects;
 using Windows.UI;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
@@ -51,7 +53,57 @@ public sealed partial class TodoPage : Page
         {
             Log.Error(ex, "An error occurred");
         }
-        
+    }
+
+    private bool Filter(TodoList todolist)
+    {
+        try
+        {
+            Log.Debug("Filtering todolist");
+
+            return todolist.Name.Contains(SearchTextBox.Text, StringComparison.InvariantCultureIgnoreCase);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+            return false;
+
+        }
+    }
+
+    private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        try
+        {
+            Log.Debug("SearchTextBox_TextChanged has been called");
+
+            TodoListListView.Items.Clear();
+
+            LoadTodoFromList(TodoCollection.TodoLists);
+
+            List<TodoListControl> itemsToRemove = new List<TodoListControl>();
+
+            foreach (TodoListControl todoListControl in TodoListListView.Items)
+            {
+                TodoList todoList = todoListControl.DataContext as TodoList;
+                if (todoList != null)
+                {
+                    if (!Filter(todoList))
+                    {
+                        itemsToRemove.Add(todoListControl);
+                    }
+                }
+            }
+
+            foreach (TodoListControl todoListControl in itemsToRemove)
+            {
+                TodoListListView.Items.Remove(todoListControl);
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
     }
 
     private void TodoListListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -97,7 +149,7 @@ public sealed partial class TodoPage : Page
             int amountLoaded = 0;
             foreach (TodoList item in list)
             {
-                TodoListControl todoListControl = new TodoListControl(true)
+                TodoListControl todoListControl = new TodoListControl(false)
                 {
                     DataContext = item,
                     Height = 70,
@@ -285,7 +337,7 @@ public sealed partial class TodoPage : Page
         {
             Log.Information("Updating todo list view");
 
-            Log.Debug("Cleating todo list view");
+            Log.Debug("Clearing todo list view");
             TodoItemListView.Items.Clear();
 
             int amountUpdated = 0;

@@ -36,6 +36,23 @@ public sealed partial class TodoListControl : UserControl, INotifyPropertyChange
             this.InitializeComponent();
             this.Loaded += TodoListControl_Loaded;
             this.RightTapped += TodoListControl_RightTapped;
+
+            NameTextBlock.Visibility = Visibility.Visible;
+            NameTextBox.Visibility = Visibility.Collapsed;
+
+            /*
+            if (isnew)
+            {
+                NameTextBlock.Visibility = Visibility.Visible;
+                NameTextBox.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                NameTextBlock.Visibility = Visibility.Collapsed;
+                NameTextBox.Visibility = Visibility.Visible;
+            }
+            */
+
         }
         catch (Exception ex)
         {
@@ -68,8 +85,6 @@ public sealed partial class TodoListControl : UserControl, INotifyPropertyChange
         {
             Log.Error(ex, "An error occurred");
         }
-
-        
     }
 
     public void FocusOnTextBox()

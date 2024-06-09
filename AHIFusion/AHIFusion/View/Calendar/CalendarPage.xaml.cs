@@ -48,6 +48,8 @@ public sealed partial class CalendarPage : Page
     {
         try
         {
+            Log.Information("ShowEventControl has been pressed");
+
             ShowEventControl showEventControl = sender as ShowEventControl;
 
             if (showEventControl != null)

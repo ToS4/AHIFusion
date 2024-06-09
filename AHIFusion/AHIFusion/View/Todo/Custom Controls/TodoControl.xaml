@@ -10,22 +10,41 @@
   d:DesignWidth="400"
   DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
+  <UserControl.Resources>
+    <local:PriorityToBrushConverter x:Key="PriorityToBrushConverter"/>
+  </UserControl.Resources>
+
   <Grid PointerEntered="Grid_PointerEntered" PointerExited="Grid_PointerExited" PointerPressed="Grid_PointerPressed">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*"/>
       <ColumnDefinition Width="10*"/>
+      <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
 
-    <Border CornerRadius="10" BorderThickness="2" Grid.ColumnSpan="2">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="6*"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+
+    <Border CornerRadius="10" BorderThickness="2" Grid.ColumnSpan="3" Grid.RowSpan="2">
       <Rectangle x:Name="BackgroundRect" ></Rectangle>
     </Border>
 
-    <Viewbox>
+    <Viewbox Grid.RowSpan="2">
       <CheckBox IsChecked="{Binding IsCompleted, Mode=TwoWay}"></CheckBox>
     </Viewbox>
 
-    <Viewbox Grid.Column="1" HorizontalAlignment="Left" Margin="20">
+    <Viewbox Grid.Column="1" HorizontalAlignment="Left" Margin="20,20,10,10">
       <TextBlock Text="{Binding Title, Mode=TwoWay}" VerticalAlignment="Center" Margin="-15,0,0,0" Foreground="Black"/>
     </Viewbox>
+
+    <Viewbox Grid.Column="2" HorizontalAlignment="Left" Margin="-20,0,10,0">
+      <TextBlock Text="12.05.2024" VerticalAlignment="Center" Foreground="Black"/>
+    </Viewbox>
+    
+    <Line Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" 
+      X1="0" Y1="0" X2="{Binding ElementName=BackgroundRect, Path=ActualWidth}" Y2="0" 
+      Stroke="{Binding Priority, Converter={StaticResource PriorityToBrushConverter}}" StrokeThickness="60" Stretch="Fill" Margin="0,0,120,7"/>
   </Grid>
 </UserControl>

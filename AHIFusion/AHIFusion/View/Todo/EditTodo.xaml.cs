@@ -24,6 +24,7 @@ public sealed partial class EditTodo : ContentDialog
     public bool IsCompletedEdit { get; set; }
     public int PriorityEdit { get; set; }
     public ObservableCollection<TodoSub> SubtasksEdit { get; set; } = new ObservableCollection<TodoSub>();
+    public ObservableCollection<TodoSub> AddedSubtasks { get; set; } = new ObservableCollection<TodoSub>();
 
     public Todo todoEdit;
 
@@ -34,7 +35,7 @@ public sealed partial class EditTodo : ContentDialog
         this.InitializeComponent();
         todoEdit = todo;
 
-        SubtasksEdit.CollectionChanged += SubtasksEdit_CollectionChanged;
+        AddedSubtasks.CollectionChanged += AddedSubtasks_CollectionChanged;
 
         TitleEdit = todo.Title;
         DescriptionEdit = todo.Description;
@@ -48,7 +49,7 @@ public sealed partial class EditTodo : ContentDialog
         AddSubTodo(SubtasksEdit);
     }
 
-    private void SubtasksEdit_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+    private void AddedSubtasks_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
     {
         if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
         {
@@ -92,7 +93,11 @@ public sealed partial class EditTodo : ContentDialog
         todoEdit.DueDate = DueDateEdit.DateTime;
         todoEdit.IsCompleted = IsCompletedEdit;
         todoEdit.Priority = PriorityEdit;
-        todoEdit.Subtasks = SubtasksEdit;
+
+        for (int i = 0; i < AddedSubtasks.Count; i++)
+        {
+            SubtasksEdit.Add(AddedSubtasks[i]);
+        }
     }
 
     private void RadioButton_Checked(object sender, RoutedEventArgs e)
@@ -139,7 +144,7 @@ public sealed partial class EditTodo : ContentDialog
             Title = "New Subtask",
             IsCompleted = false
         };
-        SubtasksEdit.Add(new TodoSub());
+        AddedSubtasks.Add(todoSub);
     }
 
     private void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -148,4 +153,11 @@ public sealed partial class EditTodo : ContentDialog
         this.Hide();
     }
 
+    private void ContentDialog_CloseButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+    {
+        for (int i = 0; i < AddedSubtasks.Count; i++)
+        {
+            SubtasksEdit.Remove(AddedSubtasks[i]);
+        }
+    }
 }

@@ -50,11 +50,11 @@
       </Viewbox>
 
       <Viewbox Grid.Row="2" Grid.Column="0">
-        <Button x:Name="StartButton" Width="100" Click="StartStopButton_Click"/>
+        <Button x:Name="StartButton" Content="Start" Width="100" Click="StartStopButton_Click"/>
       </Viewbox>
 
       <Viewbox Grid.Row="2" Grid.Column="1">
-        <Button x:Name="ResetButton" Width="100" Click="ResetButton_Click"/>
+        <Button x:Name="ResetButton" Content="Reset" Width="100" Click="ResetButton_Click"/>
       </Viewbox>
 
     </Grid>

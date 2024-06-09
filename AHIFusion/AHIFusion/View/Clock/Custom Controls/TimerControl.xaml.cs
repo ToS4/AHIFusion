@@ -172,10 +172,12 @@ namespace AHIFusion
             if (IsRunning)
             {
                 StopTimer();
+                StartButton.Content = "Start";
             }
             else
             {
                 StartTimer();
+                StartButton.Content = "Stop";
             }
         }
 

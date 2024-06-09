@@ -97,10 +97,6 @@ public sealed partial class ClockPage : Page
             {
                 ClockNavigation.SelectedItem = ClockNavigation.MenuItems[5];
             }
-            else if (ContentFrame.SourcePageType == typeof(WorldClockContent))
-            {
-                ClockNavigation.SelectedItem = ClockNavigation.MenuItems[7];
-            }
         }
         catch (Exception ex)
         {

@@ -11,7 +11,7 @@
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
   <Grid Margin="40">
-    <Border BorderThickness="4" BorderBrush="Black" CornerRadius="20">
+    <Border BorderThickness="2" BorderBrush="Black" CornerRadius="20">
       <Rectangle x:Name="rect" Fill="DarkGray"/>
     </Border>
 

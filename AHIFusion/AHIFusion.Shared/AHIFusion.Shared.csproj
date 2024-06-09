@@ -12,6 +12,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <PackageReference Include="Ical.Net" />
+    <PackageReference Include="Uno.Toolkit.Skia.WinUI" />
     <None Update="AppHead.xaml.cs" DependentUpon="AppHead.xaml" />
   </ItemGroup>
 </Project>

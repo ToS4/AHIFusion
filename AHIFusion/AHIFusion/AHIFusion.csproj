@@ -25,6 +25,7 @@
     <PackageReference Include="itext7.pdfhtml" />
     <PackageReference Include="Markdig" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" />
+    <PackageReference Include="Uno.Toolkit.Skia.WinUI" />
     <PackageReference Include="Uno.WinUI">
       <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>

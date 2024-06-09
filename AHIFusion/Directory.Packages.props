@@ -27,6 +27,7 @@
     <PackageVersion Include="Uno.Extensions.Logging.WinUI" Version="4.1.14" />
     <PackageVersion Include="Uno.Material.WinUI" Version="5.0.13" />
     <PackageVersion Include="Uno.Dsp.Tasks" Version="1.2.9" />
+    <PackageVersion Include="Uno.Toolkit.Skia.WinUI" Version="6.0.18" />
     <PackageVersion Include="Uno.Toolkit.WinUI" Version="6.0.18" />
     <PackageVersion Include="Uno.Toolkit.WinUI.Material" Version="6.0.18" />
     <PackageVersion Include="Uno.Resizetizer" Version="1.4.8" />

@@ -62,12 +62,14 @@
     <Content Remove="Assets\Fonts\aptos-light.ttf" />
     <Content Remove="Assets\Fonts\aptos-semibold.ttf" />
     <Content Remove="Assets\Fonts\aptos.ttf" />
+    <Content Remove="Assets\Icons\AHIFusion.svg" />
     <Content Remove="Assets\Sounds\timer.mp3" />
     <Content Remove="Assets\weather.html" />
   </ItemGroup>
 
 
   <ItemGroup>
+    <None Remove="Assets\Icons\AHIFusion.svg" />
     <None Remove="Assets\Sounds\Alarm-01.wav" />
     <None Remove="CustomStyles.xaml" />
     <None Remove="HomePage.xaml" />

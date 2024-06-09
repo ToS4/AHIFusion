@@ -33,7 +33,7 @@
         DisplayName="AHIFusion"
         Description="AHIFusion">
         <uap:SplashScreen />
-        <uap:DefaultTile/>
+        <uap:DefaultTile Square71x71Logo="SmallTile.png"/>
       </uap:VisualElements>
     </Application>
   </Applications>

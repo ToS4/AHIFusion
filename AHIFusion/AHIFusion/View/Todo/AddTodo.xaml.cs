@@ -13,6 +13,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
+using Serilog;
 
 namespace AHIFusion
 {
@@ -29,101 +30,168 @@ namespace AHIFusion
       
 		public AddTodo(TodoList tl)
 		{
-			this.InitializeComponent();
-            todoList = tl;
-            SubtasksAdd.CollectionChanged += SubtasksAdd_CollectionChanged;
+            try
+            {
+                Log.Information("Initializing AddTodo");
+                this.InitializeComponent();
+
+                todoList = tl;
+
+                Log.Debug("Connecting XAML events");
+                SubtasksAdd.CollectionChanged += SubtasksAdd_CollectionChanged;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
+            }
 		}
 
         private void SubtasksAdd_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            try
             {
-                AddSubTodo(e.NewItems.Cast<TodoSub>());
+                Log.Information("SubtasksAdd collection has been changed");
+
+                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                {
+                    AddSubTodo(e.NewItems.Cast<TodoSub>());
+                }
             }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
+            }
+
         }
 
         private void AddSubTodo(IEnumerable<TodoSub> list)
         {
-            foreach (TodoSub todoSub in list)
+            try
             {
-                TodoSubControl todoSubControl = new TodoSubControl()
+                Log.Information("Adding subtodo(s)");
+
+                Log.Debug("Going through the given IEnumerable");
+                int amountAdded = 0;
+
+                foreach (TodoSub todoSub in list)
                 {
-                    DataContext = todoSub,
-                    Height = 40
-                };
 
-                Binding TitleBinding = new Binding
-                {
-                    Path = new PropertyPath("Title"),
-                    Mode = BindingMode.TwoWay
-                };
+                    TodoSubControl todoSubControl = new TodoSubControl()
+                    {
+                        DataContext = todoSub,
+                        Height = 40
+                    };
 
-                Binding IsCompletedBinding = new Binding
-                {
-                    Path = new PropertyPath("IsCompleted"),
-                    Mode = BindingMode.TwoWay
-                };
+                    Binding TitleBinding = new Binding
+                    {
+                        Path = new PropertyPath("Title"),
+                        Mode = BindingMode.TwoWay
+                    };
 
-                todoSubControl.SetBinding(TodoSubControl.TitleProperty, TitleBinding);
-                todoSubControl.SetBinding(TodoSubControl.IsCompletedProperty, IsCompletedBinding);
+                    Binding IsCompletedBinding = new Binding
+                    {
+                        Path = new PropertyPath("IsCompleted"),
+                        Mode = BindingMode.TwoWay
+                    };
 
-                SubTaskListView.Items.Add(todoSubControl);
+                    todoSubControl.SetBinding(TodoSubControl.TitleProperty, TitleBinding);
+                    todoSubControl.SetBinding(TodoSubControl.IsCompletedProperty, IsCompletedBinding);
+
+                    SubTaskListView.Items.Add(todoSubControl);
+                    amountAdded += 1;
+                }
+
+                Log.Debug($"{amountAdded} from {list.Count()} subtodo(s) has been added");
             }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
+            }
+
         }
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            if (TitleAdd == "" || (PriorityAdd != 1 && PriorityAdd != 2 && PriorityAdd != 3))
+            try
             {
-                args.Cancel = true;
-                return;
+                Log.Information("ContentDialogPrimaryButton has been clicke");
+
+                if (TitleAdd == "" || (PriorityAdd != 1 && PriorityAdd != 2 && PriorityAdd != 3))
+                {
+                    args.Cancel = true;
+                    return;
+                }
+
+                DueDatePicker.Date = DueDateAdd;
+
+                Todo todoToAdd = new Todo()
+                {
+                    Id = Guid.NewGuid(),
+                    Title = TitleAdd,
+                    Description = DescriptionAdd,
+                    DueDate = DueDateAdd.DateTime,
+                    IsCompleted = IsCompletedAdd,
+                    Priority = PriorityAdd,
+                    Subtasks = SubtasksAdd
+                };
+
+                todoList.Todos.Add(todoToAdd);
             }
-
-            DueDatePicker.Date = DueDateAdd;
-
-            Todo todoToAdd = new Todo()
+            catch (Exception ex)
             {
-                Id = Guid.NewGuid(),
-                Title = TitleAdd,
-                Description = DescriptionAdd,
-                DueDate = DueDateAdd.DateTime,
-                IsCompleted = IsCompletedAdd,
-                Priority = PriorityAdd,
-                Subtasks = SubtasksAdd
-            };
-
-            todoList.Todos.Add(todoToAdd);
+                Log.Error(ex, "An error occurred");
+            }
+            
         }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            RadioButton rb = sender as RadioButton;
-            if (rb != null)
+            try
             {
-                switch (rb.Content)
+                Log.Information("RadioButton has been checked");
+
+                RadioButton rb = sender as RadioButton;
+                if (rb != null)
                 {
-                    case "Low":
-                        PriorityAdd = 1;
-                        break;
-                    case "Medium":
-                        PriorityAdd = 2;
-                        break;
-                    case "High":
-                        PriorityAdd = 3;
-                        break;
+                    switch (rb.Content)
+                    {
+                        case "Low":
+                            PriorityAdd = 1;
+                            break;
+                        case "Medium":
+                            PriorityAdd = 2;
+                            break;
+                        case "High":
+                            PriorityAdd = 3;
+                            break;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
             }
         }
 
         private void SubTaskButton_Click(object sender, RoutedEventArgs e)
         {
-            TodoSub todoSub = new TodoSub()
+            try
             {
-                Id = Guid.NewGuid(),
-                Title = "New Subtask",
-                IsCompleted = false
-            };
-            SubtasksAdd.Add(new TodoSub());
+                Log.Information("SubTaskButton has been clicked");
+
+                TodoSub todoSub = new TodoSub()
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "New Subtask",
+                    IsCompleted = false
+                };
+                SubtasksAdd.Add(new TodoSub());
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
+            }
+            
         }
     }
 }

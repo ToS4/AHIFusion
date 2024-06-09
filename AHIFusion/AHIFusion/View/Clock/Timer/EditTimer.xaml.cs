@@ -1,5 +1,6 @@
 using System;
 using AHIFusion.Model;
+using Serilog;
 namespace AHIFusion;
 public sealed partial class EditTimer : ContentDialog
 {
@@ -10,32 +11,59 @@ public sealed partial class EditTimer : ContentDialog
 
     public EditTimer(AHIFusion.Model.Timer timer)
     {
-        this.InitializeComponent();
-        timerEdit = timer;
-        NameEdit = timer.Title;
-        TimeEdit = TimeSpan.FromSeconds(timer.Time  .TotalSeconds);
-        CustomTimePicker.Time = TimeEdit;
+        try
+        {
+            Log.Information("Initializing EditTimer");
+
+            this.InitializeComponent();
+            timerEdit = timer;
+            NameEdit = timer.Title;
+            TimeEdit = TimeSpan.FromSeconds(timer.Time.TotalSeconds);
+            CustomTimePicker.Time = TimeEdit;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
     }
 
     private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
-        TimeEdit = CustomTimePicker.Time;
-        timerEdit.Title = NameEdit;
-        timerEdit.Time = TimeEdit;
-        timerEdit.InitialTime = TimeEdit.TotalSeconds;
+        try
+        {
+            Log.Information("ContentDialog_PrimaryButtonClick has been called");
+
+            TimeEdit = CustomTimePicker.Time;
+            timerEdit.Title = NameEdit;
+            timerEdit.Time = TimeEdit;
+            timerEdit.InitialTime = TimeEdit.TotalSeconds;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
     }
 
     private void DeleteButton_Click(object sender, RoutedEventArgs e)
     {
-        for (int i = 0; i < TimerCollection.Timers.Count; i++)
+        try
         {
-            if (timerEdit == TimerCollection.Timers[i])
-            {
-                TimerCollection.Timers.RemoveAt(i);
-                break;
-            }
-        }
+            Log.Information("DeleteButton_Click has been called");
 
-        this.Hide();
+            for (int i = 0; i < TimerCollection.Timers.Count; i++)
+            {
+                if (timerEdit == TimerCollection.Timers[i])
+                {
+                    TimerCollection.Timers.RemoveAt(i);
+                    break;
+                }
+            }
+
+            this.Hide();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
     }
 }

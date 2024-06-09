@@ -13,6 +13,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
+using Serilog;
 using Windows.UI;
 using AHIFusion.Model;
 
@@ -91,14 +92,23 @@ namespace AHIFusion
 
         private async void Grid_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            if (this.DataContext is Todo todo)
+            try
             {
-                EditTodo editTodoDialog = new EditTodo(todo)
+                Log.Information("Grid has been pressed");
+
+                if (this.DataContext is Todo todo)
                 {
-                    XamlRoot = this.XamlRoot
-                };
-                editTodoDialog.DeleteTodo += Todo_Delete;
-                await editTodoDialog.ShowAsync();
+                    EditTodo editTodoDialog = new EditTodo(todo)
+                    {
+                        XamlRoot = this.XamlRoot
+                    };
+                    editTodoDialog.DeleteTodo += Todo_Delete;
+                    await editTodoDialog.ShowAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
             }
         }
 

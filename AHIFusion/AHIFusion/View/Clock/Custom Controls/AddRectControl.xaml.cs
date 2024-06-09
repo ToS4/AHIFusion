@@ -1,4 +1,5 @@
 using Microsoft.UI.Xaml.Input;
+using Serilog;
 
 namespace AHIFusion;
 public sealed partial class AddRectControl : UserControl
@@ -28,19 +29,30 @@ public sealed partial class AddRectControl : UserControl
 
     private async void Grid_PointerPressed(object sender, PointerRoutedEventArgs e)
     {
-        if (Mode == "Alarm")
+        try
         {
-            ContentDialog dialog = new AddAlarm();
-            dialog.XamlRoot = this.XamlRoot;
+            Log.Information("Grid_PointerPressed has been called");
 
-            var result = await dialog.ShowAsync();
+            if (Mode == "Alarm")
+            {
+                ContentDialog dialog = new AddAlarm();
+                dialog.XamlRoot = this.XamlRoot;
+
+                var result = await dialog.ShowAsync();
+            }
+            else if (Mode == "Timer")
+            {
+                ContentDialog dialog = new AddTimer();
+                dialog.XamlRoot = this.XamlRoot;
+
+                var result = await dialog.ShowAsync();
+            }
         }
-        else if (Mode == "Timer")
+        catch (Exception ex)
         {
-            ContentDialog dialog = new AddTimer();
-            dialog.XamlRoot = this.XamlRoot;
-
-            var result = await dialog.ShowAsync();
+            Log.Error(ex, "An error occurred");
         }
+
+        
     }
 }

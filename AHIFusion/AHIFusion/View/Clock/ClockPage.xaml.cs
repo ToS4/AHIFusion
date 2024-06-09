@@ -12,6 +12,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Media.Animation;
 using Microsoft.UI.Xaml.Navigation;
+using Serilog;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -27,68 +28,126 @@ public sealed partial class ClockPage : Page
 
     public ClockPage()
     {
-        this.InitializeComponent();
+        try
+        {
+            Log.Information("Initializing ClockPage");
 
-        SelectedItem = ClockNavigation.MenuItems[1];
+            this.InitializeComponent();
+
+            SelectedItem = ClockNavigation.MenuItems[1];
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
     }
 
     protected override void OnNavigatedTo(NavigationEventArgs e)
     {
-        base.OnNavigatedTo(e);
-
-        if (SelectedItem != null)
+        try
         {
-            ClockNavigation.SelectedItem = SelectedItem;
+            Log.Information("OnNavigatedTo has been called");
+
+            base.OnNavigatedTo(e);
+
+            if (SelectedItem != null)
+            {
+                ClockNavigation.SelectedItem = SelectedItem;
+            }
         }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
+
+        
     }
 
     private void ClockNavigation_Loaded(object sender, RoutedEventArgs e)
     {
+        try
+        {
+            Log.Information("ClockNavigation_Loaded has been called");
 
-        ClockNavigation.SelectedItem = SelectedItem;
+            ClockNavigation.SelectedItem = SelectedItem;
 
-        ContentFrame.Navigated += On_Navigated;
-
+            ContentFrame.Navigated += On_Navigated;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
     }
 
     private void On_Navigated(object sender, NavigationEventArgs e)
     {
-        if (ContentFrame.SourcePageType == typeof(AlarmContent))
+        try
         {
-            ClockNavigation.SelectedItem = ClockNavigation.MenuItems[1];
+            Log.Information("On_Navigated has been called");
+
+            if (ContentFrame.SourcePageType == typeof(AlarmContent))
+            {
+                ClockNavigation.SelectedItem = ClockNavigation.MenuItems[1];
+            }
+            else if (ContentFrame.SourcePageType == typeof(StopwatchContent))
+            {
+                ClockNavigation.SelectedItem = ClockNavigation.MenuItems[3];
+            }
+            else if (ContentFrame.SourcePageType == typeof(TimerContent))
+            {
+                ClockNavigation.SelectedItem = ClockNavigation.MenuItems[5];
+            }
+            else if (ContentFrame.SourcePageType == typeof(WorldClockContent))
+            {
+                ClockNavigation.SelectedItem = ClockNavigation.MenuItems[7];
+            }
         }
-        else if (ContentFrame.SourcePageType == typeof(StopwatchContent))
+        catch (Exception ex)
         {
-            ClockNavigation.SelectedItem = ClockNavigation.MenuItems[3];
-        }
-        else if (ContentFrame.SourcePageType == typeof(TimerContent))
-        {
-            ClockNavigation.SelectedItem = ClockNavigation.MenuItems[5];
+            Log.Error(ex, "An error occurred");
         }
     }
 
     private void ClockNavigation_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
-        SelectedItem = args.SelectedItem;
+        try
+        {
+            Log.Information("ClockNavigation_SelectionChanged has been called");
 
-        if (args.IsSettingsSelected)
-        {
-            return;
+            SelectedItem = args.SelectedItem;
+
+            if (args.IsSettingsSelected)
+            {
+                return;
+            }
+            else if (args.SelectedItemContainer != null)
+            {
+                Type pageType = Type.GetType(args.SelectedItemContainer.Tag.ToString());
+                ClockNavigation_Navigate(pageType, args.RecommendedNavigationTransitionInfo);
+            }
         }
-        else if (args.SelectedItemContainer != null)
+        catch (Exception ex)
         {
-            Type pageType = Type.GetType(args.SelectedItemContainer.Tag.ToString());
-            ClockNavigation_Navigate(pageType, args.RecommendedNavigationTransitionInfo);
+            Log.Error(ex, "An error occurred");
         }
     }
 
     private void ClockNavigation_Navigate(Type pageType, NavigationTransitionInfo transitionInfo)
     {
-        Type preNavigationPageType = ContentFrame.CurrentSourcePageType;
-
-        if (pageType is not null && pageType != preNavigationPageType)
+        try
         {
-            ContentFrame.Navigate(pageType, null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft});
+            Log.Information("ClockNavigation_Navigate has been called");
+
+            Type preNavigationPageType = ContentFrame.CurrentSourcePageType;
+
+            if (pageType is not null && pageType != preNavigationPageType)
+            {
+                ContentFrame.Navigate(pageType, null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
         }
     }
 }

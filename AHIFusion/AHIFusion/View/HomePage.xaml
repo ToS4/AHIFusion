@@ -87,7 +87,7 @@
 
 
       <utu:ShadowContainer Shadows="{StaticResource ShadowsHome}" Grid.Column="0" Grid.Row="0">
-        <Button x:Name="Todo" Click="Todo_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20">
+        <Button x:Name="Todo" Click="Todo_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="40">
           <Button.Content>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
               <FontIcon Glyph="&#xe73e;" FontSize="75" FontFamily="Segoe MDL2 Assets" />
@@ -98,7 +98,7 @@
       </utu:ShadowContainer>
 
       <utu:ShadowContainer Shadows="{StaticResource ShadowsHome}" Grid.Column="0" Grid.Row="1">
-        <Button x:Name="Calendar" Click="Calendar_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20">
+        <Button x:Name="Calendar" Click="Calendar_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="40">
           <Button.Content>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
               <FontIcon Glyph="&#xE787;" FontSize="75" FontFamily="Segoe MDL2 Assets" />
@@ -109,7 +109,7 @@
       </utu:ShadowContainer>
 
       <utu:ShadowContainer Shadows="{StaticResource ShadowsHome}" Grid.Column="1" Grid.Row="0">
-        <Button x:Name="Notes" Click="Notes_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20">
+        <Button x:Name="Notes" Click="Notes_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="40">
           <Button.Content>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
               <FontIcon Glyph="&#xE70B;" FontSize="75" FontFamily="Segoe MDL2 Assets" />
@@ -120,7 +120,7 @@
       </utu:ShadowContainer>
 
       <utu:ShadowContainer Shadows="{StaticResource ShadowsHome}" Grid.Column="1" Grid.Row="1">
-        <Button x:Name="Clock" Click="Clock_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20">
+        <Button x:Name="Clock" Click="Clock_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="40">
           <Button.Content>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
               <FontIcon Glyph="&#xE121;" FontSize="75" FontFamily="Segoe MDL2 Assets" />

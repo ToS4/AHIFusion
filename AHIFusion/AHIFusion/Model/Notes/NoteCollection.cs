@@ -15,8 +15,6 @@ public static class NoteCollection
     {
         try
         {
-            Log.Information($"Adding note to NoteCollection");
-
             Notes.Add(note);
         }
         catch (Exception ex) 
@@ -28,8 +26,6 @@ public static class NoteCollection
     {
         try
         {
-            Log.Information($"Removing note from NoteCollection");
-
             Notes.Remove(note);
         }
         catch (Exception ex)
@@ -68,10 +64,6 @@ public static class NoteCollection
                 Log.Debug($"File '{filePath}' exists");
                 string jsonString = File.ReadAllText(filePath);
                 Notes = JsonSerializer.Deserialize<ObservableCollection<Note>>(jsonString);
-            }
-            else
-            {
-                Log.Debug($"File '{filePath}' doesn't exist");
             }
         }
         catch (Exception ex)

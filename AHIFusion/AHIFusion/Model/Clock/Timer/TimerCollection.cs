@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Serilog;
 
 namespace AHIFusion.Model;
 
@@ -12,30 +13,66 @@ public static class TimerCollection
 
     public static void Add(Timer timer)
     {
-        Timers.Add(timer);
+        try
+        {
+            Timers.Add(timer);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
+       
     }
     public static void Remove(Timer timer)
     {
-        Timers.Remove(timer);
+        try
+        {
+            Timers.Remove(timer);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
+       
     }
 
     public static void SaveToFile(string filePath)
     {
-        var options = new JsonSerializerOptions
+        try
         {
-            WriteIndented = true, // For pretty printing
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-        };
-        string jsonString = JsonSerializer.Serialize(Timers, options);
-        File.WriteAllText(filePath, jsonString);
+            Log.Information($"Saving TimerCollection to file: {filePath}");
+
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true, // For pretty printing
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
+            string jsonString = JsonSerializer.Serialize(Timers, options);
+            File.WriteAllText(filePath, jsonString);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
+        
     }
 
     public static void LoadFromFile(string filePath)
     {
-        if (File.Exists(filePath))
+        try
         {
-            string jsonString = File.ReadAllText(filePath);
-            Timers = JsonSerializer.Deserialize<ObservableCollection<Timer>>(jsonString);
+            Log.Information($"Loading TimerCollection from file: {filePath}");
+
+            if (File.Exists(filePath))
+            {
+                string jsonString = File.ReadAllText(filePath);
+                Timers = JsonSerializer.Deserialize<ObservableCollection<Timer>>(jsonString);
+            }
         }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
+       
     }
 }

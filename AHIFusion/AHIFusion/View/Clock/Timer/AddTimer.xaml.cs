@@ -11,6 +11,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Serilog;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -27,20 +28,29 @@ public sealed partial class AddTimer : ContentDialog
 
     private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
-        TimeAdd = CustomTimePicker.Time;
-
-        if (TimeAdd.TotalSeconds == 0)
+        try
         {
-            return;
+            Log.Information("ContentDialog_PrimaryButtonClick has been called");
+
+            TimeAdd = CustomTimePicker.Time;
+
+            if (TimeAdd.TotalSeconds == 0)
+            {
+                return;
+            }
+
+            AHIFusion.Model.Timer timerToAdd = new AHIFusion.Model.Timer()
+            {
+                Title = NameAdd,
+                Time = TimeAdd,
+                InitialTime = TimeAdd.TotalSeconds,
+                IsRunning = false
+            };
+            TimerCollection.Timers.Add(timerToAdd);
         }
-
-        AHIFusion.Model.Timer timerToAdd = new AHIFusion.Model.Timer()
+        catch (Exception ex)
         {
-            Title = NameAdd,
-            Time = TimeAdd,
-            InitialTime = TimeAdd.TotalSeconds,
-            IsRunning = false
-        };
-        TimerCollection.Timers.Add(timerToAdd);
+            Log.Error(ex, "An error occurred");
+        }
     }
 }

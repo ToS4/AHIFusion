@@ -5,6 +5,7 @@ using Windows.Media.Playback;
 using Windows.UI;
 using System.Timers;
 using Microsoft.UI.Xaml;
+using Serilog;
 
 namespace AHIFusion
 {
@@ -17,20 +18,30 @@ namespace AHIFusion
 
         public TimerControl()
         {
-            this.InitializeComponent();
+            try
+            {
+                Log.Information("Initializing TimerControl");
 
-            timer = new System.Timers.Timer(1000); // Set interval to 1000 milliseconds (1 second)
-            timer.Elapsed += Timer_Elapsed;
-            timer.AutoReset = true;
+                this.InitializeComponent();
 
-            _mediaPlayer = new MediaPlayer();
-            TimerSoundPlayer.SetMediaPlayer(_mediaPlayer);
+                timer = new System.Timers.Timer(1000); // Set interval to 1000 milliseconds (1 second)
+                timer.Elapsed += Timer_Elapsed;
+                timer.AutoReset = true;
 
-            RingBColor = new SolidColorBrush(Colors.DarkSlateGray);
-            RingFColor = new SolidColorBrush(Colors.DarkSlateGray);
+                _mediaPlayer = new MediaPlayer();
+                TimerSoundPlayer.SetMediaPlayer(_mediaPlayer);
 
-            this.Loaded += TimerControl_Loaded;
-            this.Unloaded += TimerControl_Unloaded;
+                RingBColor = new SolidColorBrush(Colors.DarkSlateGray);
+                RingFColor = new SolidColorBrush(Colors.DarkSlateGray);
+
+                this.Loaded += TimerControl_Loaded;
+                this.Unloaded += TimerControl_Unloaded;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
+            }
+
         }
 
         private void TimerControl_Unloaded(object sender, RoutedEventArgs e)
@@ -41,33 +52,52 @@ namespace AHIFusion
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            // Use DispatcherQueue to update the UI
-            DispatcherQueue.TryEnqueue(() =>
+            try
             {
-                if (Time.TotalSeconds > 0)
+                Log.Information("Timer_Elapsed has been called");
+
+                Log.Debug("Use DispatcherQueue to update the UI");
+                DispatcherQueue.TryEnqueue(() =>
                 {
-                    Time -= TimeSpan.FromSeconds(1);
-                    RingValue = (Time.TotalSeconds / InitialTime) * 100;
-                }
-                else
-                {
-                    RingTimer();
-                    IsRunning = false;
-                    timer.Stop();
-                }
-            });
+                    if (Time.TotalSeconds > 0)
+                    {
+                        Time -= TimeSpan.FromSeconds(1);
+                        RingValue = (Time.TotalSeconds / InitialTime) * 100;
+                    }
+                    else
+                    {
+                        RingTimer();
+                        IsRunning = false;
+                        timer.Stop();
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
+            }
         }
 
         private void TimerControl_Loaded(object sender, RoutedEventArgs e)
         {
-            timer.Elapsed -= Timer_Elapsed;
-            timer.Elapsed += Timer_Elapsed;
-            if (IsRunning && !timer.Enabled)
+            try
             {
-                timer.Start();
-            }
+                Log.Information("TimerControl_Loaded has been called");
 
-            RingValue = (Time.TotalSeconds / InitialTime) * 100;
+                timer.Elapsed -= Timer_Elapsed;
+                timer.Elapsed += Timer_Elapsed;
+                if (IsRunning && !timer.Enabled)
+                {
+                    timer.Start();
+                }
+
+                RingValue = (Time.TotalSeconds / InitialTime) * 100;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
+            }
+            
         }
 
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(TimerControl), new PropertyMetadata(""));
@@ -151,29 +181,47 @@ namespace AHIFusion
 
         private void StartTimer()
         {
-            CalculateRingTime();
-            RingTimeTextBlock.Text = ringTimeString;
-            RingTimeBorder.Visibility = Visibility.Visible;
-            RingTimeTextBlock.Visibility = Visibility.Visible;
-            IsRunning = true;
-
-            if (!timer.Enabled)
+            try
             {
-                timer.Start();
-            }
+                Log.Information("StartTimer has been called");
 
-            RingFColor = new SolidColorBrush(Colors.AliceBlue);
-            TextColor = new SolidColorBrush(Colors.Black);
+                CalculateRingTime();
+                RingTimeTextBlock.Text = ringTimeString;
+                RingTimeBorder.Visibility = Visibility.Visible;
+                RingTimeTextBlock.Visibility = Visibility.Visible;
+                IsRunning = true;
+
+                if (!timer.Enabled)
+                {
+                    timer.Start();
+                }
+
+                RingFColor = new SolidColorBrush(Colors.AliceBlue);
+                TextColor = new SolidColorBrush(Colors.Black);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
+            }
         }
 
         private void StopTimer()
         {
-            RingTimeBorder.Visibility = Visibility.Collapsed;
-            RingTimeTextBlock.Visibility = Visibility.Collapsed;
-            IsRunning = false;
-            timer.Stop();
-            RingFColor = new SolidColorBrush(Color.FromArgb(255, 220, 228, 235));
-            TextColor = new SolidColorBrush(Color.FromArgb(255, 70, 70, 70));
+            try
+            {
+                Log.Information("StopTimer has been called");
+
+                RingTimeBorder.Visibility = Visibility.Collapsed;
+                RingTimeTextBlock.Visibility = Visibility.Collapsed;
+                IsRunning = false;
+                timer.Stop();
+                RingFColor = new SolidColorBrush(Color.FromArgb(255, 220, 228, 235));
+                TextColor = new SolidColorBrush(Color.FromArgb(255, 70, 70, 70));
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "An error occurred");
+            }
         }
 
         private void ResetButton_Click(object sender, RoutedEventArgs e)
@@ -194,13 +242,14 @@ namespace AHIFusion
         {
             try
             {
+                Log.Information("RingTimer has been called");
+
                 _mediaPlayer.Source = MediaSource.CreateFromUri(new Uri($"ms-appx:///Assets/Sounds/Timers/{Sound}"));
                 _mediaPlayer.Play();
             }
             catch (Exception ex)
             {
-                // Handle or log the exception as needed
-                System.Diagnostics.Debug.WriteLine($"Error playing sound: {ex.Message}");
+                Log.Error(ex, "An error occurred");
             }
         }
 

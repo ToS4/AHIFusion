@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AHIFusion.Model;
+using Serilog;
 using Windows.UI.Core;
 using Windows.UI.WindowManagement;
 
@@ -30,14 +31,24 @@ public sealed partial class AddAlarm : ContentDialog
 
     private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
-        Alarm alarmToAdd = new Alarm()
+        try
         {
-            Title = NameAdd,
-            Time = TimeOnly.FromTimeSpan(TimeAdd),
-            IsOn = true,
-            Days = DaysAdd,
-            Sound = SelectedSound
-        };
-        AlarmCollection.Alarms.Add(alarmToAdd);
+            Log.Information("ContentDialog_PrimaryButtonClick has been called");
+
+            Alarm alarmToAdd = new Alarm()
+            {
+                Title = NameAdd,
+                Time = TimeOnly.FromTimeSpan(TimeAdd),
+                IsOn = true,
+                Days = DaysAdd,
+                Sound = SelectedSound
+            };
+            AlarmCollection.Alarms.Add(alarmToAdd);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
+       
     }
 }

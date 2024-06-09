@@ -11,6 +11,7 @@ using Windows.Media.Core;
 using Windows.Media.Playback;
 using Windows.UI.Notifications;
 using Microsoft.Toolkit.Uwp.Notifications;
+using Serilog;
 
 namespace AHIFusion;
 public sealed partial class AlarmControl : UserControl
@@ -22,45 +23,72 @@ public sealed partial class AlarmControl : UserControl
 
     public AlarmControl()
     {
-        this.InitializeComponent();
+        try
+        {
+            Log.Information("Initializing AlarmControl");
 
-        _mediaPlayer = new MediaPlayer();
-        AlarmSoundPlayer.SetMediaPlayer(_mediaPlayer);
+            this.InitializeComponent();
 
-        timer.Interval = TimeSpan.FromSeconds(1);
-        timer.Tick += Timer_Tick;
-        timer.Start();
+            _mediaPlayer = new MediaPlayer();
+            AlarmSoundPlayer.SetMediaPlayer(_mediaPlayer);
+
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += Timer_Tick;
+            timer.Start();
 
 
-        UpdateClockHands();
+            UpdateClockHands();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
     }
 
     private void Timer_Tick(object? sender, object e)
     {
-        CalculateTimeLeft();
-        if (TimeLeft <= TimeSpan.FromMinutes(1))
+        try
         {
-            RingAlarm();
-            if (!hasRung)
+            Log.Information("Timer_Tick has been called");
+
+            CalculateTimeLeft();
+            if (TimeLeft <= TimeSpan.FromMinutes(1))
             {
-                ShowNotification(Title, "The alarm is ringing!");
-                hasRung = true;
+                RingAlarm();
+                if (!hasRung)
+                {
+                    ShowNotification(Title, "The alarm is ringing!");
+                    hasRung = true;
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
         }
     }
 
     private void UpdateClockHands()
     {
-        TimeOnly now = Time;
+        try
+        {
+            Log.Information("UpdateClockHands has been called");
 
-        double minuteAngle = now.Minute * 6; 
-        double hourAngle = (now.Hour % 12 + now.Minute / 60.0) * 30;
+            TimeOnly now = Time;
 
-        MinuteHand.X2 = 150 + 90 * Math.Sin(minuteAngle * Math.PI / 180);
-        MinuteHand.Y2 = 150 - 90 * Math.Cos(minuteAngle * Math.PI / 180);
+            double minuteAngle = now.Minute * 6;
+            double hourAngle = (now.Hour % 12 + now.Minute / 60.0) * 30;
 
-        HourHand.X2 = 150 + 50 * Math.Sin(hourAngle * Math.PI / 180);
-        HourHand.Y2 = 150 - 50 * Math.Cos(hourAngle * Math.PI / 180);
+            MinuteHand.X2 = 150 + 90 * Math.Sin(minuteAngle * Math.PI / 180);
+            MinuteHand.Y2 = 150 - 90 * Math.Cos(minuteAngle * Math.PI / 180);
+
+            HourHand.X2 = 150 + 50 * Math.Sin(hourAngle * Math.PI / 180);
+            HourHand.Y2 = 150 - 50 * Math.Cos(hourAngle * Math.PI / 180);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
     }
 
     public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(AlarmControl), new PropertyMetadata(""));
@@ -134,8 +162,10 @@ public sealed partial class AlarmControl : UserControl
     {
         try
         {
-            // Create the toast notification content
-            // notification must be enabled in windows settings
+            Log.Information("ShowNotification has been called");
+
+            Log.Debug("Create the toast notification content & notification must be enabled in windows settings");
+
             var toastContent = new ToastContentBuilder()
                 .AddArgument("action", "viewConversation")
                 .AddText(title)
@@ -149,15 +179,15 @@ public sealed partial class AlarmControl : UserControl
                 ToastNotificationManager.CreateToastNotifier().Show(toastNotification);
             }
 
-            System.Diagnostics.Debug.WriteLine("Notification should be shown now.");
+            Log.Debug("Notification should be shown now.");
         }
         catch (System.Runtime.InteropServices.COMException comEx)
         {
-            System.Diagnostics.Debug.WriteLine($"COMException: {comEx.Message} (HRESULT: {comEx.HResult})");
+            Log.Error($"COMException: {comEx}");
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Exception: {ex.Message}");
+            Log.Error($"Exception: {ex.Message}");
         }
     }
 
@@ -183,66 +213,85 @@ public sealed partial class AlarmControl : UserControl
 
     private void CalculateTimeLeft()
     {
-        DateTime now = DateTime.Now;
-        DateTime alarmTimeToday = new DateTime(now.Year, now.Month, now.Day, Time.Hour, Time.Minute, 0);
-
-        if (now > alarmTimeToday)
+        try
         {
-            alarmTimeToday = alarmTimeToday.AddDays(1);
-        }
+            Log.Information("CalculateTimeLeft has been called");
 
-        if (IsOn == false)
-        {
-            TimeLeft = TimeSpan.FromDays(7);
-            TimeLeftText = "Alarm is off";
-            hasRung = false; 
-            return;
-        }
+            DateTime now = DateTime.Now;
+            DateTime alarmTimeToday = new DateTime(now.Year, now.Month, now.Day, Time.Hour, Time.Minute, 0);
 
-        for (int i = 0; i < 7; i++)
-        {
-            string dayOfWeek = alarmTimeToday.DayOfWeek.ToString().Substring(0, 2);
-            if (Days.ContainsKey(dayOfWeek) && Days[dayOfWeek])
+            if (now > alarmTimeToday)
             {
-                TimeLeft = alarmTimeToday - DateTime.Now;
-                if (TimeLeft.Days != 0)
-                {
-                    TimeLeftText = $"Your Alarm will ring in {TimeLeft.Days}d {TimeLeft.Hours}h {TimeLeft.Minutes}min";
-                    if (TimeLeft > TimeSpan.FromMinutes(1))
-                    {
-                        hasRung = false; 
-                    }
-                    return;
-                }
-                TimeLeftText = $"Your Alarm will ring in {TimeLeft.Hours}h {TimeLeft.Minutes}min";
-                if (TimeLeft > TimeSpan.FromMinutes(1))
-                {
-                    hasRung = false; 
-                }
+                alarmTimeToday = alarmTimeToday.AddDays(1);
+            }
+
+            if (IsOn == false)
+            {
+                TimeLeft = TimeSpan.FromDays(7);
+                TimeLeftText = "Alarm is off";
+                hasRung = false;
                 return;
             }
 
-            alarmTimeToday = alarmTimeToday.AddDays(1);
+            for (int i = 0; i < 7; i++)
+            {
+                string dayOfWeek = alarmTimeToday.DayOfWeek.ToString().Substring(0, 2);
+                if (Days.ContainsKey(dayOfWeek) && Days[dayOfWeek])
+                {
+                    TimeLeft = alarmTimeToday - DateTime.Now;
+                    if (TimeLeft.Days != 0)
+                    {
+                        TimeLeftText = $"Your Alarm will ring in {TimeLeft.Days}d {TimeLeft.Hours}h {TimeLeft.Minutes}min";
+                        if (TimeLeft > TimeSpan.FromMinutes(1))
+                        {
+                            hasRung = false;
+                        }
+                        return;
+                    }
+                    TimeLeftText = $"Your Alarm will ring in {TimeLeft.Hours}h {TimeLeft.Minutes}min";
+                    if (TimeLeft > TimeSpan.FromMinutes(1))
+                    {
+                        hasRung = false;
+                    }
+                    return;
+                }
+
+                alarmTimeToday = alarmTimeToday.AddDays(1);
+            }
+
+            TimeLeft = TimeSpan.FromDays(7);
+            TimeLeftText = "No day selected";
+            hasRung = false;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
         }
 
-        TimeLeft = TimeSpan.FromDays(7);
-        TimeLeftText = "No day selected";
-        hasRung = false;
     }
 
     private async void Grid_PointerPressed(object sender, PointerRoutedEventArgs e)
     {
-        // Get the Alarm associated with this AlarmControl
-        Alarm alarm = this.DataContext as Alarm;
-
-        if (alarm != null)
+        try
         {
-            // Create a new EditAlarm dialog
-            EditAlarm editAlarmDialog = new EditAlarm(alarm);
+            Log.Information("Grid_PointerPressed has been called");
 
-            // Show the EditAlarm dialog
-            editAlarmDialog.XamlRoot = this.XamlRoot;
-            await editAlarmDialog.ShowAsync();
+            Log.Debug("Get the Alarm associated with this AlarmControl");
+            Alarm alarm = this.DataContext as Alarm;
+
+            if (alarm != null)
+            {
+                Log.Debug("Create a new EditAlarm dialog");
+                EditAlarm editAlarmDialog = new EditAlarm(alarm);
+
+                Log.Debug("Show the EditAlarm dialog");
+                editAlarmDialog.XamlRoot = this.XamlRoot;
+                await editAlarmDialog.ShowAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
         }
     }
 }

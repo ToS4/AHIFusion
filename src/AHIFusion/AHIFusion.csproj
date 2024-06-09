@@ -1,0 +1,237 @@
+<Project Sdk="Uno.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows')) or '$(EnableWindowsTargeting)' == 'true'">$(TargetFrameworks);$(DotNetVersion)-windows10.0.19041</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OverrideTargetFramework)'!=''">$(OverrideTargetFramework)</TargetFrameworks>
+
+    <!-- Ensures the .xr.xml files are generated in a proper layout folder -->
+    <GenerateLibraryLayout>true</GenerateLibraryLayout>
+    <!--
+      If you encounter this error message:
+
+        error NETSDK1148: A referenced assembly was compiled using a newer version of Microsoft.Windows.SDK.NET.dll.
+        Please update to a newer .NET SDK in order to reference this assembly.
+
+      This means that the two packages below must be aligned with the "build" version number of
+      the "Microsoft.Windows.SDK.BuildTools" package above, and the "revision" version number
+      must be the highest found in https://www.nuget.org/packages/Microsoft.Windows.SDK.NET.Ref.
+    -->
+    <!-- <WindowsSdkPackageVersion>10.0.22621.28</WindowsSdkPackageVersion> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ical.Net" />
+    <PackageReference Include="itext7" />
+    <PackageReference Include="itext7.bouncy-castle-adapter" />
+    <PackageReference Include="itext7.pdfhtml" />
+    <PackageReference Include="Markdig" />
+    <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" />
+    <PackageReference Include="Uno.Toolkit.Skia.WinUI" />
+    <PackageReference Include="Uno.WinUI">
+      <TreatAsUsed>true</TreatAsUsed>
+    </PackageReference>
+    <PackageReference Include="Uno.WinUI.Lottie" Condition="!$(TargetFramework.Contains('windows10'))" />
+    <PackageReference Include="Uno.WinUI.DevServer" Condition="'$(Configuration)'=='Debug' AND !$(TargetFramework.Contains('windows10'))" />
+    <PackageReference Include="Uno.Resizetizer" />
+    <PackageReference Include="CommunityToolkit.Mvvm">
+      <TreatAsUsed>true</TreatAsUsed>
+    </PackageReference>
+    <PackageReference Include="Uno.Extensions.Logging.WinUI" />
+    <PackageReference Include="Uno.Extensions.Logging.Serilog" />
+    <PackageReference Include="Uno.Material.WinUI" />
+    <PackageReference Include="Uno.Dsp.Tasks" />
+    <PackageReference Include="Uno.Toolkit.WinUI.Material" />
+    <PackageReference Include="Uno.Toolkit.WinUI" />
+    <PackageReference Include="Uno.Extensions.Core.WinUI" />
+    <PackageReference Include="Uno.Extensions.Hosting.WinUI" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console">
+      <TreatAsUsed>true</TreatAsUsed>
+    </PackageReference>
+    <PackageReference Include="Microsoft.WindowsAppSDK" Condition="$(TargetFramework.Contains('windows10'))">
+      <TreatAsUsed>true</TreatAsUsed>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Condition="$(TargetFramework.Contains('windows10'))" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UnoDspImportColors Include="Styles\*.zip" Generator="Xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Remove="Assets\Fonts\aptos-light.ttf" />
+    <Content Remove="Assets\Fonts\aptos-semibold.ttf" />
+    <Content Remove="Assets\Fonts\aptos.ttf" />
+    <Content Remove="Assets\Sounds\timer.mp3" />
+    <Content Remove="Assets\weather.html" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Remove="Assets\Sounds\Alarm-01.wav" />
+    <None Remove="CustomStyles.xaml" />
+    <None Remove="HomePage.xaml" />
+    <None Remove="View\AlarmContent.xaml" />
+    <None Remove="View\ClockPage.xaml" />
+    <None Remove="View\Clock\Alarm\EditAlarm.xaml" />
+    <None Remove="View\Clock\Custom Controls\AddAlarm.xaml" />
+    <None Remove="View\Clock\Custom Controls\AddRectControl.xaml" />
+    <None Remove="View\Clock\Custom Controls\AlarmControl.xaml" />
+    <None Remove="View\Clock\Custom Controls\CustomTimePicker.xaml" />
+    <None Remove="View\Clock\Custom Controls\StopwatchControl.xaml" />
+    <None Remove="View\Clock\Custom Controls\TimerControl.xaml" />
+    <None Remove="View\Clock\Stopwatch\StopwatchContent.xaml" />
+    <None Remove="View\Clock\Timer\AddTimer.xaml" />
+    <None Remove="View\Clock\Timer\EditTimer.xaml" />
+    <None Remove="View\Notes\LinkText.xaml" />
+    <None Remove="View\StopwatchContent.xaml" />
+    <None Remove="View\TimerContent.xaml" />
+    <None Remove="View\Todo\AddTodo.xaml" />
+    <None Remove="View\Todo\Custom Controls\TodoControl.xaml" />
+    <None Remove="View\Todo\Custom Controls\TodoListControl.xaml" />
+    <None Remove="View\Todo\EditTodo.xaml" />
+    <None Remove="View\Todo\TodoPage.xaml" />
+    <None Remove="View\Todo\TodoSubControl.xaml" />
+    <None Remove="View\WorldClockContent.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="NotesPage.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="HomePage.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\ClockPage.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="CustomStyles.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\AlarmContent.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\StopwatchContent.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\TimerContent.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\WorldClockContent.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Clock\Custom Controls\AlarmControl.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Clock\Custom Controls\AddRectControl.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Clock\Custom Controls\AddAlarm.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Clock\Alarm\EditAlarm.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Notes\NotesPage.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Notes\LinkText.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <CustomAdditionalCompileInputs Remove="View\Clock\Custom Controls\TimerControl.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Resource Remove="View\Clock\Custom Controls\TimerControl.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Clock\Custom Controls\TimerControl.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Clock\Timer\AddTimer.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Clock\Custom Controls\CustomTimePicker.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Clock\Timer\EditTimer.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Clock\Stopwatch\StopwatchContent.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Clock\Custom Controls\StopwatchControl.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Todo\TodoPage.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Todo\Custom Controls\TodoListControl.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Todo\Custom Controls\TodoControl.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Todo\AddTodo.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Todo\TodoSubControl.xaml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="View\Todo\EditTodo.xaml" />
+  </ItemGroup>
+</Project>

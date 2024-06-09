@@ -1,0 +1,22 @@
+﻿<ContentDialog
+    x:Class="AHIFusion.AddTimer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AHIFusion"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Add Timer"
+    Style="{ThemeResource DefaultContentDialogStyle}"
+    PrimaryButtonText="Add"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    CloseButtonText="Cancel"
+    DefaultButton="Primary"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}">
+  
+	<StackPanel>
+    <Viewbox MaxWidth="350">
+      <local:CustomTimePicker x:Name="CustomTimePicker"/>
+    </Viewbox>
+    <TextBlock Text="Name:" Margin="0,10,0,15"/>
+    <TextBox Text="{Binding NameAdd, Mode=TwoWay}"/>
+  </StackPanel>
+</ContentDialog>

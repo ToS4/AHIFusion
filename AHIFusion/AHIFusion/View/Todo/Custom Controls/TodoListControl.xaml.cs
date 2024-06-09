@@ -13,6 +13,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Serilog;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
@@ -27,10 +28,20 @@ public sealed partial class TodoListControl : UserControl, INotifyPropertyChange
 
     public TodoListControl(bool isnew)
     {
-        IsNew = isnew;
-        this.InitializeComponent();
-        this.Loaded += TodoListControl_Loaded;
-        this.RightTapped += TodoListControl_RightTapped;
+        try
+        {
+            Log.Information("Initializing TodoListControl");
+
+            IsNew = isnew;
+            this.InitializeComponent();
+            this.Loaded += TodoListControl_Loaded;
+            this.RightTapped += TodoListControl_RightTapped;
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
+
     }
 
     private void TodoListControl_RightTapped(object sender, RightTappedRoutedEventArgs e)
@@ -40,56 +51,96 @@ public sealed partial class TodoListControl : UserControl, INotifyPropertyChange
 
     private void TodoListControl_Loaded(object sender, RoutedEventArgs e)
     {
-        if (IsNew)
+        try
         {
-            this.DispatcherQueue.TryEnqueue(() =>
+            Log.Information("TodoListControl has been loaded");
+
+            if (IsNew)
             {
-                FocusOnTextBox();
-            });
-            IsNew = false;
+                this.DispatcherQueue.TryEnqueue(() =>
+                {
+                    FocusOnTextBox();
+                });
+                IsNew = false;
+            }
         }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
+
+        
     }
 
     public void FocusOnTextBox()
     {
-        NameTextBlock.Visibility = Visibility.Collapsed;
-        NameTextBox.Visibility = Visibility.Visible;
-        NameTextBox.Focus(FocusState.Programmatic);
-        NameTextBox.SelectAll();
+        try
+        {
+            Log.Information("FocusOnTextBox has been called");
+
+            NameTextBlock.Visibility = Visibility.Collapsed;
+            NameTextBox.Visibility = Visibility.Visible;
+            NameTextBox.Focus(FocusState.Programmatic);
+            NameTextBox.SelectAll();
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }   
     }
 
     private void NameTextBox_KeyDown(object sender, KeyRoutedEventArgs e)
     {
-        if (e.Key == Windows.System.VirtualKey.Enter)
+        try
         {
-            NameTextBlock.Visibility = Visibility.Visible;
-            NameTextBox.Visibility = Visibility.Collapsed;
-            Name = NameTextBox.Text;
+            Log.Information("Key down while in NameTextBox");
+
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                NameTextBlock.Visibility = Visibility.Visible;
+                NameTextBox.Visibility = Visibility.Collapsed;
+                Name = NameTextBox.Text;
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
         }
     }
 
     private void ShowCommandBarFlyout()
     {
-        var flyout = new CommandBarFlyout();
-
-        var renamButton = new AppBarButton
+        try
         {
-            Icon = new SymbolIcon(Symbol.Rename),
-            Label = "Rename"
-        };
-        renamButton.Click += RenameButton_Click;
+            Log.Information("ShowCommandBarFlyout has been called");
 
-        var deleteButton = new AppBarButton
+            var flyout = new CommandBarFlyout();
+
+            var renamButton = new AppBarButton
+            {
+                Icon = new SymbolIcon(Symbol.Rename),
+                Label = "Rename"
+            };
+            renamButton.Click += RenameButton_Click;
+
+            var deleteButton = new AppBarButton
+            {
+                Icon = new SymbolIcon(Symbol.Delete),
+                Label = "Delete"
+            };
+            deleteButton.Click += DeleteButton_Click;
+
+            flyout.PrimaryCommands.Add(renamButton);
+            flyout.PrimaryCommands.Add(deleteButton);
+
+            flyout.ShowAt(this);
+        }
+        catch (Exception ex)
         {
-            Icon = new SymbolIcon(Symbol.Delete),
-            Label = "Delete"
-        };
-        deleteButton.Click += DeleteButton_Click;
+            Log.Error(ex, "An error occurred");
+        }
 
-        flyout.PrimaryCommands.Add(renamButton);
-        flyout.PrimaryCommands.Add(deleteButton);
-
-        flyout.ShowAt(this);
+        
     }
 
     private void RenameButton_Click(object sender, RoutedEventArgs e)
@@ -100,10 +151,21 @@ public sealed partial class TodoListControl : UserControl, INotifyPropertyChange
     public event EventHandler DeleteClicked;
     private void DeleteButton_Click(object sender, RoutedEventArgs e)
     {
-        TodoList currentTodoList = this.DataContext as TodoList;
-        TodoCollection.TodoLists.Remove(currentTodoList);
+        try
+        {
+            Log.Information("DeleteButton has been click");
 
-        DeleteClicked?.Invoke(this, EventArgs.Empty);
+            TodoList currentTodoList = this.DataContext as TodoList;
+            TodoCollection.TodoLists.Remove(currentTodoList);
+
+            DeleteClicked?.Invoke(this, EventArgs.Empty);
+        }
+        catch (Exception ex)
+        {
+            Log.Error(ex, "An error occurred");
+        }
+
+
     }
 
     public static readonly DependencyProperty NameProperty = DependencyProperty.Register("Name", typeof(string), typeof(TodoListControl), new PropertyMetadata(""));
@@ -166,25 +228,37 @@ public sealed partial class TodoListControl : UserControl, INotifyPropertyChange
 
     private void Ellipse_PointerPressed(object sender, PointerRoutedEventArgs e)
     {
-        Flyout flyout = new Flyout();
-        ColorPicker colorPicker = new ColorPicker()
+        try
         {
-            ColorSpectrumShape = ColorSpectrumShape.Ring,
-            IsColorPreviewVisible = false,
-            IsColorChannelTextInputVisible = false,
-            IsHexInputVisible = false
-        };
-        flyout.Content = colorPicker;
 
-        flyout.FlyoutPresenterStyle = new Style(typeof(FlyoutPresenter));
-        flyout.FlyoutPresenterStyle.Setters.Add(new Setter(BackgroundProperty, new SolidColorBrush(Colors.White)));
+            Log.Information("Ellipse has been pressed");
 
-        flyout.Closed += (s, e) =>
+            Flyout flyout = new Flyout();
+            ColorPicker colorPicker = new ColorPicker()
+            {
+                ColorSpectrumShape = ColorSpectrumShape.Ring,
+                IsColorPreviewVisible = false,
+                IsColorChannelTextInputVisible = false,
+                IsHexInputVisible = false
+            };
+            flyout.Content = colorPicker;
+
+            flyout.FlyoutPresenterStyle = new Style(typeof(FlyoutPresenter));
+            flyout.FlyoutPresenterStyle.Setters.Add(new Setter(BackgroundProperty, new SolidColorBrush(Colors.White)));
+
+            flyout.Closed += (s, e) =>
+            {
+                Color = colorPicker.Color;
+            };
+
+            flyout.ShowAt(sender as FrameworkElement);
+        }
+        catch (Exception ex)
         {
-            Color = colorPicker.Color;
-        };
+            Log.Error(ex, "An error occurred");
+        }
 
-        flyout.ShowAt(sender as FrameworkElement);
+        
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

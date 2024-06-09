@@ -676,7 +676,7 @@ namespace AHIFusion
                 StorageFile saveFile = await fileSavePicker.PickSaveFileAsync();
                 if (saveFile != null)
                 {
-                    Log.Information("A file was selected to save");
+                    Log.Information($"A file was selected to save: {saveFile.Path}");
 
                     CachedFileManager.DeferUpdates(saveFile);
 
@@ -685,20 +685,19 @@ namespace AHIFusion
 
                     if (saveFile.FileType == ".pdf")
                     {
-
-                        // Creating temp.html file
+                        Log.Debug("Creating temp.html file");
                         File.WriteAllText("temp.html", htmlText);
 
-                        // Converting to pdf
+                        Log.Debug("Converting to pdf");
                         HtmlConverter.ConvertToPdf(
                                 new FileInfo("temp.html"),
                                 new FileInfo(saveFile.Path)
                                 );
 
-                        // Deleting temp.html file
+                        Log.Debug("Deleting temp.html file");
                         File.Delete("temp.html");
                     }
-                    else // Markdown
+                    else
                     {
                         await FileIO.WriteTextAsync(saveFile, currentText);
                     }

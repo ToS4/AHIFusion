@@ -21,6 +21,7 @@ namespace AHIFusion
 	public sealed partial class TodoControl : UserControl
 	{
         public event Action<Todo> DeleteTodo;
+        public string DueDateStirng;
 
 		public TodoControl()
 		{
@@ -46,7 +47,11 @@ namespace AHIFusion
         public DateTime DueDate
         {
             get { return (DateTime)GetValue(DueDateProperty); }
-            set { SetValue(DueDateProperty, value); }
+            set
+            {
+                SetValue(DueDateProperty, value);
+                DueDateStirng = value.ToString("MM/dd/yyyy");
+            }
         }
 
         public static readonly DependencyProperty IsCompletedProperty = DependencyProperty.Register("IsCompleted", typeof(bool), typeof(TodoControl), new PropertyMetadata(false));

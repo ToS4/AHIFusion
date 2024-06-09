@@ -90,6 +90,7 @@ namespace AHIFusion
             TabViewItem tab = CreateTab(new HomePage());
             tab.Header = "Home";
             tab.IconSource = new SymbolIconSource { Symbol = Symbol.Home };
+            tab.IsSelected = true;
             Tabs.Add(tab);
         }
 

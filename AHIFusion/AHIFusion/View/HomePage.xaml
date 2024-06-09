@@ -87,22 +87,48 @@
 
 
       <utu:ShadowContainer Shadows="{StaticResource ShadowsHome}" Grid.Column="0" Grid.Row="0">
-        <Button x:Name="Todo" Content="Todo" Click="Todo_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20"/>
+        <Button x:Name="Todo" Click="Todo_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20">
+          <Button.Content>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+              <FontIcon Glyph="&#xe73e;" FontSize="75" FontFamily="Segoe MDL2 Assets" />
+              <TextBlock Text="Todo" FontSize="30" HorizontalAlignment="Center" />
+            </StackPanel>
+          </Button.Content>
+        </Button>
       </utu:ShadowContainer>
 
       <utu:ShadowContainer Shadows="{StaticResource ShadowsHome}" Grid.Column="0" Grid.Row="1">
-        <Button x:Name="Calendar" Content="Calendar" Click="Calendar_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20" />
+        <Button x:Name="Calendar" Click="Calendar_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20">
+          <Button.Content>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+              <FontIcon Glyph="&#xE787;" FontSize="75" FontFamily="Segoe MDL2 Assets" />
+              <TextBlock Text="Calendar" FontSize="30" HorizontalAlignment="Center" />
+            </StackPanel>
+          </Button.Content>
+        </Button>
       </utu:ShadowContainer>
 
       <utu:ShadowContainer Shadows="{StaticResource ShadowsHome}" Grid.Column="1" Grid.Row="0">
-        <Button x:Name="Notes" Content="Notes" Click="Notes_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20" />
+        <Button x:Name="Notes" Click="Notes_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20">
+          <Button.Content>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+              <FontIcon Glyph="&#xE70B;" FontSize="75" FontFamily="Segoe MDL2 Assets" />
+              <TextBlock Text="Notes" FontSize="30" HorizontalAlignment="Center" />
+            </StackPanel>
+          </Button.Content>
+        </Button>
       </utu:ShadowContainer>
 
       <utu:ShadowContainer Shadows="{StaticResource ShadowsHome}" Grid.Column="1" Grid.Row="1">
-        <Button x:Name="Clock" Content="Clock" Click="Clock_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20" />
+        <Button x:Name="Clock" Click="Clock_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20">
+          <Button.Content>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+              <FontIcon Glyph="&#xE121;" FontSize="75" FontFamily="Segoe MDL2 Assets" />
+              <TextBlock Text="Clock" FontSize="30" HorizontalAlignment="Center" />
+            </StackPanel>
+          </Button.Content>
+        </Button>
       </utu:ShadowContainer>
-
-
 
     </Grid>
     

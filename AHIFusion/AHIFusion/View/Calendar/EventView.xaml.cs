@@ -40,10 +40,6 @@ public sealed partial class EventView : ContentDialog
             Log.Error(ex, "Error occurred while initializing EventView");
 
         }
-        finally
-        {
-            Log.CloseAndFlush();
-        }
     }
 
     public EventView(bool isNew, DateOnly givenDate)
@@ -66,10 +62,6 @@ public sealed partial class EventView : ContentDialog
         {
             Log.Error(ex, "Error occurred while initializing EventView");
 
-        }
-        finally
-        {
-            Log.CloseAndFlush();
         }
     }
 
@@ -98,11 +90,6 @@ public sealed partial class EventView : ContentDialog
             Log.Error(ex, "Error occurred while handling ContentDialog_PrimaryButton click event");
 
         }
-        finally
-        {
-            Log.CloseAndFlush();
-        }
-
     }
 
     private void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -119,10 +106,6 @@ public sealed partial class EventView : ContentDialog
         {
             Log.Error(ex, "Error occurred while handling DeleteButton click event");
 
-        }
-        finally
-        {
-            Log.CloseAndFlush();
         }
     }
 }

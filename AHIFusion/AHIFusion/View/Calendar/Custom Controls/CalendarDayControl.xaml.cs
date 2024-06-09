@@ -25,10 +25,6 @@ namespace AHIFusion
             {
                 Log.Error(ex, "Error occurred while initializing CalendarDayControl");
             }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
         }
 
         public void UpdateDay()
@@ -78,10 +74,6 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "Error occurred while updating day");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
             }
         }
     }

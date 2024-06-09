@@ -6,50 +6,106 @@
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d"
-  Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
+  Background="{ThemeResource BackgroundColor}"
   xmlns:utu="using:Uno.Toolkit.UI">
+
+  <Page.Resources>
+    <ResourceDictionary>
+      <utu:ShadowCollection x:Key="ShadowsHome">
+        <utu:Shadow BlurRadius="20"
+          OffsetX="0"
+          OffsetY="8"
+          Color="Gray"
+          Opacity="0.4"
+          Spread="5"/>
+      </utu:ShadowCollection>
+
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ms-appx:///AHIFusion/Styles/ColorPaletteOverride.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+
+  </Page.Resources>
 
   <Grid>
 
-    <Grid.RowDefinitions>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="2*"/>
-      <RowDefinition Height="2*"/>
-    </Grid.RowDefinitions>
-
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*"/>
-      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="4*"/>
     </Grid.ColumnDefinitions>
 
-    <utu:ShadowContainer Grid.ColumnSpan="2" Margin="10">
-      <utu:ShadowContainer.Shadows>
-        <utu:ShadowCollection>
-          <utu:Shadow 
-                        Color="Black" 
-                        Opacity="0.3" 
-                        BlurRadius="10" 
-                        OffsetX="5" 
-                        OffsetY="5"/>
-        </utu:ShadowCollection>
-      </utu:ShadowContainer.Shadows>
+    <Grid Background="{ThemeResource SurfaceColor}">
 
-      <Viewbox>
-        <Border CornerRadius="20" BorderBrush="Gray" BorderThickness="2" Background="DarkGray">
-          <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10">
-            <TextBlock x:Name="CityTextBlock" FontSize="24" TextAlignment="Center" />
-            <Image x:Name="WeatherIcon" Width="100" Height="100" />
-            <TextBlock x:Name="WeatherDescriptionTextBlock" FontSize="18" TextAlignment="Center" />
-            <TextBlock x:Name="TemperatureTextBlock" FontSize="24" TextAlignment="Center" />
-          </StackPanel>
-        </Border>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="1.5*"/>
+        <RowDefinition Height="5*"/>
+        <RowDefinition Height="1.5*"/>
+      </Grid.RowDefinitions>
+      
+      <Viewbox >
+        <TextBlock Text="AHIFusion" Margin="8" Foreground="{ThemeResource OnSurfaceColor}"/>
       </Viewbox>
-    </utu:ShadowContainer>
 
-    <Button x:Name="Todo" Content="Todo" Click="Todo_Click" Grid.Column="0" Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20" />
-    <Button x:Name="Calendar" Content="Calendar" Click="Calendar_Click" Grid.Column="1" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20" />
-    <Button x:Name="Notes" Content="Notes" Click="Notes_Click" Grid.Column="0" Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20" />
-    <Button x:Name="Clock" Content="Clock" Click="Clock_Click" Grid.Column="1" Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20" />
+      <utu:ShadowContainer Grid.Row="1" Margin="20" Shadows="{StaticResource ShadowsHome}">
 
+        <Viewbox >
+          <Border CornerRadius="10" BorderBrush="{ThemeResource OutlineColor}" BorderThickness="1" Background="{ThemeResource TertiaryContainerColor}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Padding="10">
+              <TextBlock x:Name="CityTextBlock" FontSize="24" TextAlignment="Center" Foreground="{ThemeResource OnTertiaryContainerColor}"/>
+              <Image x:Name="WeatherIcon" Width="100" Height="100" Stretch="Uniform"/>
+              <TextBlock x:Name="WeatherDescriptionTextBlock" FontSize="18" TextAlignment="Center" Foreground="{ThemeResource OnTertiaryContainerColor}" />
+              <TextBlock x:Name="TemperatureTextBlock" FontSize="24" TextAlignment="Center" Foreground="{ThemeResource OnTertiaryContainerColor}"/>
+            </StackPanel>
+          </Border>
+        </Viewbox>
+      </utu:ShadowContainer>
+
+
+      <utu:ShadowContainer Grid.Row="2" HorizontalAlignment="Center" Margin="20" Shadows="{StaticResource ShadowsHome}">
+        <Viewbox >
+          <Border x:Name="SettingsStackPanel" BorderBrush="{ThemeResource OutlineColor}" BorderThickness="1" CornerRadius="10" Background="{ThemeResource TertiaryContainerColor}" PointerEntered="StackPanel_PointerEntered" PointerExited="StackPanel_PointerExited" PointerPressed="StackPanel_PointerPressed" >
+            <StackPanel Orientation="Horizontal" Margin="10,0,0,0" >
+              <TextBlock Text="Theme" VerticalAlignment="Center" Foreground="{ThemeResource OnSurfaceColor}"/>
+              <AppBarButton Icon="Setting" VerticalAlignment="Center" Foreground="{ThemeResource OnSurfaceColor}" IsEnabled="False"/>
+            </StackPanel>
+          </Border>
+        </Viewbox>
+      </utu:ShadowContainer>
+
+    </Grid>
+
+    <Grid Grid.Column="1" >
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+
+      <utu:ShadowContainer Shadows="{StaticResource ShadowsHome}" Grid.Column="0" Grid.Row="0">
+        <Button x:Name="Todo" Content="Todo" Click="Todo_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20"/>
+      </utu:ShadowContainer>
+
+      <utu:ShadowContainer Shadows="{StaticResource ShadowsHome}" Grid.Column="0" Grid.Row="1">
+        <Button x:Name="Calendar" Content="Calendar" Click="Calendar_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20" />
+      </utu:ShadowContainer>
+
+      <utu:ShadowContainer Shadows="{StaticResource ShadowsHome}" Grid.Column="1" Grid.Row="0">
+        <Button x:Name="Notes" Content="Notes" Click="Notes_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20" />
+      </utu:ShadowContainer>
+
+      <utu:ShadowContainer Shadows="{StaticResource ShadowsHome}" Grid.Column="1" Grid.Row="1">
+        <Button x:Name="Clock" Content="Clock" Click="Clock_Click" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20" />
+      </utu:ShadowContainer>
+
+
+
+    </Grid>
+    
+    
   </Grid>
 </Page>

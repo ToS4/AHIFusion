@@ -17,6 +17,7 @@
       </utum:MaterialToolkitTheme.FontOverrideDictionary>
     </utum:MaterialToolkitTheme>
     <ResourceDictionary Source="CustomStyles.xaml"></ResourceDictionary>
+    <ResourceDictionary Source="ms-appx:///AHIFusion/Styles/ColorPaletteOverride.xaml"/>
   </ResourceDictionary.MergedDictionaries>
 
   

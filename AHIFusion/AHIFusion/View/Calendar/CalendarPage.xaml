@@ -8,6 +8,14 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="Page_Loaded">
 
+  <Page.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ms-appx:///AHIFusion/Styles/ColorPaletteOverride.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Page.Resources>
+  
   <Grid>
 
     <Grid.ColumnDefinitions>
@@ -20,20 +28,20 @@
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <Grid Grid.Column="0">
+    <Grid Grid.Column="0" Background="{ThemeResource SecondaryColor}">
       <Grid.RowDefinitions>
         <RowDefinition Height="50*"/>
         <RowDefinition Height="100*"/>
       </Grid.RowDefinitions>
 
-      <Viewbox Stretch="Fill" VerticalAlignment="Top">
-        <CalendarView x:Name="SmallCalendarView" SelectionMode="Single" CalendarIdentifier="GregorianCalendar"  SelectedDatesChanged="SmallCalendarView_SelectedDatesChanged" />
+      <Viewbox Stretch="Fill" VerticalAlignment="Top" Margin="4">
+        <CalendarView x:Name="SmallCalendarView" SelectionMode="Single" CalendarIdentifier="GregorianCalendar" SelectedDatesChanged="SmallCalendarView_SelectedDatesChanged" />
       </Viewbox>
-      
-      <Rectangle Fill="DarkGray" Grid.Row="2"/>
+
+      <Rectangle Fill="{ThemeResource SurfaceColor}" Grid.Row="2"/>
       <StackPanel Grid.Row="2" Margin="5" VerticalAlignment="Bottom">
-        <Button Content="Save" HorizontalAlignment="Stretch" Margin="5" x:Name="SaveButton" Click="SaveButton_Click" />
-        <Button Content="Load" HorizontalAlignment="Stretch" Margin="5" x:Name="LoadButton" Click="LoadButton_Click" />
+        <Button Content="Save" HorizontalAlignment="Stretch" Margin="5" CornerRadius="10" x:Name="SaveButton" Click="SaveButton_Click" />
+        <Button Content="Load" HorizontalAlignment="Stretch" Margin="5" CornerRadius="10" x:Name="LoadButton" Click="LoadButton_Click" />
       </StackPanel>
     </Grid>
 
@@ -72,12 +80,13 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-      
-      <TextBlock x:Name="CurrentDayDateTextBlock" Text="26.05.2024" TextAlignment="Center" FontSize="40" Margin="15" TextWrapping="Wrap" HorizontalAlignment="Stretch"/>
 
-      <StackPanel Grid.Row="1" VerticalAlignment="Stretch" x:Name="CurrentDayEventsStackPanel" Background="DarkGray" />
+      <Rectangle HorizontalAlignment="Stretch" Fill="{ThemeResource SecondaryColor}"/>
+      <TextBlock x:Name="CurrentDayDateTextBlock" TextAlignment="Center" FontSize="40" Margin="15" TextWrapping="Wrap" HorizontalAlignment="Stretch"/>
+
+      <StackPanel Grid.Row="1" VerticalAlignment="Stretch" x:Name="CurrentDayEventsStackPanel" Background="{ThemeResource SurfaceColor}"/>
       
-      <Button x:Name="AddButton" Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="Add Event" Click="AddButton_Click"/>
+      <Button x:Name="AddButton" CornerRadius="10" Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Content="Add Event" Click="AddButton_Click"/>
     </Grid>
 
   </Grid>

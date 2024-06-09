@@ -11,4 +11,5 @@
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
   <TextBlock x:Name="EventTitleTextBlock" Text="Template Event Text" TextAlignment="Center" HorizontalAlignment="Stretch"/>
+
 </UserControl>

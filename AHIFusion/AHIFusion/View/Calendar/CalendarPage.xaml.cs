@@ -1,5 +1,6 @@
 using System;
 using System.Security.Cryptography.X509Certificates;
+using AHIFusion.Model;
 using Ical.Net;
 using Ical.Net.CalendarComponents;
 using Ical.Net.DataTypes;
@@ -9,6 +10,7 @@ using Microsoft.UI.Text;
 using Serilog;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
+using Windows.UI;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -119,13 +121,29 @@ public sealed partial class CalendarPage : Page
 
                 if (dayEvent.Date == _currentDayControl.Day.Date)
                 {
-                    ShowEventControl showEventControl = new ShowEventControl()
+
+                    var color = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[ThemeConfig.theme])["SurfaceVariantColor"];
+                    var brushColor = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[ThemeConfig.theme])["OutlineColor"];
+
+                    Border border = new Border()
                     {
+                        BorderBrush = new SolidColorBrush(brushColor),
+                        BorderThickness = new Thickness(1.5),
+                        CornerRadius = new CornerRadius(5),
+                        Height = 50,
                         Margin = new Thickness(5),
-                        Event = dayEvent
+                        Background = new SolidColorBrush(color)
                     };
 
-                    CurrentDayEventsStackPanel.Children.Add(showEventControl);
+                    ShowEventControl showEventControl = new ShowEventControl()
+                    {
+                        Event = dayEvent,
+                        VerticalAlignment = VerticalAlignment.Center
+                    };
+
+                    border.Child = showEventControl;
+
+                    CurrentDayEventsStackPanel.Children.Add(border);
                     showEventControl.UpdateEvent();
 
                     showEventControl.PointerPressed += ShowEventControl_PointerPressed;
@@ -150,12 +168,15 @@ public sealed partial class CalendarPage : Page
             int firstDayOffset = (int)firstDayOfMonth.DayOfWeek;
             DateOnly firstDayToDisplay = firstDayOfMonth.AddDays(-firstDayOffset);
 
+            var color = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[ThemeConfig.theme])["PrimaryColor"];
+
             for (int i = 0; i < 7; i++)
             {
                 TextBlock textBlock = new TextBlock()
                 {
                     TextAlignment = TextAlignment.Center,
-                    Text = _days[i]
+                    Text = _days[i],
+                    Foreground = new SolidColorBrush(color)
                 };
 
                 Grid.SetColumn(textBlock, i);

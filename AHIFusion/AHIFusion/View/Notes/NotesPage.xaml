@@ -14,15 +14,15 @@
     </Grid.RowDefinitions>
 
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="2*"/>
-      <ColumnDefinition Width="8*"/>
+      <ColumnDefinition Width="1*"/>
+      <ColumnDefinition Width="4*"/>
     </Grid.ColumnDefinitions>
 
-    <Grid Grid.Column="0" Grid.Row="0">
+    <Grid Grid.Column="0" Grid.Row="0" Background="{ThemeResource SurfaceColor}">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="90*"/>
-        <RowDefinition Height="5*"/>
+        <RowDefinition Height="30*"/>
       </Grid.RowDefinitions>
 
       <Grid.ColumnDefinitions>
@@ -30,14 +30,20 @@
       </Grid.ColumnDefinitions>
 
       <Grid Margin="15">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*" />
           <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBox x:Name="SearchTextBox" Grid.Column="0" Margin="0,0,20,0" Padding="5" VerticalAlignment="Center" TextChanged="SearchTextBox_TextChanged" />
-        <SymbolIcon Symbol="Find" HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" />
+        <TextBlock  Text="Notes" Foreground="{ThemeResource OnSurfaceColor}" VerticalAlignment="Center" FontSize="54" HorizontalAlignment="Center" Margin="10"/>
+        <TextBox x:Name="SearchTextBox" Grid.Row="1" Grid.Column="0" Margin="0,0,20,0" Padding="5" VerticalAlignment="Center" TextChanged="SearchTextBox_TextChanged" />
+        <SymbolIcon Symbol="Find" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" />
       </Grid>
+
 
       <ListView x:Name="NotesListView" Grid.Row="1" SelectionChanged="NotesListView_SelectionChanged" SelectionMode="Single">
         <ListView.ItemTemplate>
@@ -56,7 +62,9 @@
           </DataTemplate>
         </ListView.ItemTemplate>
       </ListView>
-      <Button x:Name="AddButton" Grid.Row="2" HorizontalAlignment="Stretch" Content="Add Note" Click="AddButton_Click"/>
+      <Viewbox Grid.Row="2" VerticalAlignment="Bottom">
+        <Button x:Name="AddButton" CornerRadius="10" Content="Add Note"  Height="20" Width="200" Margin="40,0,40,18"  Click="AddButton_Click"/>
+      </Viewbox>
     </Grid>
 
     <Grid x:Name="RightViewGrid" Grid.Column="1" Grid.Row="0" Visibility="Collapsed">
@@ -73,7 +81,7 @@
 
       <TextBlock Grid.Row="0" x:Name="RightViewNoteTitleTextBlock" Text="Title" TextAlignment="Left"  Grid.ColumnSpan="2" Padding="5"/>
 
-      <RichEditBox Grid.Row="1" Loaded="EditorRichEditBox_Loaded" Unloaded="EditorRichEditBox_Unloaded" TextChanged="EditorRichEditBox_TextChanged" x:Name="EditorRichEditBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" Padding="10"/>
+      <RichEditBox Grid.Row="1" Foreground="{StaticResource OnPrimaryColor}" Loaded="EditorRichEditBox_Loaded" Unloaded="EditorRichEditBox_Unloaded" TextChanged="EditorRichEditBox_TextChanged" x:Name="EditorRichEditBox" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" Padding="10"/>
 
       <WebView2 Grid.Row="1" x:Name="EditorWebView" Grid.Column="1" Source="get-good" Margin="10" />
 

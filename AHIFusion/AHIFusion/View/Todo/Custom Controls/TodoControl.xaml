@@ -11,7 +11,15 @@
   DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
   <UserControl.Resources>
-    <local:PriorityToBrushConverter x:Key="PriorityToBrushConverter"/>
+    <ResourceDictionary>
+      <local:PriorityToBrushConverter x:Key="PriorityToBrushConverter"/>
+      <local:DueDateConverter x:Key="DueDateConverter"/>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ms-appx:///AHIFusion/Styles/ColorPaletteOverride.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+
+      
+    </ResourceDictionary>
   </UserControl.Resources>
 
   <Grid PointerEntered="Grid_PointerEntered" PointerExited="Grid_PointerExited" PointerPressed="Grid_PointerPressed">
@@ -28,7 +36,7 @@
 
 
     <Border CornerRadius="10" BorderThickness="2" Grid.ColumnSpan="3" Grid.RowSpan="2">
-      <Rectangle x:Name="BackgroundRect" ></Rectangle>
+      <Rectangle x:Name="BackgroundRect" Fill="{StaticResource PrimaryColor}" ></Rectangle>
     </Border>
 
     <Viewbox Grid.RowSpan="2">
@@ -36,11 +44,11 @@
     </Viewbox>
 
     <Viewbox Grid.Column="1" HorizontalAlignment="Left" Margin="20,20,10,10">
-      <TextBlock Text="{Binding Title, Mode=TwoWay}" VerticalAlignment="Center" Margin="-15,0,0,0" Foreground="Black"/>
+      <TextBlock Text="{Binding Title, Mode=TwoWay}" VerticalAlignment="Center" Margin="-15,0,0,0" Foreground="{StaticResource OnPrimaryColor}"/>
     </Viewbox>
 
     <Viewbox Grid.Column="2" HorizontalAlignment="Left" Margin="-20,0,10,0">
-      <TextBlock Text="12.05.2024" VerticalAlignment="Center" Foreground="Black"/>
+      <TextBlock x:Name="DueDateTextBlock" Foreground="{StaticResource OnPrimaryColor}" Text="{Binding DueDate, Converter={StaticResource DueDateConverter}}" VerticalAlignment="Center"/>
     </Viewbox>
     
     <Line Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" 

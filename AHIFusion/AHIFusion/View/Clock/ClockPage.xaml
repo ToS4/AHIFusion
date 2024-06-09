@@ -12,20 +12,31 @@
                   Loaded="ClockNavigation_Loaded"
                   SelectionChanged="ClockNavigation_SelectionChanged"
                   PaneDisplayMode="Left"
-                  IsSettingsVisible="True"
+                  IsSettingsVisible="False"
                   IsBackButtonVisible="Collapsed"
                   AlwaysShowHeader="True"
                   PaneTitle="Clock">
 
     <NavigationView.MenuItems>
       <NavigationViewItemSeparator Height="15" Opacity="0"/>
-      <NavigationViewItem Icon="Clock" Content="Alarm" Tag="AHIFusion.AlarmContent"/>
+      <NavigationViewItem Content="Alarm" Tag="AHIFusion.AlarmContent">
+        <NavigationViewItem.Icon>
+          <FontIcon FontFamily="ms-appx:///Assets/Fonts/aptos.ttf#Aptos" Glyph="&#x23F0;"/>
+        </NavigationViewItem.Icon>
+      </NavigationViewItem>
       <NavigationViewItemSeparator Height="15"/>
-      <NavigationViewItem Icon="MusicInfo" Content="Stopwatch" Tag="AHIFusion.StopwatchContent" />
+      <NavigationViewItem Content="Stopwatch" Tag="AHIFusion.StopwatchContent">
+        <NavigationViewItem.Icon>
+          <FontIcon FontFamily="ms-appx:///Assets/Fonts/aptos.ttf#Aptos" Glyph="&#x23F1;"/>
+        </NavigationViewItem.Icon>
+      </NavigationViewItem>
       <NavigationViewItemSeparator Height="15"/>
-      <NavigationViewItem Icon="Refresh" Content="Timer" Tag="AHIFusion.TimerContent" />
+      <NavigationViewItem Content="Timer" Tag="AHIFusion.TimerContent">
+        <NavigationViewItem.Icon>
+          <FontIcon FontFamily="ms-appx:///Assets/Fonts/aptos.ttf#Aptos" Glyph="&#x23F2;"/>
+        </NavigationViewItem.Icon>
+      </NavigationViewItem>
       <NavigationViewItemSeparator Height="15"/>
-      <NavigationViewItem Icon="ReportHacked" Content="World Clock" Tag="AHIFusion.WorldClockContent" />
     </NavigationView.MenuItems>
     
     <Frame x:Name="ContentFrame">

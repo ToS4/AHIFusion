@@ -15,11 +15,11 @@ namespace AHIFusion
 
             switch (priority)
             {
-                case 1:
+                case 3:
                     return new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0));
                 case 2:
                     return new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 165, 0));
-                case 3:
+                case 1:
                     return new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 255, 0));
                 default:
                     return new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 0));

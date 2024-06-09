@@ -13,6 +13,8 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System.Collections.ObjectModel;
+using Windows.UI;
+using AHIFusion.Model;
 
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
@@ -21,12 +23,13 @@ namespace AHIFusion
 	public sealed partial class TodoControl : UserControl
 	{
         public event Action<Todo> DeleteTodo;
-        public string DueDateStirng;
 
 		public TodoControl()
 		{
 			this.InitializeComponent();
-            BackgroundRect.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 181, 126, 220));
+
+            var lighterColor = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[ThemeConfig.theme])["PrimaryColor"];
+            BackgroundRect.Fill = new SolidColorBrush(lighterColor);
         }
 
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(TodoControl), new PropertyMetadata(""));
@@ -47,10 +50,9 @@ namespace AHIFusion
         public DateTime DueDate
         {
             get { return (DateTime)GetValue(DueDateProperty); }
-            set
-            {
-                SetValue(DueDateProperty, value);
-                DueDateStirng = value.ToString("MM/dd/yyyy");
+            set 
+            { 
+                SetValue(DueDateProperty, value); 
             }
         }
 
@@ -77,12 +79,14 @@ namespace AHIFusion
 
         private void Grid_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
-            BackgroundRect.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 150, 110, 200));
+            var darkerColor = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[ThemeConfig.theme])["PrimaryColorDarker"];
+            BackgroundRect.Fill = new SolidColorBrush(darkerColor);
         }
 
         private void Grid_PointerExited(object sender, PointerRoutedEventArgs e)
         {
-            BackgroundRect.Fill = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 181, 126, 220));
+            var lighterColor = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[ThemeConfig.theme])["PrimaryColor"];
+            BackgroundRect.Fill = new SolidColorBrush(lighterColor);
         }
 
         private async void Grid_PointerPressed(object sender, PointerRoutedEventArgs e)

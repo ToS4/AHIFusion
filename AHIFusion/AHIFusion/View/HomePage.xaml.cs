@@ -1,7 +1,8 @@
-using System.Drawing;
 using System.Text.Json;
+using AHIFusion.Model;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Windows.Devices.Geolocation;
+using Windows.UI;
 
 namespace AHIFusion
 {
@@ -10,10 +11,33 @@ namespace AHIFusion
         private const string OpenWeatherMapApiKey = "e7c7b443582143eb2bdb819309c83af4";
         private const string OpenWeatherMapApiUrl = "http://api.openweathermap.org/data/2.5/weather";
 
+        public string theme;
         public HomePage()
 		{
 			this.InitializeComponent();
             LocateAndLoadWeatherData();
+
+            theme = ThemeConfig.theme;
+
+            this.Loaded += HomePage_Loaded;
+
+        }
+
+        private void HomePage_Loaded(object sender, RoutedEventArgs e)
+        {
+            theme = ThemeConfig.theme;
+            FrameworkElement rootElement = XamlRoot.Content as FrameworkElement;
+            if (theme == "Dark")
+            {
+                rootElement.RequestedTheme = ElementTheme.Dark;
+            }
+            else
+            {
+                rootElement.RequestedTheme = ElementTheme.Light;
+            }
+
+            var lighterColor = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[theme])["TertiaryContainerColor"];
+            SettingsStackPanel.Background = new SolidColorBrush(lighterColor);
         }
 
         private async void LocateAndLoadWeatherData()
@@ -110,6 +134,28 @@ namespace AHIFusion
                 "Clock",
                 new SymbolIconSource { Symbol = Symbol.Clock }
                 );
+        }
+
+        private void StackPanel_PointerEntered(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            
+            var darkerColor = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[theme])["TertiaryContainerColorDarker"];
+            SettingsStackPanel.Background = new SolidColorBrush(darkerColor);
+        }
+
+        private void StackPanel_PointerExited(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            
+            var lighterColor = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[theme])["TertiaryContainerColor"];
+            SettingsStackPanel.Background = new SolidColorBrush(lighterColor);
+        }
+
+        private void StackPanel_PointerPressed(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            var content = XamlRoot.Content as FrameworkElement;
+            content.RequestedTheme = content.RequestedTheme == ElementTheme.Dark ? ElementTheme.Light : ElementTheme.Dark;
+            theme = content.RequestedTheme == ElementTheme.Dark ? "Dark" : "Light";
+            ThemeConfig.theme = theme;
         }
     }
 }

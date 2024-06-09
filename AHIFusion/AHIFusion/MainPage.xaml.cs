@@ -58,7 +58,7 @@ namespace AHIFusion
             {
                 From = 1.0,
                 To = 0.0,
-                Duration = new Duration(TimeSpan.FromSeconds(3))
+                Duration = new Duration(TimeSpan.FromSeconds(2))
             };
 
             Storyboard.SetTarget(fadeOut, WelcomeScreen);

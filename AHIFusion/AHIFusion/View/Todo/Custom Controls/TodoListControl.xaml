@@ -10,19 +10,27 @@
   d:DesignWidth="400"
   DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ms-appx:///AHIFusion/Styles/ColorPaletteOverride.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*"/>
       <ColumnDefinition Width="5*"/>
     </Grid.ColumnDefinitions>
 
-    <Border CornerRadius="3" BorderThickness="1" BorderBrush="Black" Grid.ColumnSpan="2">
-      <Rectangle x:Name="BackgroundRect" Fill="LightSlateGray"/>
+    <Border CornerRadius="3" BorderThickness="1" BorderBrush="{StaticResource OutlineColor}" Grid.ColumnSpan="2">
+      <Rectangle x:Name="BackgroundRect" Fill="{StaticResource SecondaryColor}"/>
     </Border>
     <Viewbox Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center">
       <Grid>
-        <TextBlock x:Name="NameTextBlock" Text="{x:Bind Name, Mode=TwoWay}" Margin="2,6,6,6"/>
-        <TextBox x:Name="NameTextBox" FocusDisengaged="NameTextBox_FocusDisengaged" KeyDown="NameTextBox_KeyDown" Text="{x:Bind Name, Mode=TwoWay}" Margin="2,6,6,6" FontSize="30"/>
+        <TextBlock x:Name="NameTextBlock" Text="{x:Bind Name, Mode=TwoWay}" Margin="2,6,6,6" Foreground="{StaticResource OnSecondaryColor}"/>
+        <TextBox x:Name="NameTextBox" FocusDisengaged="NameTextBox_FocusDisengaged" KeyDown="NameTextBox_KeyDown" Foreground="{StaticResource OnSecondaryColor}" Text="{x:Bind Name, Mode=TwoWay}" Margin="2,6,6,6" FontSize="30"/>
       </Grid>
     </Viewbox>
 

@@ -11,26 +11,35 @@
   DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
   <UserControl.Resources>
-    <local:CalendarBoolToBorderThickness x:Key="CalendarBoolToBorderThickness"/>
+    <ResourceDictionary>
+      <local:CalendarBoolToBorderThickness x:Key="CalendarBoolToBorderThickness"/>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ms-appx:///AHIFusion/Styles/ColorPaletteOverride.xaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
   </UserControl.Resources>
 
-  <Border BorderThickness="{Binding DaySelected, Mode=TwoWay, Converter={StaticResource CalendarBoolToBorderThickness}}" BorderBrush="AliceBlue">
-    <Grid Background="Transparent">
+  <Border x:Name="MainBorder" PointerEntered="Border_PointerEntered" PointerExited="Border_PointerExited" BorderThickness="0.5" BorderBrush="{ThemeResource OutlineColor}" >
+    <Border  BorderThickness="{Binding DaySelected, Mode=TwoWay, Converter={StaticResource CalendarBoolToBorderThickness}}" BorderBrush="{ThemeResource OutlineColor}">
+      <Grid Background="Transparent">
 
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*"/>
-      </Grid.ColumnDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="*"/>
-      </Grid.RowDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-      <TextBlock x:Name="DateTextBlock" Text="xx.yy.zzzz" TextAlignment="Center" HorizontalAlignment="Stretch" Padding="5"/>
+        <Rectangle />
+        <TextBlock x:Name="DateTextBlock" Text="xx.yy.zzzz" TextAlignment="Center" HorizontalAlignment="Stretch" Padding="5"/>
 
-      <StackPanel x:Name="EventsStackPanel" VerticalAlignment="Top" Grid.Row="1" />
+        <StackPanel x:Name="EventsStackPanel" VerticalAlignment="Top" Grid.Row="1" />
 
-    </Grid>
+      </Grid>
+    </Border>
   </Border>
+  
 
 </UserControl>

@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using AHIFusion.Model;
 using Serilog;
+using Windows.UI;
 using Windows.UI.Core;
 
 namespace AHIFusion
@@ -20,6 +22,8 @@ namespace AHIFusion
             try
             {
                 this.InitializeComponent();
+                var lighterColor = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[ThemeConfig.theme])["BackgroundColor"];
+                MainBorder.BorderBrush = new SolidColorBrush(lighterColor);
             }
             catch (Exception ex)
             {
@@ -41,13 +45,25 @@ namespace AHIFusion
                 {
                     if (dayEvent.Date == Day.Date)
                     {
+                        var color = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[ThemeConfig.theme])["TertiaryColor"];
+                        var brushColor = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[ThemeConfig.theme])["OutlineColor"];
+
+                        Border border = new Border()
+                        {
+                            BorderBrush = new SolidColorBrush(brushColor),
+                            BorderThickness = new Thickness(1),
+                            CornerRadius = new CornerRadius(5),
+                            Margin = new Thickness(5),
+                            Background = new SolidColorBrush(color)
+                        };
+
                         ShowEventControl showEventControl = new ShowEventControl()
                         {
-                            Margin = new Thickness(5),
                             Event = dayEvent
                         };
 
-                        EventsStackPanel.Children.Add(showEventControl);
+                        border.Child = showEventControl;
+                        EventsStackPanel.Children.Add(border);
 
                         showEventControl.UpdateEvent();
                     }
@@ -75,6 +91,18 @@ namespace AHIFusion
             {
                 Log.Error(ex, "Error occurred while updating day");
             }
+        }
+
+        private void Border_PointerEntered(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            var darkerColor = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[ThemeConfig.theme])["BackgroundColorDarker"];
+            MainBorder.BorderBrush = new SolidColorBrush(darkerColor);
+        }
+
+        private void Border_PointerExited(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            var lighterColor = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[ThemeConfig.theme])["BackgroundColor"];
+            MainBorder.BorderBrush = new SolidColorBrush(lighterColor);
         }
     }
 }

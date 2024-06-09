@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using AHIFusion.Model;
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -27,6 +28,7 @@ public sealed partial class TodoListControl : UserControl, INotifyPropertyChange
 
     public TodoListControl(bool isnew)
     {
+
         IsNew = isnew;
         this.InitializeComponent();
         this.Loaded += TodoListControl_Loaded;
@@ -48,6 +50,8 @@ public sealed partial class TodoListControl : UserControl, INotifyPropertyChange
             });
             IsNew = false;
         }
+        var lighterColor = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[ThemeConfig.theme])["SecondaryColor"];
+        BackgroundRect.Fill = new SolidColorBrush(lighterColor);
     }
 
     public void FocusOnTextBox()
@@ -150,11 +154,13 @@ public sealed partial class TodoListControl : UserControl, INotifyPropertyChange
     {
         if (IsSelected)
         {
-            BackgroundRect.Fill= new SolidColorBrush(Color.FromArgb(255, 94, 109, 124));
+            var darkerColor = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[ThemeConfig.theme])["SecondaryColorDarker"];
+            BackgroundRect.Fill= new SolidColorBrush(darkerColor);
         }
         else
         {
-            BackgroundRect.Fill = new SolidColorBrush(Color.FromArgb(255, 119, 136, 153));
+            var lighterColor = (Color)((ResourceDictionary)this.Resources.MergedDictionaries[0].ThemeDictionaries[ThemeConfig.theme])["SecondaryColor"];
+            BackgroundRect.Fill = new SolidColorBrush(lighterColor);
         }
     }
 

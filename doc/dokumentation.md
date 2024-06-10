@@ -83,9 +83,9 @@ Edit Fenster Todo
 **Umsetzung**
 Aufgaben wurden aufgeteilt und wir haben angefangen, keep it simple.
 
-Yazan: zuständig für Clock und Todo Features, auch für UI Design (Frontend)
+mirko4001: zuständig für Clock und Todo Features, auch für UI Design (Frontend)
 
-Mohamad: zuständig für Kalender und Notes Feature, auch für weitere Features (Backend)
+ToS4: zuständig für Kalender und Notes Feature, auch für weitere Features (Backend)
 
 Wir haben in den ersten 2 Wochen fast nichts für das Projekt gemacht, da wir eine neue Umgebung - Uno Platform - kennengelernt haben. Erstmals brauchte es sehr lange, ein fehlerfreies Programm zu ERSTELLEN. Danach haben wir uns beide lange damit beschäftigt, die Features von Uno zu testen.
 

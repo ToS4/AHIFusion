@@ -1,0 +1,51 @@
+﻿<Page
+    x:Class="AHIFusion.ClockPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AHIFusion"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+  <NavigationView x:ConnectionId='2' x:Name="ClockNavigation"
+                                                 
+                                                                     
+                  PaneDisplayMode="Left"
+                  IsSettingsVisible="False"
+                  IsBackButtonVisible="Collapsed"
+                  AlwaysShowHeader="True"
+                  PaneTitle="Clock">
+
+    <NavigationView.MenuItems>
+      <NavigationViewItemSeparator Height="15" Opacity="0"/>
+      <NavigationViewItem Content="Alarm" Tag="AHIFusion.AlarmContent">
+        <NavigationViewItem.Icon>
+          <FontIcon FontFamily="ms-appx:///Assets/Fonts/aptos.ttf#Aptos" Glyph="&#x23F0;"/>
+        </NavigationViewItem.Icon>
+      </NavigationViewItem>
+      <NavigationViewItemSeparator Height="15"/>
+      <NavigationViewItem Content="Stopwatch" Tag="AHIFusion.StopwatchContent">
+        <NavigationViewItem.Icon>
+          <FontIcon FontFamily="ms-appx:///Assets/Fonts/aptos.ttf#Aptos" Glyph="&#x23F1;"/>
+        </NavigationViewItem.Icon>
+      </NavigationViewItem>
+      <NavigationViewItemSeparator Height="15"/>
+      <NavigationViewItem Content="Timer" Tag="AHIFusion.TimerContent">
+        <NavigationViewItem.Icon>
+          <FontIcon FontFamily="ms-appx:///Assets/Fonts/aptos.ttf#Aptos" Glyph="&#x23F2;"/>
+        </NavigationViewItem.Icon>
+      </NavigationViewItem>
+      <NavigationViewItemSeparator Height="15"/>
+    </NavigationView.MenuItems>
+    
+    <Frame x:ConnectionId='3' x:Name="ContentFrame">
+      <Frame.ContentTransitions>
+        <TransitionCollection>
+          <NavigationThemeTransition  />
+        </TransitionCollection>
+      </Frame.ContentTransitions>
+    </Frame>
+  </NavigationView>
+</Page>
+

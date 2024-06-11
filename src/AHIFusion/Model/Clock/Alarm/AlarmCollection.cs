@@ -33,7 +33,7 @@ public static class AlarmCollection
 
     }
 
-    public static void SaveToFile(string filePath)
+    public async static void SaveToFile(string filePath)
     {
         try
         {
@@ -45,7 +45,11 @@ public static class AlarmCollection
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
             string jsonString = JsonSerializer.Serialize(Alarms, options);
-            File.WriteAllText(filePath, jsonString);
+
+            var localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            var folder = await localFolder.CreateFolderAsync("AppData", CreationCollisionOption.OpenIfExists);
+            File.WriteAllText(Path.Combine(folder.Path, filePath), jsonString);
+
         }
         catch (Exception ex)
         {
@@ -54,15 +58,19 @@ public static class AlarmCollection
         
     }
 
-    public static void LoadFromFile(string filePath)
+    public async  static void LoadFromFile(string filePath)
     {
         try
         {
             Log.Information($"Loading AlarmCollection from file: {filePath}");
 
-            if (File.Exists(filePath))
+            var localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            var folder = await localFolder.CreateFolderAsync("AppData", CreationCollisionOption.OpenIfExists);
+            var newPath = Path.Combine(folder.Path, filePath);
+
+            if (File.Exists(newPath))
             {
-                string jsonString = File.ReadAllText(filePath);
+                string jsonString = File.ReadAllText(newPath);
                 Alarms = JsonSerializer.Deserialize<ObservableCollection<Alarm>>(jsonString);
             }
         }

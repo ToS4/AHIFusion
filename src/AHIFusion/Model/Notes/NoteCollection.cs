@@ -33,7 +33,7 @@ public static class NoteCollection
             Log.Error(ex, "An error occurred");
         }
     }
-    public static void SaveToFile(string filePath)
+    public async static void SaveToFile(string filePath)
     {
         try
         {
@@ -45,7 +45,11 @@ public static class NoteCollection
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
             string jsonString = JsonSerializer.Serialize(Notes, options);
-            File.WriteAllText(filePath, jsonString);
+
+            var localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            var folder = await localFolder.CreateFolderAsync("AppData", CreationCollisionOption.OpenIfExists);
+            File.WriteAllText(Path.Combine(folder.Path, filePath), jsonString);
+
         }
         catch (Exception ex)
         {
@@ -53,16 +57,19 @@ public static class NoteCollection
         }
     }
 
-    public static void LoadFromFile(string filePath)
+    public async static void LoadFromFile(string filePath)
     {
         try
         {
             Log.Information($"Loading NoteCollection from file: {filePath}");
 
-            if (File.Exists(filePath))
+            var localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+            var folder = await localFolder.CreateFolderAsync("AppData", CreationCollisionOption.OpenIfExists);
+            var newPath = Path.Combine(folder.Path, filePath);
+
+            if (File.Exists(newPath))
             {
-                Log.Debug($"File '{filePath}' exists");
-                string jsonString = File.ReadAllText(filePath);
+                string jsonString = File.ReadAllText(newPath);
                 Notes = JsonSerializer.Deserialize<ObservableCollection<Note>>(jsonString);
             }
         }

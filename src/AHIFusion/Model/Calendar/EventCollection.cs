@@ -32,7 +32,7 @@ namespace AHIFusion
             }
         }
 
-        public static void SaveToFile(string filePath)
+        public async static void SaveToFile(string filePath)
         {
             try
             {
@@ -44,24 +44,32 @@ namespace AHIFusion
                     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
                 };
                 string jsonString = JsonSerializer.Serialize(Events, options);
-                File.WriteAllText(filePath, jsonString);
+
+                var localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                var folder = await localFolder.CreateFolderAsync("AppData", CreationCollisionOption.OpenIfExists);
+                File.WriteAllText(Path.Combine(folder.Path, filePath), jsonString);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "An error occurred");
             }
-            
+
+
         }
 
-        public static void LoadFromFile(string filePath)
+        public async static void LoadFromFile(string filePath)
         {
             try
             {
                 Log.Information($"Loading EventCollection from file: {filePath}");
 
-                if (File.Exists(filePath))
+                var localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+                var folder = await localFolder.CreateFolderAsync("AppData", CreationCollisionOption.OpenIfExists);
+                var newPath = Path.Combine(folder.Path, filePath);
+
+                if (File.Exists(newPath))
                 {
-                    string jsonString = File.ReadAllText(filePath);
+                    string jsonString = File.ReadAllText(newPath);
                     Events = JsonSerializer.Deserialize<ObservableCollection<DayEvent>>(jsonString);
                 }
             }
@@ -69,7 +77,6 @@ namespace AHIFusion
             {
                 Log.Error(ex, "An error occurred");
             }
-            
         }
 
     }

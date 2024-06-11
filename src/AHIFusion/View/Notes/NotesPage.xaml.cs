@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+    using System.Collections.ObjectModel;
 using AHIFusion.Model;
 using System.Linq;
 using Windows.ApplicationModel.VoiceCommands;
@@ -226,7 +226,7 @@ namespace AHIFusion
 
                     // Save the RichEditBox document's current content
                     string originalRtf;
-                    EditorRichEditBox.Document.GetText(TextGetOptions.FormatRtf, out originalRtf);
+                    EditorRichEditBox.Document.GetText(TextGetOptions.None, out originalRtf);
 
                     // Format the selected text as a hyperlink
                     Log.Debug("Inserting hyperlink into selected text");
@@ -234,7 +234,7 @@ namespace AHIFusion
 
                     // Set the RichEditBox content to the updated RTF with the hyperlink
                     Log.Debug("Setting RichEditBox content to the updated RTF with the hyperlink");
-                    EditorRichEditBox.Document.SetText(TextSetOptions.FormatRtf, rtfWithLink);
+                    EditorRichEditBox.Document.SetText(TextSetOptions.None, rtfWithLink);
                 }
                 else
                 {
@@ -348,7 +348,7 @@ namespace AHIFusion
                     }
 
                     Log.Debug("Setting text from selected note");
-                    EditorRichEditBox.Document.SetText(TextSetOptions.FormatRtf, selectedItem.Note.Text);
+                    EditorRichEditBox.Document.SetText(TextSetOptions.None, selectedItem.Note.Text);
 
                     Log.Debug("Removing all empty lines");
                     ITextRange textRange = EditorRichEditBox.Document.GetRange(0, TextConstants.MaxUnitCount);
@@ -629,7 +629,8 @@ namespace AHIFusion
 
                 FileOpenPicker open = new FileOpenPicker();
                 open.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-                open.FileTypeFilter.Add(".rtf");
+                open.FileTypeFilter.Add(".md");
+                open.FileTypeFilter.Add(".txt");
 
                 var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
                 WinRT.Interop.InitializeWithWindow.Initialize(open, hwnd);
@@ -640,11 +641,11 @@ namespace AHIFusion
                 {
                     Log.Information("A file was selected to open");
 
-                    using (IRandomAccessStream randAccStream =
-                        await file.OpenAsync(FileAccessMode.Read))
-                    {
-                        EditorRichEditBox.Document.LoadFromStream(TextSetOptions.FormatRtf, randAccStream);
-                    }
+                    // Read the file as text
+                    string fileContent = await FileIO.ReadTextAsync(file);
+
+                    // Set the RichEditBox's text to the file content
+                    EditorRichEditBox.Document.SetText(TextSetOptions.None, fileContent);
                 }
                 else
                 {
@@ -654,7 +655,6 @@ namespace AHIFusion
             catch (Exception ex)
             {
                 Log.Error(ex, "An error occurred");
-                
             }
         }
 
@@ -725,7 +725,7 @@ namespace AHIFusion
 
                 if (selectedItem != null)
                 {
-                    EditorRichEditBox.Document.GetText(TextGetOptions.FormatRtf, out string formatedText);
+                    EditorRichEditBox.Document.GetText(TextGetOptions.None, out string formatedText);
                     selectedItem.Note.Text = formatedText;
                 }
             }
